@@ -1,6 +1,14 @@
+/*
+congress_fahrplan
+This is the dart file contains the Talk StatelessWidget.
+SPDX-License-Identifier: GPL-2.0-only
+Copyright (C) 2019 Benjamin Schilling
+*/
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:congress_fahrplan/provider/favorite_provider.dart';
+import 'package:congress_fahrplan/utilities/design_constants.dart';
 
 class Talk extends StatelessWidget {
   final int id;
@@ -45,6 +53,7 @@ class Talk extends StatelessWidget {
   build(BuildContext context) {
     //var favorites = Provider.of<FavoriteProvider>(context);
     return Card(
+      color: DesignConstants.primaryColor,
       child: ListTile(
         title: Text(title),
         subtitle: Text("$start - $room - $track"),
@@ -56,7 +65,9 @@ class Talk extends StatelessWidget {
             builder: (context, favorites, child) => IconButton(
                 icon: Icon(
                   Icons.favorite,
-                  color: favorite ? Colors.white : Colors.black,
+                  color: favorite
+                      ? DesignConstants.textIcons
+                      : DesignConstants.primaryText,
                 ),
                 onPressed: () => favorites.favoriteTalk(this)),
           ),
