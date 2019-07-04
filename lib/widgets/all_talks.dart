@@ -35,7 +35,7 @@ class AllTalks extends StatelessWidget {
             leading: Ink(
               child: IconButton(
                 icon: Icon(
-                  Icons.favorite,
+                  Icons.book,
                   color: DesignConstants.textIcons,
                 ),
                 onPressed: () => Navigator.push(
@@ -75,9 +75,15 @@ class AllTalks extends StatelessWidget {
                 return Text('Error');
               }
               return Center(
-                child: CircularProgressIndicator(
-                  valueColor: new AlwaysStoppedAnimation<Color>(
-                      DesignConstants.lightPrimaryColor),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    CircularProgressIndicator(
+                      valueColor: new AlwaysStoppedAnimation<Color>(
+                          DesignConstants.lightPrimaryColor),
+                    ),
+                    Text('Loading Fahrplan'),
+                  ],
                 ),
               );
             },
