@@ -1,6 +1,22 @@
 # congress_fahrplan
 A Congress Fahrplan App written in Flutter
 
+## How to build
+
+Build the app using `flutter build apk --split-per-abi`.
+
+Required `key.properties` in `./android/`.
+
+Content:
+
+```
+storePassword=<Keystore Password>
+keyPassword=<Key Password>
+keyAlias=<Alias>
+storeFile=<Location of the Keystore>
+```
+
+When building on Windows: Make sure that the location only includes `\\` and no `\`.
 
 ## Design
 
