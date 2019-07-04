@@ -18,6 +18,7 @@ class Talk extends StatelessWidget {
   final String abstract;
   final String start;
   final String room;
+  final String language;
   final int day;
   bool favorite;
 
@@ -30,6 +31,7 @@ class Talk extends StatelessWidget {
       this.start,
       this.room,
       this.day,
+      this.language,
       this.favorite});
 
   static List<Talk> talks = new List<Talk>();
@@ -44,6 +46,7 @@ class Talk extends StatelessWidget {
       abstract: json['abstract'] != null ? json['abstract'] : "",
       start: json['start'] != null ? json['start'] : "",
       room: room,
+      language: json['language'] != null ? json['language'] : "",
       day: start.compareTo("09:00") < 0 ? day + 1 : day,
       favorite: false,
     );
@@ -56,7 +59,7 @@ class Talk extends StatelessWidget {
       color: DesignConstants.primaryColor,
       child: ListTile(
         title: Text(title),
-        subtitle: Text("$start - $room - $track"),
+        subtitle: Text("$start - $room - $track - $language"),
         leading: Ink(
           decoration: ShapeDecoration(
             shape: CircleBorder(),
@@ -64,12 +67,63 @@ class Talk extends StatelessWidget {
           child: Consumer<FavoriteProvider>(
             builder: (context, favorites, child) => IconButton(
                 icon: Icon(
-                  Icons.favorite,
-                  color: favorite
-                      ? DesignConstants.textIcons
-                      : DesignConstants.primaryText,
+                  favorite ? Icons.bookmark : Icons.bookmark_border,
                 ),
                 onPressed: () => favorites.favoriteTalk(this)),
+          ),
+        ),
+        trailing: Ink(
+          decoration: ShapeDecoration(
+            shape: CircleBorder(),
+          ),
+          child: IconButton(
+            icon: Icon(
+              Icons.info,
+            ),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) => SimpleDialog(
+                  title: Text('$title'),
+                  children: <Widget>[
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          '$subtitle',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          'Starts: $start',
+                        ),
+                        Text(
+                          'Room: $room',
+                        ),
+                        Text(
+                          'Track: $track',
+                        ),
+                        Text(
+                          'Language: $language',
+                        ),
+                        SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                'Abstact: ',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              Text('$abstract'),
+                            ],
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                  contentPadding: EdgeInsets.all(10),
+                ),
+              );
+            },
           ),
         ),
       ),
