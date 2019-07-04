@@ -1,3 +1,10 @@
+/*
+congress_fahrplan
+This is the dart file contains the Fahrplan and FavoritedTalks class.
+SPDX-License-Identifier: GPL-2.0-only
+Copyright (C) 2019 Benjamin Schilling
+*/
+
 import 'package:flutter/material.dart';
 
 import 'conference.dart';
@@ -66,10 +73,6 @@ class Fahrplan {
                         widgets.add(t.build(context));
                       }
                     }
-                    int numbersOfTalks = d.talks.length;
-                    int numberOfWidgets = widgets.length;
-                    print(
-                        "Number of talks: $numbersOfTalks - $numberOfWidgets");
                     return new Column(
                       children: widgets,
                     );

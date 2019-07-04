@@ -1,3 +1,10 @@
+/*
+congress_fahrplan
+This is the dart file contains the AllTalks screen StatelessWidget
+SPDX-License-Identifier: GPL-2.0-only
+Copyright (C) 2019 Benjamin Schilling
+*/
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -5,6 +12,8 @@ import 'package:congress_fahrplan/model/fahrplan.dart';
 import 'package:provider/provider.dart';
 import 'package:congress_fahrplan/provider/favorite_provider.dart';
 import 'package:congress_fahrplan/widgets/favorites.dart';
+
+import 'package:congress_fahrplan/utilities/design_constants.dart';
 
 class AllTalks extends StatelessWidget {
   final Future<Fahrplan> fahrplan;
@@ -20,41 +29,40 @@ class AllTalks extends StatelessWidget {
       home: new DefaultTabController(
         length: 4,
         child: new Scaffold(
-          appBar: new PreferredSize(
-            preferredSize: Size.fromHeight(80),
-            child: new AppBar(
-              title: new Text('Congress Fahrplan'),
-              leading: Ink(
-                child: IconButton(
-                  icon: Icon(
-                    Icons.favorite,
-                    color: Colors.white,
-                  ),
-                  onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Favorites(
-                        fahrplan: fahrplan,
-                      ),
+          appBar: new AppBar(
+            backgroundColor: DesignConstants.darkPrimaryColor,
+            title: new Text('Congress Fahrplan'),
+            leading: Ink(
+              child: IconButton(
+                icon: Icon(
+                  Icons.favorite,
+                  color: DesignConstants.textIcons,
+                ),
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Favorites(
+                      fahrplan: fahrplan,
                     ),
                   ),
                 ),
               ),
-              bottom: PreferredSize(
-                  child: FutureBuilder<Fahrplan>(
-                    future: fahrplan,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return TabBar(
-                          tabs: snapshot.data.conference.getDaysAsText(),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Text('Error');
-                      }
-                      return Center(child: CircularProgressIndicator());
-                    },
-                  ),
-                  preferredSize: null),
+            ),
+            bottom: PreferredSize(
+              child: FutureBuilder<Fahrplan>(
+                future: fahrplan,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return TabBar(
+                        indicatorColor: DesignConstants.lightPrimaryColor,
+                        tabs: snapshot.data.conference.getDaysAsText());
+                  } else if (snapshot.hasError) {
+                    return Text('Error');
+                  }
+                  return Text('');
+                },
+              ),
+              preferredSize: Size.fromHeight(50),
             ),
           ),
           body: FutureBuilder<Fahrplan>(
@@ -66,7 +74,12 @@ class AllTalks extends StatelessWidget {
               } else if (snapshot.hasError) {
                 return Text('Error');
               }
-              return Center(child: CircularProgressIndicator());
+              return Center(
+                child: CircularProgressIndicator(
+                  valueColor: new AlwaysStoppedAnimation<Color>(
+                      DesignConstants.lightPrimaryColor),
+                ),
+              );
             },
           ),
         ),

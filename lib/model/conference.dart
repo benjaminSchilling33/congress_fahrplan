@@ -1,3 +1,10 @@
+/*
+congress_fahrplan
+This is the dart file contains the Conference class.
+SPDX-License-Identifier: GPL-2.0-only
+Copyright (C) 2019 Benjamin Schilling
+*/
+
 import 'package:congress_fahrplan/model/day.dart';
 import 'package:congress_fahrplan/model/talk.dart';
 import 'package:congress_fahrplan/model/room.dart';
@@ -141,7 +148,7 @@ class Conference {
     return dayColumns;
   }
 
-  List<Text> getDaysAsText() {
+  List<Widget> getDaysAsText() {
     List<Text> dayTexts = new List<Text>();
     for (Day d in days) {
       dayTexts.add(new Text(d.date));

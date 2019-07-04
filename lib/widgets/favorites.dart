@@ -1,8 +1,16 @@
+/*
+congress_fahrplan
+This is the dart file contains the Favorites screen StatelessWidget
+SPDX-License-Identifier: GPL-2.0-only
+Copyright (C) 2019 Benjamin Schilling
+*/
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:congress_fahrplan/model/fahrplan.dart';
 import 'package:congress_fahrplan/widgets/all_talks.dart';
+import 'package:congress_fahrplan/utilities/design_constants.dart';
 
 class Favorites extends StatelessWidget {
   final Future<Fahrplan> fahrplan;
@@ -29,6 +37,7 @@ class Favorites extends StatelessWidget {
               length: snapshot.data.days.length,
               child: new Scaffold(
                 appBar: new AppBar(
+                  backgroundColor: DesignConstants.darkPrimaryColor,
                   title: new Text('Favorites'),
                   leading: Ink(
                     decoration: ShapeDecoration(
@@ -45,6 +54,7 @@ class Favorites extends StatelessWidget {
                   ),
                   bottom: TabBar(
                     tabs: snapshot.data.conference.getDaysAsText(),
+                    indicatorColor: DesignConstants.lightPrimaryColor,
                   ),
                 ),
                 body: TabBarView(
