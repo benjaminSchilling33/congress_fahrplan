@@ -1,3 +1,10 @@
+/*
+congress_fahrplan
+This is the dart file contains the FavoriteProvider class which implemented the provider pattern.
+SPDX-License-Identifier: GPL-2.0-only
+Copyright (C) 2019 Benjamin Schilling
+*/
+
 import 'dart:collection';
 import 'package:flutter/foundation.dart';
 
