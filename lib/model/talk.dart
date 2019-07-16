@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:congress_fahrplan/provider/favorite_provider.dart';
 import 'package:congress_fahrplan/utilities/design_constants.dart';
 
+/// The Talk widget stores all data about it and build a card with all data relevant for it.
 class Talk extends StatelessWidget {
   final int id;
   final String title;
@@ -54,7 +55,6 @@ class Talk extends StatelessWidget {
 
   @override
   build(BuildContext context) {
-    //var favorites = Provider.of<FavoriteProvider>(context);
     return Card(
       color: DesignConstants.primaryColor,
       child: ListTile(
@@ -66,8 +66,10 @@ class Talk extends StatelessWidget {
           ),
           child: Consumer<FavoriteProvider>(
             builder: (context, favorites, child) => IconButton(
+                splashColor: DesignConstants.lightPrimaryColor,
+                tooltip: "Add to favorites.",
                 icon: Icon(
-                  favorite ? Icons.bookmark : Icons.bookmark_border,
+                  favorite ? Icons.favorite : Icons.favorite_border,
                 ),
                 onPressed: () => favorites.favoriteTalk(this)),
           ),
@@ -77,6 +79,8 @@ class Talk extends StatelessWidget {
             shape: CircleBorder(),
           ),
           child: IconButton(
+            splashColor: DesignConstants.lightPrimaryColor,
+            tooltip: "Show details.",
             icon: Icon(
               Icons.info,
             ),
@@ -89,23 +93,60 @@ class Talk extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(
-                          '$subtitle',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                        Container(
+                          padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                          child: Text(
+                            '$subtitle',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 16.0),
+                          ),
                         ),
-                        Text(
-                          'Starts: $start',
+                        Row(
+                          children: <Widget>[
+                            Container(
+                              child: Icon(Icons.access_time),
+                              padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                            ),
+                            Text(
+                              '$start',
+                            ),
+                          ],
                         ),
-                        Text(
-                          'Room: $room',
+                        Row(
+                          children: <Widget>[
+                            Container(
+                              child: Icon(Icons.room),
+                              padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                            ),
+                            Text(
+                              '$room',
+                            ),
+                          ],
                         ),
-                        Text(
-                          'Track: $track',
+                        Row(
+                          children: <Widget>[
+                            Container(
+                              child: Icon(Icons.school),
+                              padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                            ),
+                            Text(
+                              '$track',
+                            ),
+                          ],
                         ),
-                        Text(
-                          'Language: $language',
+                        Row(
+                          children: <Widget>[
+                            Container(
+                              child: Icon(Icons.translate),
+                              padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                            ),
+                            Text(
+                              '$language',
+                            ),
+                          ],
                         ),
                         SingleChildScrollView(
+                          padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
