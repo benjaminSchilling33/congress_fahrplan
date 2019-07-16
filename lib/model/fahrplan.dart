@@ -47,9 +47,15 @@ class Fahrplan {
     );
   }
 
-  Widget build(BuildContext context) {
+  Widget buildDayTabs(BuildContext context) {
     return TabBarView(
       children: this.conference.toDayTabs(),
+    );
+  }
+
+  Widget buildRoomLayout(BuildContext context) {
+    return TabBarView(
+      children: this.conference.toRoomTabs(),
     );
   }
 
