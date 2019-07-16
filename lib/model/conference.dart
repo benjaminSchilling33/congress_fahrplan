@@ -112,6 +112,40 @@ class Conference {
     return dayColumns;
   }
 
+  List<Widget> toRoomTabs() {
+    List<Column> dayColumns = new List<Column>();
+    for (Day d in days) {
+      dayColumns.add(
+        Column(
+          children: <Widget>[
+            Expanded(
+              child: new ListView.builder(
+                  itemCount: 1,
+                  itemBuilder: (
+                    BuildContext context,
+                    int index,
+                  ) {
+                    List<Widget> widgets = new List<Widget>();
+                    d.talks.sort((a, b) => a.start.compareTo(b.start));
+                    for (Talk t in d.talks) {
+                      widgets.add(t.build(context));
+                    }
+                    int numbersOfTalks = d.talks.length;
+                    int numberOfWidgets = widgets.length;
+                    print(
+                        "Number of talks: $numbersOfTalks - $numberOfWidgets");
+                    return new Column(
+                      children: widgets,
+                    );
+                  }),
+            ),
+          ],
+        ),
+      );
+    }
+    return dayColumns;
+  }
+
   List<Widget> toFavoriteTabs() {
     List<Column> dayColumns = new List<Column>();
     for (Day d in days) {
