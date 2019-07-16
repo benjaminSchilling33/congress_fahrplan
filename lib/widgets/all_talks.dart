@@ -23,73 +23,110 @@ class AllTalks extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var favorites = Provider.of<FavoriteProvider>(context);
-    return new MaterialApp(
-      theme: new ThemeData.dark(),
-      title: 'Congress Fahrplan',
-      home: new DefaultTabController(
-        length: 4,
-        child: new Scaffold(
-          appBar: new AppBar(
-            backgroundColor: DesignConstants.darkPrimaryColor,
-            title: new Text('Congress Fahrplan'),
-            leading: Ink(
-              child: IconButton(
-                icon: Icon(
-                  Icons.book,
-                  color: DesignConstants.textIcons,
-                ),
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Favorites(
-                      fahrplan: fahrplan,
-                    ),
+    return FutureBuilder<Fahrplan>(
+        future: fahrplan,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            favorites.initializeProvider(snapshot.data);
+            return new MaterialApp(
+                theme: new ThemeData.dark(),
+                title: 'Congress Fahrplan',
+                home: OrientationBuilder(builder: (context, orientation) {
+                  if (orientation == Orientation.portrait) {
+                    return new DefaultTabController(
+                      length: snapshot.data.conference.daysCount,
+                      child: new Scaffold(
+                        appBar: new AppBar(
+                          backgroundColor: DesignConstants.darkPrimaryColor,
+                          title: new Text('Congress Fahrplan'),
+                          leading: Ink(
+                            child: IconButton(
+                              tooltip: "Show the favorited talks.",
+                              splashColor: DesignConstants.lightPrimaryColor,
+                              icon: Icon(
+                                Icons.favorite,
+                                color: DesignConstants.textIcons,
+                              ),
+                              onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Favorites(
+                                    fahrplan: fahrplan,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          bottom: PreferredSize(
+                            child: TabBar(
+                              indicatorColor: DesignConstants.lightPrimaryColor,
+                              tabs: snapshot.data.conference.getDaysAsText(),
+                            ),
+                            preferredSize: Size.fromHeight(50),
+                          ),
+                        ),
+                        body: snapshot.data.buildDayTabs(context),
+                      ),
+                    );
+                  } else {
+                    return new DefaultTabController(
+                      length: snapshot.data.conference.daysCount,
+                      child: new Scaffold(
+                        appBar: new AppBar(
+                          backgroundColor: DesignConstants.darkPrimaryColor,
+                          title: new Text('Congress Fahrplan'),
+                          leading: Ink(
+                            child: IconButton(
+                              tooltip: "Show the favorited talks.",
+                              splashColor: DesignConstants.lightPrimaryColor,
+                              icon: Icon(
+                                Icons.favorite,
+                                color: DesignConstants.textIcons,
+                              ),
+                              onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Favorites(
+                                    fahrplan: fahrplan,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          bottom: PreferredSize(
+                            child: TabBar(
+                              indicatorColor: DesignConstants.lightPrimaryColor,
+                              tabs: snapshot.data.conference.getDaysAsText(),
+                            ),
+                            preferredSize: Size.fromHeight(50),
+                          ),
+                        ),
+                        body: snapshot.data.buildRoomLayout(context),
+                      ),
+                    );
+                  }
+                }));
+          }
+          return new MaterialApp(
+              theme: new ThemeData.dark(),
+              title: 'Congress Fahrplan',
+              home: new Scaffold(
+                body: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      CircularProgressIndicator(
+                        valueColor: new AlwaysStoppedAnimation<Color>(
+                            DesignConstants.lightPrimaryColor),
+                      ),
+                      Container(
+                        child: Text('Loading Fahrplan'),
+                        padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-            ),
-            bottom: PreferredSize(
-              child: FutureBuilder<Fahrplan>(
-                future: fahrplan,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return TabBar(
-                        indicatorColor: DesignConstants.lightPrimaryColor,
-                        tabs: snapshot.data.conference.getDaysAsText());
-                  } else if (snapshot.hasError) {
-                    return Text('Error');
-                  }
-                  return Text('');
-                },
-              ),
-              preferredSize: Size.fromHeight(50),
-            ),
-          ),
-          body: FutureBuilder<Fahrplan>(
-            future: fahrplan,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                favorites.initializeProvider(snapshot.data);
-                return snapshot.data.build(context);
-              } else if (snapshot.hasError) {
-                return Text('Error');
-              }
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    CircularProgressIndicator(
-                      valueColor: new AlwaysStoppedAnimation<Color>(
-                          DesignConstants.lightPrimaryColor),
-                    ),
-                    Text('Loading Fahrplan'),
-                  ],
-                ),
-              );
-            },
-          ),
-        ),
-      ),
-    );
+              ));
+        });
   }
 }
