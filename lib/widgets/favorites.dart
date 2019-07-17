@@ -10,7 +10,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:congress_fahrplan/model/fahrplan.dart';
 import 'package:congress_fahrplan/widgets/all_talks.dart';
-import 'package:congress_fahrplan/utilities/design_constants.dart';
 
 class Favorites extends StatelessWidget {
   final Future<Fahrplan> fahrplan;
@@ -21,24 +20,18 @@ class Favorites extends StatelessWidget {
   Widget build(BuildContext context) {
     // The StoreProvider should wrap your MaterialApp or WidgetsApp. This will
     // ensure all routes have access to the store.
-    return new MaterialApp(
-      theme: new ThemeData.dark(),
-      title: 'Congress Fahrplan',
-      routes: {
-        '/alltalks': (context) => AllTalks(
-              fahrplan: fahrplan,
-            ),
-      },
-      home: FutureBuilder<Fahrplan>(
-        future: fahrplan,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return new DefaultTabController(
+    return FutureBuilder<Fahrplan>(
+      future: fahrplan,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return new MaterialApp(
+            theme: Theme.of(context),
+            title: snapshot.data.getFahrplanTitle(),
+            home: new DefaultTabController(
               length: snapshot.data.days.length,
               child: new Scaffold(
                 appBar: new AppBar(
-                  backgroundColor: DesignConstants.darkPrimaryColor,
-                  title: new Text('Favorites'),
+                  title: new Text(snapshot.data.getFavoritesTitle()),
                   leading: Ink(
                     decoration: ShapeDecoration(
                       shape: CircleBorder(),
@@ -46,26 +39,34 @@ class Favorites extends StatelessWidget {
                     child: IconButton(
                       icon: Icon(
                         Icons.calendar_today,
-                        color: Colors.white,
                       ),
-                      onPressed: () =>
-                          Navigator.pushNamed(context, '/alltalks'),
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AllTalks(
+                            fahrplan: fahrplan,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                   bottom: TabBar(
                     tabs: snapshot.data.conference.getDaysAsText(),
-                    indicatorColor: DesignConstants.lightPrimaryColor,
+                    indicator: UnderlineTabIndicator(
+                      borderSide:
+                          BorderSide(color: Theme.of(context).indicatorColor),
+                    ),
                   ),
                 ),
                 body: TabBarView(
                   children: snapshot.data.toFavoriteList(),
                 ),
               ),
-            );
-          }
-          return Center(child: CircularProgressIndicator());
-        },
-      ),
+            ),
+          );
+        }
+        return Center(child: CircularProgressIndicator());
+      },
     );
   }
 }

@@ -8,7 +8,6 @@ Copyright (C) 2019 Benjamin Schilling
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:congress_fahrplan/provider/favorite_provider.dart';
-import 'package:congress_fahrplan/utilities/design_constants.dart';
 
 /// The Talk widget stores all data about it and build a card with all data relevant for it.
 class Talk extends StatelessWidget {
@@ -56,22 +55,17 @@ class Talk extends StatelessWidget {
   @override
   build(BuildContext context) {
     return Card(
-      color: DesignConstants.primaryColor,
       child: ListTile(
         title: Text(title),
         subtitle: Text("$start - $room - $track - $language"),
         leading: Ink(
-          decoration: ShapeDecoration(
-            shape: CircleBorder(),
-          ),
           child: Consumer<FavoriteProvider>(
-            builder: (context, favorites, child) => IconButton(
-                splashColor: DesignConstants.lightPrimaryColor,
+            builder: (context, favoriteProvider, child) => IconButton(
                 tooltip: "Add to favorites.",
                 icon: Icon(
                   favorite ? Icons.favorite : Icons.favorite_border,
                 ),
-                onPressed: () => favorites.favoriteTalk(this)),
+                onPressed: () => favoriteProvider.favoriteTalk(this)),
           ),
         ),
         trailing: Ink(
@@ -79,10 +73,10 @@ class Talk extends StatelessWidget {
             shape: CircleBorder(),
           ),
           child: IconButton(
-            splashColor: DesignConstants.lightPrimaryColor,
             tooltip: "Show details.",
             icon: Icon(
               Icons.info,
+              color: Colors.white,
             ),
             onPressed: () {
               showDialog(

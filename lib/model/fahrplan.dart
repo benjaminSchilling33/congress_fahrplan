@@ -90,6 +90,16 @@ class Fahrplan {
     }
     return dayColumns;
   }
+
+  String getFahrplanTitle() {
+    String acronym = conference.acronym;
+    return 'Congress Fahrplan - $acronym';
+  }
+
+  String getFavoritesTitle() {
+    String acronym = conference.acronym;
+    return 'Favorites - $acronym';
+  }
 }
 
 class FavoritedTalks {

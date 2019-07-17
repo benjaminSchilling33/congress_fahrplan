@@ -185,7 +185,38 @@ class Conference {
   List<Widget> getDaysAsText() {
     List<Text> dayTexts = new List<Text>();
     for (Day d in days) {
-      dayTexts.add(new Text(d.date));
+      String weekday = '';
+      DateTime date = DateTime.parse(d.date);
+      switch (date.weekday) {
+        case DateTime.monday:
+          weekday = 'Mon';
+          break;
+        case DateTime.tuesday:
+          weekday = 'Tue';
+          break;
+        case DateTime.wednesday:
+          weekday = 'Wed';
+          break;
+        case DateTime.thursday:
+          weekday = 'Thu';
+          break;
+        case DateTime.friday:
+          weekday = 'Fri';
+          break;
+        case DateTime.saturday:
+          weekday = 'Sat';
+          break;
+        case DateTime.sunday:
+          weekday = 'Sun';
+          break;
+      }
+      String dateString = date.month.toString() + '-' + date.day.toString();
+      dayTexts.add(new Text(
+        '$weekday | $dateString',
+        style: TextStyle(
+          fontSize: 16,
+        ),
+      ));
     }
     return dayTexts;
   }

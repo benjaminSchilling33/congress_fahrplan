@@ -13,8 +13,6 @@ import 'package:provider/provider.dart';
 import 'package:congress_fahrplan/provider/favorite_provider.dart';
 import 'package:congress_fahrplan/widgets/favorites.dart';
 
-import 'package:congress_fahrplan/utilities/design_constants.dart';
-
 class AllTalks extends StatelessWidget {
   final Future<Fahrplan> fahrplan;
 
@@ -29,23 +27,22 @@ class AllTalks extends StatelessWidget {
           if (snapshot.hasData) {
             favorites.initializeProvider(snapshot.data);
             return new MaterialApp(
-                theme: new ThemeData.dark(),
-                title: 'Congress Fahrplan',
-                home: OrientationBuilder(builder: (context, orientation) {
+              theme: Theme.of(context),
+              title: snapshot.data.getFahrplanTitle(),
+              home: OrientationBuilder(
+                builder: (context, orientation) {
                   if (orientation == Orientation.portrait) {
+                    ///Portrait Orientation
                     return new DefaultTabController(
                       length: snapshot.data.conference.daysCount,
                       child: new Scaffold(
                         appBar: new AppBar(
-                          backgroundColor: DesignConstants.darkPrimaryColor,
-                          title: new Text('Congress Fahrplan'),
+                          title: Text(snapshot.data.getFahrplanTitle()),
                           leading: Ink(
                             child: IconButton(
                               tooltip: "Show the favorited talks.",
-                              splashColor: DesignConstants.lightPrimaryColor,
                               icon: Icon(
                                 Icons.favorite,
-                                color: DesignConstants.textIcons,
                               ),
                               onPressed: () => Navigator.push(
                                 context,
@@ -59,8 +56,11 @@ class AllTalks extends StatelessWidget {
                           ),
                           bottom: PreferredSize(
                             child: TabBar(
-                              indicatorColor: DesignConstants.lightPrimaryColor,
                               tabs: snapshot.data.conference.getDaysAsText(),
+                              indicator: UnderlineTabIndicator(
+                                borderSide: BorderSide(
+                                    color: Theme.of(context).indicatorColor),
+                              ),
                             ),
                             preferredSize: Size.fromHeight(50),
                           ),
@@ -69,19 +69,17 @@ class AllTalks extends StatelessWidget {
                       ),
                     );
                   } else {
+                    ///Landscape Orientation
                     return new DefaultTabController(
                       length: snapshot.data.conference.daysCount,
                       child: new Scaffold(
                         appBar: new AppBar(
-                          backgroundColor: DesignConstants.darkPrimaryColor,
-                          title: new Text('Congress Fahrplan'),
+                          title: Text(snapshot.data.getFahrplanTitle()),
                           leading: Ink(
                             child: IconButton(
                               tooltip: "Show the favorited talks.",
-                              splashColor: DesignConstants.lightPrimaryColor,
                               icon: Icon(
                                 Icons.favorite,
-                                color: DesignConstants.textIcons,
                               ),
                               onPressed: () => Navigator.push(
                                 context,
@@ -95,17 +93,22 @@ class AllTalks extends StatelessWidget {
                           ),
                           bottom: PreferredSize(
                             child: TabBar(
-                              indicatorColor: DesignConstants.lightPrimaryColor,
                               tabs: snapshot.data.conference.getDaysAsText(),
+                              indicator: UnderlineTabIndicator(
+                                borderSide: BorderSide(
+                                    color: Theme.of(context).indicatorColor),
+                              ),
                             ),
                             preferredSize: Size.fromHeight(50),
                           ),
                         ),
-                        body: snapshot.data.buildRoomLayout(context),
+                        body: snapshot.data.buildDayTabs(context),
                       ),
                     );
                   }
-                }));
+                },
+              ),
+            );
           }
           return new MaterialApp(
               theme: new ThemeData.dark(),
@@ -117,7 +120,7 @@ class AllTalks extends StatelessWidget {
                     children: <Widget>[
                       CircularProgressIndicator(
                         valueColor: new AlwaysStoppedAnimation<Color>(
-                            DesignConstants.lightPrimaryColor),
+                            Theme.of(context).indicatorColor),
                       ),
                       Container(
                         child: Text('Loading Fahrplan'),
