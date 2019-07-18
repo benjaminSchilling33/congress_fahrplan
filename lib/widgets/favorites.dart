@@ -40,7 +40,7 @@ class Favorites extends StatelessWidget {
                       icon: Icon(
                         Icons.calendar_today,
                       ),
-                      onPressed: () => Navigator.push(
+                      onPressed: () => Navigator.pop(
                         context,
                         MaterialPageRoute(
                           builder: (context) => AllTalks(
