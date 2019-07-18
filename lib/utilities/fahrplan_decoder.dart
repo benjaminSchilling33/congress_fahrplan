@@ -6,7 +6,7 @@ Copyright (C) 2019 Benjamin Schilling
 */
 
 import 'package:congress_fahrplan/model/fahrplan.dart';
-import 'package:congress_fahrplan/model/talk.dart';
+import 'package:congress_fahrplan/widgets/talk.dart';
 import 'package:congress_fahrplan/model/day.dart';
 
 class FahrplanDecoder {
@@ -15,20 +15,22 @@ class FahrplanDecoder {
       Map<String, dynamic> json, FavoritedTalks favTalks) {
     Fahrplan f = Fahrplan.fromJson(json, favTalks);
 
-    //Initialize days, rooms and talks
+    //Initialize days, rooms and sort talks of days
     for (Day d in f.conference.days) {
       f.days.add(d);
       f.rooms.addAll(d.rooms);
-      for (Talk t in d.talks) {
-        f.talks.add(t);
-      }
+      d.talks.sort((a, b) => a.date.compareTo(b.date));
     }
 
     //set all favorites talks
-    for (int i in f.favTalks.ids) {
-      for (Talk t in f.talks) {
-        if (t.id == i) {
-          f.talks.elementAt(f.talks.indexOf(t)).favorite = true;
+    for (int i in f.favTalkIds.ids) {
+      for (Day d in f.days) {
+        for (Talk t in d.talks) {
+          if (t.id == i) {
+            f.favoriteTalks.add(t);
+            d.talks.elementAt(d.talks.indexOf(t)).favorite = true;
+            break;
+          }
         }
       }
     }

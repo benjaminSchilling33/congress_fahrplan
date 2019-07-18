@@ -10,9 +10,8 @@ import 'package:flutter/foundation.dart';
 
 import 'package:flutter/material.dart';
 
-import 'package:congress_fahrplan/model/talk.dart';
+import 'package:congress_fahrplan/widgets/talk.dart';
 import 'package:congress_fahrplan/model/fahrplan.dart';
-import 'package:congress_fahrplan/model/day.dart';
 
 class FavoriteProvider extends ChangeNotifier {
   final List<Widget> _favorites = [];
@@ -29,17 +28,19 @@ class FavoriteProvider extends ChangeNotifier {
     }
   }
 
-  void favoriteTalk(Talk talk) {
-    print('favorite talk called');
-    for (Talk t in fahrplan.talks) {
+  void favoriteTalk(Talk talk, DateTime talkDate) {
+    for (Talk t
+        in fahrplan.days.firstWhere((day) => day.date == talkDate).talks) {
       if (t == talk && !t.favorite) {
-        print("favorite item");
         talk.favorite = true;
-        fahrplan.favTalks.addFavoriteTalk(talk.id);
+        fahrplan.favTalkIds.addFavoriteTalk(talk.id);
+        fahrplan.favoriteTalks.add(talk);
+        fahrplan.favoriteTalks.sort((a, b) => a.date.compareTo(b.date));
       } else if (t == talk && t.favorite) {
-        print("de-favorite item");
         talk.favorite = false;
-        fahrplan.favTalks.removeFavoriteTalk(talk.id);
+        fahrplan.favTalkIds.removeFavoriteTalk(talk.id);
+        fahrplan.favoriteTalks.remove(talk);
+        fahrplan.favoriteTalks.sort((a, b) => a.date.compareTo(b.date));
       }
     }
     notifyListeners();

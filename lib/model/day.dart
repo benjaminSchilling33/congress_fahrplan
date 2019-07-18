@@ -6,36 +6,26 @@ Copyright (C) 2019 Benjamin Schilling
 */
 
 import 'package:congress_fahrplan/model/room.dart';
-import 'package:congress_fahrplan/model/talk.dart';
+import 'package:congress_fahrplan/widgets/talk.dart';
 
 class Day {
   final int index;
-  final String date;
-  final String day_start;
-  final String day_end;
+  final DateTime date;
 
   final List<Room> rooms;
   final List<Talk> talks;
 
-  Day(
-      {this.index,
-      this.date,
-      this.day_start,
-      this.day_end,
-      this.rooms,
-      this.talks});
+  Day({this.index, this.date, this.rooms, this.talks});
 
   factory Day.fromJson(var json) {
     return Day(
         index: json['index'],
-        date: json['date'],
-        day_start: json['day_start'],
-        day_end: json['day_end'],
-        rooms: jsonToRoomList(json['rooms'], json['index']),
-        talks: jsonToTalkList(json['rooms'], json['index']));
+        date: DateTime.parse(json['date']),
+        rooms: jsonToRoomList(json['rooms'], DateTime.parse(json['date'])),
+        talks: jsonToTalkList(json['rooms'], DateTime.parse(json['date'])));
   }
 
-  static List<Room> jsonToRoomList(Map<String, dynamic> json, int day) {
+  static List<Room> jsonToRoomList(Map<String, dynamic> json, DateTime day) {
     List<Room> roomList = new List<Room>();
     List<String> roomNames = new List<String>.from(json.keys);
     for (var rn in roomNames) {
@@ -44,7 +34,7 @@ class Day {
     return roomList;
   }
 
-  static List<Talk> jsonToTalkList(var json, int day) {
+  static List<Talk> jsonToTalkList(var json, DateTime day) {
     List<Talk> talkList = new List<Talk>();
     List<String> roomNames = new List<String>.from(json.keys);
     for (var rn in roomNames) {

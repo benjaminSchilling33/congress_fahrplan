@@ -12,7 +12,6 @@ import 'package:congress_fahrplan/widgets/all_talks.dart';
 import 'package:congress_fahrplan/provider/favorite_provider.dart';
 import 'package:congress_fahrplan/model/fahrplan.dart';
 import 'package:congress_fahrplan/utilities/fahrplan_fetcher.dart';
-import 'package:congress_fahrplan/widgets/favorites.dart';
 
 void main() {
   runApp(CongressFahrplanApp(

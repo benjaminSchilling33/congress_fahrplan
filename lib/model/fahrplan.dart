@@ -8,7 +8,7 @@ Copyright (C) 2019 Benjamin Schilling
 import 'package:flutter/material.dart';
 
 import 'conference.dart';
-import 'talk.dart';
+import 'package:congress_fahrplan/widgets/talk.dart';
 import 'day.dart';
 import 'room.dart';
 
@@ -16,41 +16,46 @@ import 'package:congress_fahrplan/utilities/file_storage.dart';
 
 class Fahrplan {
   final String version;
-  final String base_url;
+  final String baseUrl;
   final Conference conference;
 
-  List<Talk> talks;
   List<Day> days;
   List<Room> rooms;
 
-  FavoritedTalks favTalks;
+  List<Talk> favoriteTalks;
+  FavoritedTalks favTalkIds;
+
+  Widget dayTabCache;
 
   Fahrplan({
     this.version,
-    this.base_url,
+    this.baseUrl,
     this.conference,
-    this.talks,
     this.days,
     this.rooms,
-    this.favTalks,
+    this.favTalkIds,
+    this.favoriteTalks,
   });
 
   factory Fahrplan.fromJson(var json, FavoritedTalks favTalks) {
     return Fahrplan(
       version: json['version'],
-      base_url: json['base_url'],
+      baseUrl: json['base_url'],
       conference: Conference.fromJson(json['conference']),
-      talks: new List<Talk>(),
       days: new List<Day>(),
       rooms: new List<Room>(),
-      favTalks: favTalks,
+      favTalkIds: favTalks,
+      favoriteTalks: new List<Talk>(),
     );
   }
 
-  Widget buildDayTabs(BuildContext context) {
-    return TabBarView(
-      children: this.conference.toDayTabs(),
-    );
+  Widget getDayTabBarView(BuildContext context) {
+    if (dayTabCache == null) {
+      dayTabCache = TabBarView(
+        children: this.conference.toDayTabs(),
+      );
+    }
+    return dayTabCache;
   }
 
   Widget buildRoomLayout(BuildContext context) {
@@ -62,27 +67,20 @@ class Fahrplan {
   List<Widget> toFavoriteList() {
     List<Column> dayColumns = new List<Column>();
     for (Day d in days) {
+      List<Widget> widgets = new List<Widget>();
+      widgets
+          .addAll(favoriteTalks.where((talk) => talk.date.day == d.date.day));
       dayColumns.add(
         Column(
           children: <Widget>[
             Expanded(
-              child: new ListView.builder(
-                  itemCount: 1,
-                  itemBuilder: (
-                    BuildContext context,
-                    int index,
-                  ) {
-                    List<Widget> widgets = new List<Widget>();
-                    d.talks.sort((a, b) => a.start.compareTo(b.start));
-                    for (Talk t in d.talks) {
-                      if (t.favorite) {
-                        widgets.add(t.build(context));
-                      }
-                    }
-                    return new Column(
-                      children: widgets,
-                    );
-                  }),
+              child: new ListView(
+                children: <Widget>[
+                  Column(
+                    children: widgets,
+                  )
+                ],
+              ),
             ),
           ],
         ),

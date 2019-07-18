@@ -43,16 +43,14 @@ class FahrplanFetcher {
 
     /// Fetch the Fahrplan from the REST API
     Fahrplan fp;
-
-    // Complete Fahrplan : https://http://data.c3voc.de/35C3/everything.schedule.json
+    // Complete Fahrplan : https://data.c3voc.de/35C3/everything.schedule.json
     // Only Main Rooms Fahrplan : https://fahrplan.events.ccc.de/congress/2018/Fahrplan/schedule.json
-    final response = await http.get(
-        'https://fahrplan.events.ccc.de/congress/2018/Fahrplan/schedule.json',
-        headers: {
-          "If-Modified-Since": fahrplanFile != null
-              ? HttpDate.format(fahrplanFileLastModified.toUtc())
-              : ""
-        });
+    final response = await http
+        .get('https://data.c3voc.de/35C3/everything.schedule.json', headers: {
+      "If-Modified-Since": fahrplanFile != null
+          ? HttpDate.format(fahrplanFileLastModified.toUtc())
+          : ""
+    });
 
     ///If the HTTP Status code is 200 OK use the Fahrplan from the response,
     ///if the HTTP Status Code is 304 Not Modified use the local file.

@@ -11,6 +11,7 @@ import 'package:congress_fahrplan/provider/favorite_provider.dart';
 
 /// The Talk widget stores all data about it and build a card with all data relevant for it.
 class Talk extends StatelessWidget {
+  DateTime day;
   final int id;
   final String title;
   final String track;
@@ -19,7 +20,7 @@ class Talk extends StatelessWidget {
   final String start;
   final String room;
   final String language;
-  final int day;
+  final DateTime date;
   bool favorite;
 
   Talk(
@@ -30,14 +31,11 @@ class Talk extends StatelessWidget {
       this.abstract,
       this.start,
       this.room,
-      this.day,
+      this.date,
       this.language,
       this.favorite});
 
-  static List<Talk> talks = new List<Talk>();
-
-  factory Talk.fromJson(var json, String room, int day) {
-    String start = json['start'] != null ? json['start'] : "";
+  factory Talk.fromJson(var json, String room) {
     return Talk(
       id: json['id'] != null ? json['id'] : 0,
       title: json['title'] != null ? json['title'] : "",
@@ -47,9 +45,13 @@ class Talk extends StatelessWidget {
       start: json['start'] != null ? json['start'] : "",
       room: room,
       language: json['language'] != null ? json['language'] : "",
-      day: start.compareTo("09:00") < 0 ? day + 1 : day,
+      date: DateTime.parse(json['date']),
       favorite: false,
     );
+  }
+
+  void setDay(DateTime d) {
+    this.day = d;
   }
 
   @override
@@ -65,7 +67,7 @@ class Talk extends StatelessWidget {
                 icon: Icon(
                   favorite ? Icons.favorite : Icons.favorite_border,
                 ),
-                onPressed: () => favoriteProvider.favoriteTalk(this)),
+                onPressed: () => favoriteProvider.favoriteTalk(this, day)),
           ),
         ),
         trailing: Ink(

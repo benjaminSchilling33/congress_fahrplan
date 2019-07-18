@@ -6,7 +6,6 @@ Copyright (C) 2019 Benjamin Schilling
 */
 
 import 'package:congress_fahrplan/model/day.dart';
-import 'package:congress_fahrplan/model/talk.dart';
 import 'package:congress_fahrplan/model/room.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +15,7 @@ class Conference {
   final String start;
   final String end;
   final int daysCount;
-  final String timeslot_duration;
+  final String timeslotDuration;
   final List<Day> days;
   final List<String> namesOfRooms;
 
@@ -26,10 +25,10 @@ class Conference {
     this.start,
     this.end,
     this.daysCount,
-    this.timeslot_duration,
+    this.timeslotDuration,
     this.days,
     this.namesOfRooms,
-  }); //, this.rooms});
+  });
 
   factory Conference.fromJson(var json) {
     return Conference(
@@ -38,7 +37,7 @@ class Conference {
       start: json['start'],
       end: json['end'],
       daysCount: json['daysCount'],
-      timeslot_duration: json['timeslot_duration'],
+      timeslotDuration: json['timeslot_duration'],
       days: jsonToDayList(json['days']),
       namesOfRooms: dayListToRoomNameList(
         jsonToDayList(json['days']),
@@ -47,23 +46,11 @@ class Conference {
   }
 
   static List<Day> jsonToDayList(var json) {
-    List<Day> dayList = new List<Day>();
+    List<Day> days = new List<Day>();
     for (var j in json) {
-      dayList.add(Day.fromJson(j));
+      days.add(Day.fromJson(j));
     }
-    List<Talk> reorderList = new List<Talk>();
-    for (Day d in dayList) {
-      for (Talk t in d.talks) {
-        if (t.day > d.index) {
-          reorderList.add(t);
-        }
-      }
-    }
-    for (Talk t in reorderList) {
-      dayList[t.day - 2].talks.remove(t);
-      dayList[t.day - 1].talks.add(t);
-    }
-    return dayList;
+    return days;
   }
 
   static List<String> dayListToRoomNameList(List<Day> dayList) {
@@ -79,31 +66,21 @@ class Conference {
   }
 
   List<Widget> toDayTabs() {
-    List<Column> dayColumns = new List<Column>();
+    List<Column> dayColumns = List<Column>();
     for (Day d in days) {
+      List<Widget> widgets = List<Widget>();
+      widgets.addAll(d.talks);
       dayColumns.add(
         Column(
           children: <Widget>[
             Expanded(
-              child: new ListView.builder(
-                  itemCount: 1,
-                  itemBuilder: (
-                    BuildContext context,
-                    int index,
-                  ) {
-                    List<Widget> widgets = new List<Widget>();
-                    d.talks.sort((a, b) => a.start.compareTo(b.start));
-                    for (Talk t in d.talks) {
-                      widgets.add(t.build(context));
-                    }
-                    int numbersOfTalks = d.talks.length;
-                    int numberOfWidgets = widgets.length;
-                    print(
-                        "Number of talks: $numbersOfTalks - $numberOfWidgets");
-                    return new Column(
-                      children: widgets,
-                    );
-                  }),
+              child: ListView(
+                children: <Widget>[
+                  Column(
+                    children: widgets,
+                  )
+                ],
+              ),
             ),
           ],
         ),
@@ -126,50 +103,8 @@ class Conference {
                     int index,
                   ) {
                     List<Widget> widgets = new List<Widget>();
-                    d.talks.sort((a, b) => a.start.compareTo(b.start));
-                    for (Talk t in d.talks) {
-                      widgets.add(t.build(context));
-                    }
-                    int numbersOfTalks = d.talks.length;
-                    int numberOfWidgets = widgets.length;
-                    print(
-                        "Number of talks: $numbersOfTalks - $numberOfWidgets");
-                    return new Column(
-                      children: widgets,
-                    );
-                  }),
-            ),
-          ],
-        ),
-      );
-    }
-    return dayColumns;
-  }
-
-  List<Widget> toFavoriteTabs() {
-    List<Column> dayColumns = new List<Column>();
-    for (Day d in days) {
-      dayColumns.add(
-        Column(
-          children: <Widget>[
-            Expanded(
-              child: new ListView.builder(
-                  itemCount: 1,
-                  itemBuilder: (
-                    BuildContext context,
-                    int index,
-                  ) {
-                    List<Widget> widgets = new List<Widget>();
-                    d.talks.sort((a, b) => a.start.compareTo(b.start));
-                    for (Talk t in d.talks) {
-                      if (t.favorite) {
-                        widgets.add(t.build(context));
-                      }
-                    }
-                    int numbersOfTalks = d.talks.length;
-                    int numberOfWidgets = widgets.length;
-                    print(
-                        "Number of talks: $numbersOfTalks - $numberOfWidgets");
+                    d.talks.sort((a, b) => a.date.compareTo(b.date));
+                    widgets.addAll(d.talks);
                     return new Column(
                       children: widgets,
                     );
@@ -186,8 +121,7 @@ class Conference {
     List<Text> dayTexts = new List<Text>();
     for (Day d in days) {
       String weekday = '';
-      DateTime date = DateTime.parse(d.date);
-      switch (date.weekday) {
+      switch (d.date.weekday) {
         case DateTime.monday:
           weekday = 'Mon';
           break;
@@ -210,7 +144,7 @@ class Conference {
           weekday = 'Sun';
           break;
       }
-      String dateString = date.month.toString() + '-' + date.day.toString();
+      String dateString = d.date.month.toString() + '-' + d.date.day.toString();
       dayTexts.add(new Text(
         '$weekday | $dateString',
         style: TextStyle(
