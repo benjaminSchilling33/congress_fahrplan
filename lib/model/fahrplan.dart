@@ -74,12 +74,11 @@ class Fahrplan {
         Column(
           children: <Widget>[
             Expanded(
-              child: new ListView(
-                children: <Widget>[
-                  Column(
-                    children: widgets,
-                  )
-                ],
+              child: new ListView.builder(
+                itemCount: widgets.length,
+                itemBuilder: (context, index) {
+                  return widgets[index];
+                },
               ),
             ),
           ],

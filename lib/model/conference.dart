@@ -74,12 +74,11 @@ class Conference {
         Column(
           children: <Widget>[
             Expanded(
-              child: ListView(
-                children: <Widget>[
-                  Column(
-                    children: widgets,
-                  )
-                ],
+              child: ListView.builder(
+                itemCount: d.talks.length,
+                itemBuilder: (context, index) {
+                  return d.talks[index];
+                },
               ),
             ),
           ],
