@@ -59,7 +59,7 @@ class Talk extends StatelessWidget {
     return Card(
       child: ListTile(
         title: Text(title),
-        subtitle: Text("$start - $room - $track - $language"),
+        subtitle: getCardSubtitle(),
         leading: Ink(
           child: Consumer<FavoriteProvider>(
             builder: (context, favoriteProvider, child) => IconButton(
@@ -87,75 +87,8 @@ class Talk extends StatelessWidget {
                   title: Text('$title'),
                   children: <Widget>[
                     Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-                          child: Text(
-                            '$subtitle',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 16.0),
-                          ),
-                        ),
-                        Row(
-                          children: <Widget>[
-                            Container(
-                              child: Icon(Icons.access_time),
-                              padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                            ),
-                            Text(
-                              '$start',
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: <Widget>[
-                            Container(
-                              child: Icon(Icons.room),
-                              padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                            ),
-                            Text(
-                              '$room',
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: <Widget>[
-                            Container(
-                              child: Icon(Icons.school),
-                              padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                            ),
-                            Text(
-                              '$track',
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: <Widget>[
-                            Container(
-                              child: Icon(Icons.translate),
-                              padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                            ),
-                            Text(
-                              '$language',
-                            ),
-                          ],
-                        ),
-                        SingleChildScrollView(
-                          padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                'Abstact: ',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              Text('$abstract'),
-                            ],
-                          ),
-                        ),
-                      ],
-                    )
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: getDetails())
                   ],
                   contentPadding: EdgeInsets.all(10),
                 ),
@@ -165,5 +98,116 @@ class Talk extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Text getCardSubtitle() {
+    String textString = '';
+    textString = textString +
+        ('$start' != '' ? ('$room' != '' ? '$start' + ' - ' : '$start') : '');
+    textString = textString +
+        ('$room' != '' ? ('$track' != '' ? '$room' + ' - ' : '$room') : '');
+    textString = textString +
+        ('$track' != ''
+            ? ('$language' != '' ? '$track' + ' - ' : '$track')
+            : '');
+    textString = textString + ('$language' != '' ? '$language' : '');
+    return Text(textString);
+  }
+
+  List<Widget> getDetails() {
+    List<Widget> widgets = new List<Widget>();
+
+    /// Add the subtitle
+    if (subtitle != null && subtitle != '') {
+      widgets.add(
+        Container(
+          padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+          child: Text(
+            '$subtitle',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+          ),
+        ),
+      );
+    }
+
+    /// Add the time details
+    if (start != null && start != '') {
+      widgets.add(Row(
+        children: <Widget>[
+          Container(
+            child: Icon(Icons.access_time),
+            padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+          ),
+          Text(
+            '$start',
+          ),
+        ],
+      ));
+    }
+
+    /// Add the room details
+    if (room != null && room != '') {
+      widgets.add(Row(
+        children: <Widget>[
+          Container(
+            child: Icon(Icons.room),
+            padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+          ),
+          Text(
+            '$room',
+          ),
+        ],
+      ));
+    }
+
+    /// Add the track details
+    if (track != null && track != '') {
+      widgets.add(Row(
+        children: <Widget>[
+          Container(
+            child: Icon(Icons.school),
+            padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+          ),
+          Text(
+            '$track',
+          ),
+        ],
+      ));
+    }
+
+    /// Add the language details
+    if (language != null && language != '') {
+      widgets.add(Row(
+        children: <Widget>[
+          Container(
+            child: Icon(Icons.translate),
+            padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+          ),
+          Text(
+            '$language',
+          ),
+        ],
+      ));
+    }
+
+    /// Add the abstract text
+    if (abstract != null && abstract != '') {
+      widgets.add(
+        SingleChildScrollView(
+          padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'Abstract: ',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              Text('$abstract'),
+            ],
+          ),
+        ),
+      );
+    }
+    return widgets;
   }
 }

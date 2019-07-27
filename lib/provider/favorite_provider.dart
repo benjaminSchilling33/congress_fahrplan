@@ -31,18 +31,42 @@ class FavoriteProvider extends ChangeNotifier {
   void favoriteTalk(Talk talk, DateTime talkDate) {
     for (Talk t
         in fahrplan.days.firstWhere((day) => day.date == talkDate).talks) {
-      if (t == talk && !t.favorite) {
+      if (t.id == talk.id && !t.favorite) {
+        /// Set favorite of talk in correct room to true
+        fahrplan.days
+            .firstWhere((day) => day.date == talkDate)
+            .rooms
+            .firstWhere((room) => room.name == talk.room)
+            .talks
+            .firstWhere((ta) => (ta.id == talk.id && !ta.favorite))
+            .favorite = true;
+
+        /// Set favorite of this talk to true
         talk.favorite = true;
+
+        /// Set favorite of talk in day to true
+        t.favorite = true;
         fahrplan.favTalkIds.addFavoriteTalk(talk.id);
         fahrplan.favoriteTalks.add(talk);
         fahrplan.favoriteTalks.sort((a, b) => a.date.compareTo(b.date));
-      } else if (t == talk && t.favorite) {
+        notifyListeners();
+        return;
+      } else if (t.id == talk.id && t.favorite) {
+        fahrplan.days
+            .firstWhere((day) => day.date == talkDate)
+            .rooms
+            .firstWhere((room) => room.name == talk.room)
+            .talks
+            .firstWhere((ta) => (ta.id == talk.id && ta.favorite))
+            .favorite = false;
         talk.favorite = false;
+        t.favorite = false;
         fahrplan.favTalkIds.removeFavoriteTalk(talk.id);
-        fahrplan.favoriteTalks.remove(talk);
+        fahrplan.favoriteTalks.removeWhere((ta) => ta.id == talk.id);
         fahrplan.favoriteTalks.sort((a, b) => a.date.compareTo(b.date));
+        notifyListeners();
+        return;
       }
     }
-    notifyListeners();
   }
 }

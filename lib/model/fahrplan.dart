@@ -7,12 +7,14 @@ Copyright (C) 2019 Benjamin Schilling
 
 import 'package:flutter/material.dart';
 
+import 'package:page_view_indicators/linear_progress_page_indicator.dart';
+
 import 'conference.dart';
-import 'package:congress_fahrplan/widgets/talk.dart';
 import 'day.dart';
 import 'room.dart';
-
-import 'package:congress_fahrplan/utilities/file_storage.dart';
+import 'package:congress_fahrplan/model/favorited_talk.dart';
+import 'package:congress_fahrplan/widgets/talk.dart';
+import 'package:congress_fahrplan/widgets/fahrplan_drawer.dart';
 
 class Fahrplan {
   final String version;
@@ -26,6 +28,9 @@ class Fahrplan {
   FavoritedTalks favTalkIds;
 
   Widget dayTabCache;
+
+  final currentPageNotifier = ValueNotifier<int>(0);
+  final PageStorageBucket bucket = PageStorageBucket();
 
   Fahrplan({
     this.version,
@@ -49,22 +54,134 @@ class Fahrplan {
     );
   }
 
-  Widget getDayTabBarView(BuildContext context) {
+  Widget buildDayLayout(BuildContext context, Future<Fahrplan> fahrplan) {
     if (dayTabCache == null) {
       dayTabCache = TabBarView(
-        children: this.conference.toDayTabs(),
+        children: this.conference.buildDayTabs(),
       );
     }
-    return dayTabCache;
-  }
-
-  Widget buildRoomLayout(BuildContext context) {
-    return TabBarView(
-      children: this.conference.toRoomTabs(),
+    return new DefaultTabController(
+      length: conference.daysCount,
+      child: new Scaffold(
+        appBar: new AppBar(
+          title: Text(getFahrplanTitle()),
+          bottom: PreferredSize(
+            child: TabBar(
+              tabs: conference.getDaysAsText(),
+              indicator: UnderlineTabIndicator(
+                borderSide: BorderSide(color: Theme.of(context).indicatorColor),
+              ),
+            ),
+            preferredSize: Size.fromHeight(50),
+          ),
+        ),
+        drawer: FahrplanDrawer(
+          fahrplan: fahrplan,
+          title: Text(
+            'Overview',
+            style: Theme.of(context).textTheme.title,
+          ),
+        ),
+        body: dayTabCache,
+      ),
     );
   }
 
-  List<Widget> toFavoriteList() {
+  Widget buildRoomLayout(BuildContext context, Future<Fahrplan> fahrplan) {
+    return new Scaffold(
+      appBar: new AppBar(
+        title: Text(getFahrplanTitle()),
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constrains) =>
+                LinearProgressPageIndicator(
+              itemCount: rooms.length,
+              currentPageNotifier: currentPageNotifier,
+              progressColor: Theme.of(context).indicatorColor,
+              width: constrains.maxWidth,
+              height: 10,
+            ),
+          ),
+          Expanded(
+            child: PageStorage(
+              bucket: bucket,
+              child: PageView.builder(
+                scrollDirection: Axis.vertical,
+                itemCount: days.length,
+                controller: PageController(viewportFraction: 0.90),
+                itemBuilder: (BuildContext context, int index) {
+                  return _buildCarousel(context, days[index], index);
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
+      drawer: FahrplanDrawer(
+        fahrplan: fahrplan,
+        title: Text(
+          'Overview',
+          style: Theme.of(context).textTheme.title,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCarousel(BuildContext context, Day d, int index) {
+    return Column(
+      key: PageStorageKey(d.date.toString() + '$index'),
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        Expanded(
+          child: PageView.builder(
+            // store this controller in a State to save the carousel scroll position
+            itemCount: d.rooms.length,
+            controller: PageController(viewportFraction: 0.85),
+            itemBuilder: (BuildContext context, int itemIndex) {
+              return buildRoom(context, itemIndex, d, d.rooms[itemIndex].name);
+            },
+            onPageChanged: (int itemIndex) {
+              currentPageNotifier.value = itemIndex;
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildRoom(
+      BuildContext context, int itemIndex, Day d, String roomName) {
+    int month = d.date.month;
+    int day = d.date.day;
+    return Padding(
+      padding: EdgeInsets.fromLTRB(8, 0, 8, 16),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.grey,
+          borderRadius: BorderRadius.all(Radius.circular(4.0)),
+        ),
+        child: Column(
+          children: <Widget>[
+            Text('$month-$day - $roomName'),
+            Expanded(
+              child: ListView.builder(
+                itemCount: d.rooms[itemIndex].talks.length,
+                itemBuilder: (context, index) {
+                  return d.rooms[itemIndex].talks[index];
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  List<Widget> buildFavoriteList() {
     List<Column> dayColumns = new List<Column>();
     for (Day d in days) {
       List<Widget> widgets = new List<Widget>();
@@ -96,30 +213,5 @@ class Fahrplan {
   String getFavoritesTitle() {
     String acronym = conference.acronym;
     return 'Favorites - $acronym';
-  }
-}
-
-class FavoritedTalks {
-  final List<int> ids;
-
-  FavoritedTalks({this.ids});
-
-  factory FavoritedTalks.fromJson(Map json) {
-    if (json != null) {
-      return FavoritedTalks(
-        ids: json['ids'].cast<int>(),
-      );
-    }
-    return FavoritedTalks(ids: new List<int>());
-  }
-
-  void addFavoriteTalk(int id) {
-    ids.add(id);
-    FileStorage.writeFavoritesFile('{"ids": $ids}');
-  }
-
-  void removeFavoriteTalk(int id) {
-    ids.remove(id);
-    FileStorage.writeFavoritesFile('{"ids": $ids}');
   }
 }

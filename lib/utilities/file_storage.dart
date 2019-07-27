@@ -10,15 +10,15 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
 class FileStorage {
-  static Future<bool> get dataFileAvailable async {
-    final path = await localPath;
-    return File('$path/data.json').exists();
-  }
-
   static Future<String> get localPath async {
     final directory = await getApplicationDocumentsDirectory();
 
     return directory.path;
+  }
+
+  static Future<bool> get dataFileAvailable async {
+    final path = await localPath;
+    return File('$path/data.json').exists();
   }
 
   static Future<File> get localDataFile async {
@@ -34,6 +34,37 @@ class FileStorage {
   }
 
   static Future<String> readDataFile() async {
+    try {
+      final file = await localDataFile;
+
+      // Read the file
+      String contents = await file.readAsString();
+
+      return contents;
+    } catch (e) {
+      // If we encounter an error, return 0
+      return "";
+    }
+  }
+
+  static Future<bool> get ifNoneMatchFileAvailable async {
+    final path = await localPath;
+    return File('$path/if-none-match.file').exists();
+  }
+
+  static Future<File> get localIfNoneMatchFile async {
+    final path = await localPath;
+    return File('$path/if-none-match.file');
+  }
+
+  static Future<File> writeIfNoneMatchFile(String data) async {
+    final file = await localDataFile;
+
+    // Write the file
+    return file.writeAsString('$data', mode: FileMode.write);
+  }
+
+  static Future<String> readIfNoneMatchFile() async {
     try {
       final file = await localDataFile;
 

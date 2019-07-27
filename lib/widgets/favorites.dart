@@ -9,7 +9,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:congress_fahrplan/model/fahrplan.dart';
-import 'package:congress_fahrplan/widgets/all_talks.dart';
+import 'package:congress_fahrplan/widgets/fahrplan_drawer.dart';
 
 class Favorites extends StatelessWidget {
   final Future<Fahrplan> fahrplan;
@@ -32,24 +32,6 @@ class Favorites extends StatelessWidget {
               child: new Scaffold(
                 appBar: new AppBar(
                   title: new Text(snapshot.data.getFavoritesTitle()),
-                  leading: Ink(
-                    decoration: ShapeDecoration(
-                      shape: CircleBorder(),
-                    ),
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.calendar_today,
-                      ),
-                      onPressed: () => Navigator.pop(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AllTalks(
-                            fahrplan: fahrplan,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
                   bottom: TabBar(
                     tabs: snapshot.data.conference.getDaysAsText(),
                     indicator: UnderlineTabIndicator(
@@ -58,8 +40,15 @@ class Favorites extends StatelessWidget {
                     ),
                   ),
                 ),
+                drawer: FahrplanDrawer(
+                  fahrplan: fahrplan,
+                  title: Text(
+                    'Favorites',
+                    style: Theme.of(context).textTheme.title,
+                  ),
+                ),
                 body: TabBarView(
-                  children: snapshot.data.toFavoriteList(),
+                  children: snapshot.data.buildFavoriteList(),
                 ),
               ),
             ),

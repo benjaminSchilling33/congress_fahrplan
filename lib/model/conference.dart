@@ -6,7 +6,6 @@ Copyright (C) 2019 Benjamin Schilling
 */
 
 import 'package:congress_fahrplan/model/day.dart';
-import 'package:congress_fahrplan/model/room.dart';
 import 'package:flutter/material.dart';
 
 class Conference {
@@ -39,9 +38,6 @@ class Conference {
       daysCount: json['daysCount'],
       timeslotDuration: json['timeslot_duration'],
       days: jsonToDayList(json['days']),
-      namesOfRooms: dayListToRoomNameList(
-        jsonToDayList(json['days']),
-      ),
     );
   }
 
@@ -53,19 +49,7 @@ class Conference {
     return days;
   }
 
-  static List<String> dayListToRoomNameList(List<Day> dayList) {
-    List<String> roomNameList = new List<String>();
-    for (Day d in dayList) {
-      for (Room r in d.rooms) {
-        if (!roomNameList.contains(r.name)) {
-          roomNameList.add(r.name);
-        }
-      }
-    }
-    return roomNameList;
-  }
-
-  List<Widget> toDayTabs() {
+  List<Widget> buildDayTabs() {
     List<Column> dayColumns = List<Column>();
     for (Day d in days) {
       List<Widget> widgets = List<Widget>();
@@ -88,35 +72,7 @@ class Conference {
     return dayColumns;
   }
 
-  List<Widget> toRoomTabs() {
-    List<Column> dayColumns = new List<Column>();
-    for (Day d in days) {
-      dayColumns.add(
-        Column(
-          children: <Widget>[
-            Expanded(
-              child: new ListView.builder(
-                  itemCount: 1,
-                  itemBuilder: (
-                    BuildContext context,
-                    int index,
-                  ) {
-                    List<Widget> widgets = new List<Widget>();
-                    d.talks.sort((a, b) => a.date.compareTo(b.date));
-                    widgets.addAll(d.talks);
-                    return new Column(
-                      children: widgets,
-                    );
-                  }),
-            ),
-          ],
-        ),
-      );
-    }
-    return dayColumns;
-  }
-
-  List<Widget> getDaysAsText() {
+  List<Text> getDaysAsText() {
     List<Text> dayTexts = new List<Text>();
     for (Day d in days) {
       String weekday = '';

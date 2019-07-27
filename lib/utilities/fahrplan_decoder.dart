@@ -6,8 +6,11 @@ Copyright (C) 2019 Benjamin Schilling
 */
 
 import 'package:congress_fahrplan/model/fahrplan.dart';
-import 'package:congress_fahrplan/widgets/talk.dart';
 import 'package:congress_fahrplan/model/day.dart';
+import 'package:congress_fahrplan/model/room.dart';
+import 'package:congress_fahrplan/model/favorited_talk.dart';
+
+import 'package:congress_fahrplan/widgets/talk.dart';
 
 class FahrplanDecoder {
   // Decodes the Fahrplan, initializes it and sets all favorited talks
@@ -16,13 +19,35 @@ class FahrplanDecoder {
     Fahrplan f = Fahrplan.fromJson(json, favTalks);
 
     //Initialize days, rooms and sort talks of days
+
+    List<Room> allRooms = new List<Room>();
     for (Day d in f.conference.days) {
       f.days.add(d);
-      f.rooms.addAll(d.rooms);
+      allRooms.addAll(d.rooms);
       d.talks.sort((a, b) => a.date.compareTo(b.date));
     }
 
-    //set all favorites talks
+    // Create a reduced list of rooms and assign it to the fahrplan
+    List<Room> reducedRooms = new List<Room>();
+    for (Room r in allRooms) {
+      if (reducedRooms.length != 0) {
+        if (reducedRooms.firstWhere((room) => room.name == r.name,
+                orElse: () => null) !=
+            null) {
+          reducedRooms
+              .firstWhere((room) => room.name == r.name)
+              .talks
+              .addAll(r.talks);
+        } else {
+          reducedRooms.add(r);
+        }
+      } else {
+        reducedRooms.add(r);
+      }
+    }
+    f.rooms = reducedRooms;
+
+    //set all favorites talks for each day and each rooms of each day
     for (int i in f.favTalkIds.ids) {
       for (Day d in f.days) {
         for (Talk t in d.talks) {
@@ -30,6 +55,15 @@ class FahrplanDecoder {
             f.favoriteTalks.add(t);
             d.talks.elementAt(d.talks.indexOf(t)).favorite = true;
             break;
+          }
+        }
+        for (Room r in d.rooms) {
+          for (Talk t in r.talks) {
+            if (t.id == i) {
+              f.favoriteTalks.add(t);
+              r.talks.elementAt(r.talks.indexOf(t)).favorite = true;
+              break;
+            }
           }
         }
       }

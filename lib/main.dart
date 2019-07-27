@@ -80,7 +80,7 @@ class CongressFahrplanApp extends StatelessWidget {
         title: 'Congress Fahrplan',
         initialRoute: '/',
         routes: {
-          '/': (context) => AllTalks(
+          '/': (context) => AllTalksWidget(
                 fahrplan: fahrplan,
               ),
         },
