@@ -5,6 +5,9 @@ SPDX-License-Identifier: GPL-2.0-only
 Copyright (C) 2019 Benjamin Schilling
 */
 
+import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:congress_fahrplan/provider/favorite_provider.dart';
@@ -21,6 +24,8 @@ class Talk extends StatelessWidget {
   final String room;
   final String language;
   final DateTime date;
+  final String url;
+  final List<Person> persons;
   bool favorite;
 
   Talk(
@@ -33,6 +38,8 @@ class Talk extends StatelessWidget {
       this.room,
       this.date,
       this.language,
+      this.url,
+      this.persons,
       this.favorite});
 
   factory Talk.fromJson(var json, String room) {
@@ -46,8 +53,18 @@ class Talk extends StatelessWidget {
       room: room,
       language: json['language'] != null ? json['language'] : "",
       date: DateTime.parse(json['date']),
+      url: json['url'] != null ? json['url'] : "",
+      persons: jsonToPersonList(json['persons']),
       favorite: false,
     );
+  }
+
+  static List<Person> jsonToPersonList(var json) {
+    List<Person> persons = new List<Person>();
+    for (var j in json) {
+      persons.add(Person.fromJson(j));
+    }
+    return persons;
   }
 
   void setDay(DateTime d) {
@@ -190,6 +207,49 @@ class Talk extends StatelessWidget {
       ));
     }
 
+    /// Add the url details
+    if (url != null && url != '') {
+      widgets.add(Row(
+        children: <Widget>[
+          Container(
+            child: Icon(Icons.open_in_browser),
+            padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+          ),
+          Expanded(
+            child: Linkify(
+              onOpen: (link) async {
+                if (await canLaunch(url)) {
+                  await launch(url);
+                } else {
+                  throw 'Could not launch $link';
+                }
+              },
+              text: "$url",
+              style: TextStyle(),
+            ),
+          )
+        ],
+      ));
+    }
+
+    /// Add the persons details
+    if (persons != null && persons.length > 0) {
+      String personsString = '';
+      for (Person p in persons) {
+        personsString += p.publicName +
+            (persons.last.publicName == p.publicName ? '' : ' - ');
+      }
+      widgets.add(Row(
+        children: <Widget>[
+          Container(
+            child: Icon(Icons.group),
+            padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+          ),
+          Text(personsString),
+        ],
+      ));
+    }
+
     /// Add the abstract text
     if (abstract != null && abstract != '') {
       widgets.add(
@@ -209,5 +269,19 @@ class Talk extends StatelessWidget {
       );
     }
     return widgets;
+  }
+}
+
+class Person {
+  int id;
+  String publicName;
+
+  Person({this.id, this.publicName});
+
+  factory Person.fromJson(var json) {
+    return Person(
+      id: json['id'] != null ? json['id'] : 0,
+      publicName: json['public_name'] != null ? json['public_name'] : "",
+    );
   }
 }
