@@ -108,4 +108,36 @@ class FileStorage {
       return "";
     }
   }
+
+  /// Options File
+  static Future<bool> get settingsFileAvailable async {
+    final path = await localPath;
+    return File('$path/settings.json').exists();
+  }
+
+  static Future<File> get localSettingsFile async {
+    final path = await localPath;
+    return File('$path/settings.json');
+  }
+
+  static Future<File> writeSettingsFile(String data) async {
+    final file = await localSettingsFile;
+
+    // Write the file
+    return file.writeAsString('$data', mode: FileMode.write);
+  }
+
+  static Future<String> readSettingsFile() async {
+    try {
+      final file = await localSettingsFile;
+
+      // Read the file
+      String contents = await file.readAsString();
+
+      return contents;
+    } catch (e) {
+      // If we encounter an error, return 0
+      return "";
+    }
+  }
 }

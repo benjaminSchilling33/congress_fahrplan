@@ -12,9 +12,10 @@ import 'package:page_view_indicators/linear_progress_page_indicator.dart';
 import 'conference.dart';
 import 'day.dart';
 import 'room.dart';
-import 'package:congress_fahrplan/model/favorited_talk.dart';
+import 'package:congress_fahrplan/model/favorited_talks.dart';
 import 'package:congress_fahrplan/widgets/talk.dart';
 import 'package:congress_fahrplan/widgets/fahrplan_drawer.dart';
+import 'package:congress_fahrplan/model/settings.dart';
 
 class Fahrplan {
   final String version;
@@ -32,6 +33,8 @@ class Fahrplan {
   final currentPageNotifier = ValueNotifier<int>(0);
   final PageStorageBucket bucket = PageStorageBucket();
 
+  final Settings settings;
+
   Fahrplan({
     this.version,
     this.baseUrl,
@@ -40,9 +43,11 @@ class Fahrplan {
     this.rooms,
     this.favTalkIds,
     this.favoriteTalks,
+    this.settings,
   });
 
-  factory Fahrplan.fromJson(var json, FavoritedTalks favTalks) {
+  factory Fahrplan.fromJson(
+      var json, FavoritedTalks favTalks, Settings settings) {
     return Fahrplan(
       version: json['version'],
       baseUrl: json['base_url'],
@@ -51,15 +56,19 @@ class Fahrplan {
       rooms: new List<Room>(),
       favTalkIds: favTalks,
       favoriteTalks: new List<Talk>(),
+      settings: settings,
     );
   }
 
-  Widget buildDayLayout(BuildContext context, Future<Fahrplan> fahrplan) {
-    if (dayTabCache == null) {
+  Widget buildDayLayout(BuildContext context) {
+    /*if (dayTabCache == null) {
       dayTabCache = TabBarView(
         children: this.conference.buildDayTabs(),
       );
-    }
+    }*/
+    dayTabCache = TabBarView(
+      children: this.conference.buildDayTabs(),
+    );
     return new DefaultTabController(
       length: conference.daysCount,
       child: new Scaffold(
@@ -76,7 +85,6 @@ class Fahrplan {
           ),
         ),
         drawer: FahrplanDrawer(
-          fahrplan: fahrplan,
           title: Text(
             'Overview',
             style: Theme.of(context).textTheme.title,
@@ -87,7 +95,7 @@ class Fahrplan {
     );
   }
 
-  Widget buildRoomLayout(BuildContext context, Future<Fahrplan> fahrplan) {
+  Widget buildRoomLayout(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
         title: Text(getFahrplanTitle()),
@@ -121,7 +129,6 @@ class Fahrplan {
         ],
       ),
       drawer: FahrplanDrawer(
-        fahrplan: fahrplan,
         title: Text(
           'Overview',
           style: Theme.of(context).textTheme.title,
@@ -185,8 +192,12 @@ class Fahrplan {
     List<Column> dayColumns = new List<Column>();
     for (Day d in days) {
       List<Widget> widgets = new List<Widget>();
-      widgets
-          .addAll(favoriteTalks.where((talk) => talk.date.day == d.date.day));
+      widgets.addAll(favoriteTalks
+          .where((talk) => talk.date.day == d.date.day)
+          .where((talk) => conference.days
+              .firstWhere((date) => date.date.day == talk.day.day)
+              .talks
+              .contains(talk)));
       dayColumns.add(
         Column(
           children: <Widget>[

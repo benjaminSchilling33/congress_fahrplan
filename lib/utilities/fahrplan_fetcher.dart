@@ -15,7 +15,8 @@ import 'package:congress_fahrplan/utilities/file_storage.dart';
 import 'package:congress_fahrplan/utilities/fahrplan_decoder.dart';
 
 import 'package:congress_fahrplan/model/fahrplan.dart';
-import 'package:congress_fahrplan/model/favorited_talk.dart';
+import 'package:congress_fahrplan/model/favorited_talks.dart';
+import 'package:congress_fahrplan/model/settings.dart';
 
 class FahrplanFetcher {
   static Future<Fahrplan> fetchFahrplan() async {
@@ -55,11 +56,22 @@ class FahrplanFetcher {
 
     /// Fetch the Fahrplan from the REST API
     Fahrplan fp;
-    // Complete Fahrplan : https://data.c3voc.de/35C3/everything.schedule.json
-    // Only Main Rooms Fahrplan : https://fahrplan.events.ccc.de/congress/2018/Fahrplan/schedule.json
+
+    /// Fetch the fahrplan depending on what is set in the settings
+    String requestString =
+        'https://fahrplan.events.ccc.de/congress/2018/Fahrplan/schedule.json';
+    Settings settings = await Settings.restoreSettingsFromFile();
+    if (settings.getLoadFullFahrplan()) {
+      // Complete Fahrplan
+      requestString = 'https://data.c3voc.de/35C3/everything.schedule.json';
+    } else {
+      // Only Main Rooms Fahrplan
+      requestString =
+          'https://fahrplan.events.ccc.de/congress/2018/Fahrplan/schedule.json';
+    }
 
     final response = await http.get(
-      'https://fahrplan.events.ccc.de/congress/2018/Fahrplan/schedule.json',
+      '$requestString',
       headers: {
         "If-Modified-Since": fahrplanFile != null
             ? HttpDate.format(fahrplanFileLastModified.toUtc())
@@ -78,14 +90,16 @@ class FahrplanFetcher {
       fp = new FahrplanDecoder().decodeFahrplanFromJson(
         json.decode(fahrplanJson)['schedule'],
         favTalks,
+        settings,
       );
     } else if (response.statusCode == 304) {
       if (fahrplanFile != null) {
         fahrplanJson = await fahrplanFile.readAsString();
-        if (fahrplanJson != null) {
+        if (fahrplanJson != null && fahrplanJson != '') {
           fp = new FahrplanDecoder().decodeFahrplanFromJson(
             json.decode(fahrplanJson)['schedule'],
             favTalks,
+            settings,
           );
         }
       }

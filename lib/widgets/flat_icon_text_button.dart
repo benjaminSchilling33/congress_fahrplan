@@ -21,7 +21,7 @@ class FlatIconTextButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Container(
-              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+              padding: EdgeInsets.fromLTRB(12, 0, 0, 0),
               child: Icon(
                 icon,
                 color: onPressed != null
@@ -30,7 +30,7 @@ class FlatIconTextButton extends StatelessWidget {
               ),
             ),
             Container(
-                padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                padding: EdgeInsets.fromLTRB(12, 0, 0, 0),
                 child: Text(
                   text,
                   style: onPressed != null
