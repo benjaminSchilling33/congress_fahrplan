@@ -13,7 +13,67 @@ import 'package:congress_fahrplan/provider/favorite_provider.dart';
 import 'package:congress_fahrplan/model/fahrplan.dart';
 
 void main() {
-  runApp(CongressFahrplanApp());
+  runApp(ThemeWrapper());
+}
+
+class ThemeWrapper extends StatelessWidget {
+  ThemeWrapper({Key key}) : super(key: key);
+
+  Widget build(BuildContext context) {
+    return new MaterialApp(
+      theme: ThemeData(
+        brightness: Brightness.dark,
+        backgroundColor: Color(0xff000a12),
+        tabBarTheme: TabBarTheme(
+          indicator: UnderlineTabIndicator(),
+        ),
+        primaryColorDark: Color(0xFF000A12),
+        indicatorColor: Color(0xFFffb300),
+        accentColor: Color(0xFFffb300),
+        textTheme: TextTheme(
+          title: TextStyle(
+            color: Color(0xFFFAFAFA),
+          ),
+          body1: TextStyle(
+            color: Color(0xFFFAFAFA),
+          ),
+          body2: TextStyle(
+            color: Color(0xFFFAFAFA),
+          ),
+          subtitle: TextStyle(
+            color: Color(0xFFFAFAFA),
+          ),
+          subhead: TextStyle(
+            color: Color(0xFFFAFAFA),
+          ),
+          display1: TextStyle(
+            color: Color(0xFFFAFAFA),
+          ),
+          caption: TextStyle(
+            color: Color(0xFFFAFAFA),
+          ),
+          overline: TextStyle(
+            color: Color(0xFFFAFAFA),
+          ),
+          headline: TextStyle(
+            color: Color(0xFFFAFAFA),
+          ),
+        ),
+        cardColor: Color(0xFF4F5B62),
+        appBarTheme: AppBarTheme(
+          color: Color(0xFF263238),
+          iconTheme: IconThemeData(
+            color: Color(0xFFffb300),
+          ),
+        ),
+        iconTheme: IconThemeData(
+          color: Color(0xFFffb300),
+        ),
+        toggleableActiveColor: Color(0xFFffb300),
+      ),
+      home: CongressFahrplanApp(key: key),
+    );
+  }
 }
 
 class CongressFahrplanApp extends StatelessWidget {
@@ -29,109 +89,11 @@ class CongressFahrplanApp extends StatelessWidget {
             if (snapshot.hasData) {
               favoriteProvider.initializeProvider(snapshot.data);
               return AllTalks(
-                theme: ThemeData(
-                  brightness: Brightness.dark,
-                  backgroundColor: Color(0xff000a12),
-                  tabBarTheme: TabBarTheme(
-                    indicator: UnderlineTabIndicator(),
-                  ),
-                  primaryColorDark: Color(0xFF000A12),
-                  indicatorColor: Color(0xFFffb300),
-                  accentColor: Color(0xFFffb300),
-                  textTheme: TextTheme(
-                    title: TextStyle(
-                      color: Color(0xFFFAFAFA),
-                    ),
-                    body1: TextStyle(
-                      color: Color(0xFFFAFAFA),
-                    ),
-                    body2: TextStyle(
-                      color: Color(0xFFFAFAFA),
-                    ),
-                    subtitle: TextStyle(
-                      color: Color(0xFFFAFAFA),
-                    ),
-                    subhead: TextStyle(
-                      color: Color(0xFFFAFAFA),
-                    ),
-                    display1: TextStyle(
-                      color: Color(0xFFFAFAFA),
-                    ),
-                    caption: TextStyle(
-                      color: Color(0xFFFAFAFA),
-                    ),
-                    overline: TextStyle(
-                      color: Color(0xFFFAFAFA),
-                    ),
-                    headline: TextStyle(
-                      color: Color(0xFFFAFAFA),
-                    ),
-                  ),
-                  cardColor: Color(0xFF4F5B62),
-                  appBarTheme: AppBarTheme(
-                    color: Color(0xFF263238),
-                    iconTheme: IconThemeData(
-                      color: Color(0xFFffb300),
-                    ),
-                  ),
-                  iconTheme: IconThemeData(
-                    color: Color(0xFFffb300),
-                  ),
-                  toggleableActiveColor: Color(0xFFffb300),
-                ),
+                theme: Theme.of(context),
               );
             } else {
               return new MaterialApp(
-                theme: new ThemeData(
-                  brightness: Brightness.dark,
-                  backgroundColor: Color(0xff000a12),
-                  tabBarTheme: TabBarTheme(
-                    indicator: UnderlineTabIndicator(),
-                  ),
-                  primaryColorDark: Color(0xFF000A12),
-                  indicatorColor: Color(0xFFffb300),
-                  accentColor: Color(0xFFffb300),
-                  textTheme: TextTheme(
-                    title: TextStyle(
-                      color: Color(0xFFFAFAFA),
-                    ),
-                    body1: TextStyle(
-                      color: Color(0xFFFAFAFA),
-                    ),
-                    body2: TextStyle(
-                      color: Color(0xFFFAFAFA),
-                    ),
-                    subtitle: TextStyle(
-                      color: Color(0xFFFAFAFA),
-                    ),
-                    subhead: TextStyle(
-                      color: Color(0xFFFAFAFA),
-                    ),
-                    display1: TextStyle(
-                      color: Color(0xFFFAFAFA),
-                    ),
-                    caption: TextStyle(
-                      color: Color(0xFFFAFAFA),
-                    ),
-                    overline: TextStyle(
-                      color: Color(0xFFFAFAFA),
-                    ),
-                    headline: TextStyle(
-                      color: Color(0xFFFAFAFA),
-                    ),
-                  ),
-                  cardColor: Color(0xFF4F5B62),
-                  appBarTheme: AppBarTheme(
-                    color: Color(0xFF263238),
-                    iconTheme: IconThemeData(
-                      color: Color(0xFFffb300),
-                    ),
-                  ),
-                  iconTheme: IconThemeData(
-                    color: Color(0xFFffb300),
-                  ),
-                  toggleableActiveColor: Color(0xFFffb300),
-                ),
+                theme: Theme.of(context),
                 title: 'Congress Fahrplan',
                 home: new Scaffold(
                   body: Center(
