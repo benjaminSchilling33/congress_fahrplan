@@ -84,7 +84,8 @@ class Talk extends StatelessWidget {
                 icon: Icon(
                   favorite ? Icons.favorite : Icons.favorite_border,
                 ),
-                onPressed: () => favoriteProvider.favoriteTalk(this, day)),
+                onPressed: () =>
+                    favoriteProvider.favoriteTalk(context, this, day)),
           ),
         ),
         trailing: Ink(

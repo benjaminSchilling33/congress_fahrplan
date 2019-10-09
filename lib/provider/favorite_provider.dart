@@ -7,7 +7,6 @@ Copyright (C) 2019 Benjamin Schilling
 
 import 'dart:collection';
 import 'package:flutter/foundation.dart';
-
 import 'package:flutter/material.dart';
 
 import 'package:congress_fahrplan/widgets/talk.dart';
@@ -37,25 +36,49 @@ class FavoriteProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void favoriteTalk(Talk talk, DateTime talkDate) {
+  void favoriteTalk(BuildContext context, Talk talk, DateTime talkDate) {
     for (Talk t
         in fahrplan.days.firstWhere((day) => day.date == talkDate).talks) {
-      /// Check for a matching talk id, favorite is not set and (if favorites has elements) that the talk not exists in favorite talks
+      /// Check for 1. a matching talk id, 2. favorite is not set and (if favorites has elements) 3. that the talk not exists in favorite talks
       if (t.id == talk.id && !t.favorite) {
         if (fahrplan.favoriteTalks.length > 0) {
           for (Talk fav in fahrplan.favoriteTalks) {
             if (fav.id == talk.id) {
               return;
             } else {
+              if (context != null) {
+                String talkName = talk.title;
+                Scaffold.of(context).showSnackBar(SnackBar(
+                  content: Text('\"$talkName\" added to favorites.'),
+                  action: SnackBarAction(
+                    label: "Revert",
+                    onPressed: () => this.favoriteTalk(null, talk, talkDate),
+                  ),
+                  duration: Duration(seconds: 3),
+                ));
+              }
+
               favorite(t, talk, talkDate);
               return;
             }
           }
         } else {
+          if (context != null) {
+            String talkName = talk.title;
+            Scaffold.of(context).showSnackBar(SnackBar(
+              content: Text('\"$talkName\" added to favorites.'),
+              action: SnackBarAction(
+                label: "Revert",
+                onPressed: () => this.favoriteTalk(null, talk, talkDate),
+              ),
+              duration: Duration(seconds: 3),
+            ));
+          }
           favorite(t, talk, talkDate);
           return;
         }
       } else if (t.id == talk.id && t.favorite) {
+        /// If the talk exists and is favorites, remove it from the list of favorites
         fahrplan.days
             .firstWhere((day) => day.date == talkDate)
             .rooms
@@ -69,6 +92,17 @@ class FavoriteProvider extends ChangeNotifier {
         fahrplan.favoriteTalks.removeWhere((ta) => ta.id == talk.id);
         fahrplan.favoriteTalks.sort((a, b) => a.date.compareTo(b.date));
         notifyListeners();
+        if (context != null) {
+          String talkName = talk.title;
+          Scaffold.of(context).showSnackBar(SnackBar(
+            content: Text('\"$talkName\" removed from favorites.'),
+            action: SnackBarAction(
+              label: "Revert",
+              onPressed: () => this.favoriteTalk(null, talk, talkDate),
+            ),
+            duration: Duration(seconds: 3),
+          ));
+        }
         return;
       }
     }

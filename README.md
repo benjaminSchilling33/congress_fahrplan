@@ -5,6 +5,10 @@ A Congress Fahrplan App written in Flutter
 
 Build the app using `flutter build apk --split-per-abi`.
 
+## How to build for release
+
+Increment the `flutterVersionCode` and `flutterVersionName` in `android/app/build.gradle`
+
 Required `key.properties` in `./android/`.
 
 Content:

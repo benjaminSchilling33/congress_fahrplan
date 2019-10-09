@@ -68,6 +68,17 @@ class CongressFahrplanApp extends StatelessWidget {
                     ),
                   ),
                   cardColor: Color(0xFF4F5B62),
+                  snackBarTheme: SnackBarThemeData(
+                    backgroundColor: Color(0xFF8d9ca5),
+                    actionTextColor: Color(0xFFffb300),
+                    contentTextStyle: TextStyle(
+                      color: Color(0xFFFAFAFA),
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                    elevation: 30,
+                  ),
                   appBarTheme: AppBarTheme(
                     color: Color(0xFF263238),
                     iconTheme: IconThemeData(
