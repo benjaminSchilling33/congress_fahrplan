@@ -21,6 +21,7 @@ class Fahrplan {
   final String version;
   final String baseUrl;
   final Conference conference;
+  bool isEmpty;
 
   List<Day> days;
   List<Room> rooms;
@@ -44,6 +45,7 @@ class Fahrplan {
     this.favTalkIds,
     this.favoriteTalks,
     this.settings,
+    this.isEmpty,
   });
 
   factory Fahrplan.fromJson(

@@ -10,6 +10,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:connectivity/connectivity.dart';
 
 import 'package:congress_fahrplan/utilities/file_storage.dart';
 import 'package:congress_fahrplan/utilities/fahrplan_decoder.dart';
@@ -56,43 +57,72 @@ class FahrplanFetcher {
 
     /// Fetch the Fahrplan from the REST API
     Fahrplan fp;
-
-    /// Fetch the fahrplan depending on what is set in the settings
-    String requestString =
-        'https://fahrplan.events.ccc.de/congress/2018/Fahrplan/schedule.json';
     Settings settings = await Settings.restoreSettingsFromFile();
-    if (settings.getLoadFullFahrplan()) {
-      // Complete Fahrplan
-      requestString = 'https://data.c3voc.de/35C3/everything.schedule.json';
-    } else {
-      // Only Main Rooms Fahrplan
-      requestString =
+
+    /// Check for network connectivity
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.mobile ||
+        connectivityResult == ConnectivityResult.wifi) {
+      /// Fetch the fahrplan depending on what is set in the settings, if the timeout of 4 seconds expires load the
+      String requestString =
           'https://fahrplan.events.ccc.de/congress/2018/Fahrplan/schedule.json';
-    }
 
-    final response = await http.get(
-      '$requestString',
-      headers: {
-        "If-Modified-Since": fahrplanFile != null
-            ? HttpDate.format(fahrplanFileLastModified.toUtc())
-            : "",
-        "If-None-Match": ifNoneMatchFile != null ? ifNoneMatch : "",
-      },
-    );
+      if (settings.getLoadFullFahrplan()) {
+        /// Complete Fahrplan
+        requestString = 'https://data.c3voc.de/35C3/everything.schedule.json';
+      } else {
+        /// Only Main Rooms Fahrplan
+        requestString =
+            'https://fahrplan.events.ccc.de/congress/2018/Fahrplan/schedule.json';
+      }
 
-    ///If the HTTP Status code is 200 OK use the Fahrplan from the response,
-    ///if the HTTP Status Code is 304 Not Modified use the local file.
-    if (response.statusCode == 200 && response.bodyBytes != null) {
-      fahrplanJson = utf8.decode(response.bodyBytes);
-      FileStorage.writeIfNoneMatchFile(response.headers.keys
-          .firstWhere((key) => key.toLowerCase() == 'etag'));
-      FileStorage.writeDataFile(fahrplanJson);
-      fp = new FahrplanDecoder().decodeFahrplanFromJson(
-        json.decode(fahrplanJson)['schedule'],
-        favTalks,
-        settings,
-      );
-    } else if (response.statusCode == 304) {
+      final response = await http.get(
+        '$requestString',
+        headers: {
+          "If-Modified-Since": fahrplanFile != null
+              ? HttpDate.format(fahrplanFileLastModified.toUtc())
+              : "",
+          "If-None-Match": ifNoneMatchFile != null ? ifNoneMatch : "",
+        },
+      ).timeout(const Duration(seconds: 4));
+
+      ///If the HTTP Status code is 200 OK use the Fahrplan from the response,
+      ///if the HTTP Status Code is 304 Not Modified use the local file.
+      if (response.statusCode == 200 && response.bodyBytes != null) {
+        fahrplanJson = utf8.decode(response.bodyBytes);
+        FileStorage.writeIfNoneMatchFile(response.headers.keys
+            .firstWhere((key) => key.toLowerCase() == 'etag'));
+        FileStorage.writeDataFile(fahrplanJson);
+        fp = new FahrplanDecoder().decodeFahrplanFromJson(
+          json.decode(fahrplanJson)['schedule'],
+          favTalks,
+          settings,
+        );
+      } else if (response.statusCode == 304 && fahrplanFile != null) {
+        fahrplanJson = await fahrplanFile.readAsString();
+        if (fahrplanJson != null && fahrplanJson != '') {
+          fp = new FahrplanDecoder().decodeFahrplanFromJson(
+            json.decode(fahrplanJson)['schedule'],
+            favTalks,
+            settings,
+          );
+        }
+      } else if (fahrplanFile != null) {
+        fahrplanJson = await fahrplanFile.readAsString();
+        if (fahrplanJson != null && fahrplanJson != '') {
+          fp = new FahrplanDecoder().decodeFahrplanFromJson(
+            json.decode(fahrplanJson)['schedule'],
+            favTalks,
+            settings,
+          );
+        }
+      } else {
+        throw Exception('Failed to load Fahrplan');
+      }
+      return fp;
+
+      /// If not connected, try to load from file, otherwise set Fahrplan.isEmpty
+    } else {
       if (fahrplanFile != null) {
         fahrplanJson = await fahrplanFile.readAsString();
         if (fahrplanJson != null && fahrplanJson != '') {
@@ -102,10 +132,10 @@ class FahrplanFetcher {
             settings,
           );
         }
+      } else {
+        return new Fahrplan(isEmpty: true);
       }
-    } else {
-      throw Exception('Failed to load Fahrplan');
+      return fp;
     }
-    return fp;
   }
 }

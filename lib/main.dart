@@ -5,6 +5,7 @@ SPDX-License-Identifier: GPL-2.0-only
 Copyright (C) 2019 Benjamin Schilling
 */
 
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -99,9 +100,24 @@ class CongressFahrplanApp extends StatelessWidget {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               favoriteProvider.initializeProvider(snapshot.data);
-              return AllTalks(
-                theme: Theme.of(context),
-              );
+              if (!favoriteProvider.fahrplan.isEmpty) {
+                return AllTalks(
+                  theme: Theme.of(context),
+                );
+              } else {
+                return new MaterialApp(
+                  theme: Theme.of(context),
+                  title: 'Congress Fahrplan',
+                  home: new Scaffold(
+                    body: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[Text('No internet connection.')],
+                      ),
+                    ),
+                  ),
+                );
+              }
             } else {
               return new MaterialApp(
                 theme: Theme.of(context),
