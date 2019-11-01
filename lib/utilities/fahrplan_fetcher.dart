@@ -119,6 +119,8 @@ class FahrplanFetcher {
       } else {
         throw Exception('Failed to load Fahrplan');
       }
+
+      fp.isEmpty = false;
       return fp;
 
       /// If not connected, try to load from file, otherwise set Fahrplan.isEmpty
@@ -135,6 +137,7 @@ class FahrplanFetcher {
       } else {
         return new Fahrplan(isEmpty: true);
       }
+      fp.isEmpty = false;
       return fp;
     }
   }

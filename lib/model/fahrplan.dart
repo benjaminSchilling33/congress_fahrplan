@@ -21,7 +21,7 @@ class Fahrplan {
   final String version;
   final String baseUrl;
   final Conference conference;
-  bool isEmpty;
+  bool isEmpty = false;
 
   List<Day> days;
   List<Room> rooms;
