@@ -30,7 +30,7 @@ dependencies:
   provider: ^2.0.0
   page_view_indicators: ^1.2.0
   flutter_linkify: ^2.1.0
-  url_launcher: ^5.1.2
+  url_launcher: ^5.2.5
   connectivity: ^0.4.5+2
 
 dev_dependencies:
