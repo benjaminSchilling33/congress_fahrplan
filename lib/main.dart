@@ -6,6 +6,8 @@ Copyright (C) 2019 Benjamin Schilling
 */
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 import 'package:congress_fahrplan/widgets/all_talks.dart';
@@ -28,43 +30,43 @@ class ThemeWrapper extends StatelessWidget {
           indicator: UnderlineTabIndicator(),
         ),
         primaryColorDark: Color(0xFF000A12),
-        indicatorColor: Color(0xFFffb300),
-        accentColor: Color(0xFFffb300),
+        indicatorColor: Color(0xFFFE5000),
+        accentColor: Color(0xFFFE5000),
         textTheme: TextTheme(
           title: TextStyle(
-            color: Color(0xFFFAFAFA),
+            color: Color(0xFFD0D0CE),
           ),
           body1: TextStyle(
-            color: Color(0xFFFAFAFA),
+            color: Color(0xFFD0D0CE),
           ),
           body2: TextStyle(
-            color: Color(0xFFFAFAFA),
+            color: Color(0xFFD0D0CE),
           ),
           subtitle: TextStyle(
-            color: Color(0xFFFAFAFA),
+            color: Color(0xFFD0D0CE),
           ),
           subhead: TextStyle(
-            color: Color(0xFFFAFAFA),
+            color: Color(0xFFD0D0CE),
           ),
           display1: TextStyle(
-            color: Color(0xFFFAFAFA),
+            color: Color(0xFFD0D0CE),
           ),
           caption: TextStyle(
-            color: Color(0xFFFAFAFA),
+            color: Color(0xFFD0D0CE),
           ),
           overline: TextStyle(
-            color: Color(0xFFFAFAFA),
+            color: Color(0xFFD0D0CE),
           ),
           headline: TextStyle(
-            color: Color(0xFFFAFAFA),
+            color: Color(0xFFD0D0CE),
           ),
         ),
         cardColor: Color(0xFF4F5B62),
         snackBarTheme: SnackBarThemeData(
           backgroundColor: Color(0xFF8d9ca5),
-          actionTextColor: Color(0xFFffb300),
+          actionTextColor: Color(0xFFFE5000),
           contentTextStyle: TextStyle(
-            color: Color(0xFFFAFAFA),
+            color: Color(0xFFD0D0CE),
           ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -74,13 +76,13 @@ class ThemeWrapper extends StatelessWidget {
         appBarTheme: AppBarTheme(
           color: Color(0xFF263238),
           iconTheme: IconThemeData(
-            color: Color(0xFFffb300),
+            color: Color(0xFFFE5000),
           ),
         ),
         iconTheme: IconThemeData(
-          color: Color(0xFFffb300),
+          color: Color(0xFFFE5000),
         ),
-        toggleableActiveColor: Color(0xFFffb300),
+        toggleableActiveColor: Color(0xFFFE5000),
       ),
       home: CongressFahrplanApp(key: key),
     );
@@ -124,8 +126,9 @@ class CongressFahrplanApp extends StatelessWidget {
                 home: new Scaffold(
                   body: Center(
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
+                        SvgPicture.asset('assets/destruction.svg'),
                         CircularProgressIndicator(),
                         Container(
                           child: Text('Loading Fahrplan'),
