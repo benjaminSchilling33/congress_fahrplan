@@ -54,7 +54,7 @@ class Settings {
   void setLoadFullFahrplan(bool value, BuildContext context) {
     if (loadFullFahrplan != (value == true ? 1 : 0)) {
       loadFullFahrplan = value == true ? 1 : 0;
-      FileStorage.writeSettingsFile('{"loadfullfahrplan": $loadFullFahrplan}');
+      writeFile();
 
       var favorites = Provider.of<FavoriteProvider>(context);
       favorites.futureFahrplan = null;
@@ -62,5 +62,9 @@ class Settings {
       favorites.notifyMainListeners();
       favorites.futureFahrplan = FahrplanFetcher.fetchFahrplan();
     }
+  }
+
+  void writeFile() {
+    FileStorage.writeSettingsFile('{"loadfullfahrplan": $loadFullFahrplan}');
   }
 }

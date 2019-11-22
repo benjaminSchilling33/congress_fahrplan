@@ -25,11 +25,11 @@ class ThemeWrapper extends StatelessWidget {
     return new MaterialApp(
       theme: ThemeData(
         brightness: Brightness.dark,
-        backgroundColor: Color(0xff000a12),
+        backgroundColor: Color(0xff000000),
         tabBarTheme: TabBarTheme(
           indicator: UnderlineTabIndicator(),
         ),
-        primaryColorDark: Color(0xFF000A12),
+        primaryColorDark: Color(0xff000000),
         indicatorColor: Color(0xFFFE5000),
         accentColor: Color(0xFFFE5000),
         textTheme: TextTheme(
@@ -61,10 +61,10 @@ class ThemeWrapper extends StatelessWidget {
             color: Color(0xFFD0D0CE),
           ),
         ),
-        cardColor: Color(0xFF4F5B62),
+        cardColor: Color(0xFF3b3b3b),
         snackBarTheme: SnackBarThemeData(
-          backgroundColor: Color(0xFF8d9ca5),
-          actionTextColor: Color(0xFFFE5000),
+          backgroundColor: Color(0xFF4d4d4d),
+          actionTextColor: Color(0xFFFE50000),
           contentTextStyle: TextStyle(
             color: Color(0xFFD0D0CE),
           ),
@@ -74,7 +74,7 @@ class ThemeWrapper extends StatelessWidget {
           elevation: 30,
         ),
         appBarTheme: AppBarTheme(
-          color: Color(0xFF263238),
+          color: Color(0xFF1a1a1a),
           iconTheme: IconThemeData(
             color: Color(0xFFFE5000),
           ),
@@ -124,6 +124,7 @@ class CongressFahrplanApp extends StatelessWidget {
                 theme: Theme.of(context),
                 title: 'Congress Fahrplan',
                 home: new Scaffold(
+                  backgroundColor: Color(0xff000000),
                   body: Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -131,7 +132,7 @@ class CongressFahrplanApp extends StatelessWidget {
                         SvgPicture.asset('assets/destruction.svg'),
                         CircularProgressIndicator(),
                         Container(
-                          child: Text('Loading Fahrplan'),
+                          child: Text('Fetching Fahrplan'),
                           padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                         ),
                       ],

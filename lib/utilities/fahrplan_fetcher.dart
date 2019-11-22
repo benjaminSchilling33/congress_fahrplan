@@ -65,15 +65,16 @@ class FahrplanFetcher {
         connectivityResult == ConnectivityResult.wifi) {
       /// Fetch the fahrplan depending on what is set in the settings, if the timeout of 4 seconds expires load the
       String requestString =
-          'https://fahrplan.events.ccc.de/congress/2018/Fahrplan/schedule.json';
+          'https://fahrplan.events.ccc.de/congress/2019/Fahrplan/schedule.json';
 
       if (settings.getLoadFullFahrplan()) {
         /// Complete Fahrplan
-        requestString = 'https://data.c3voc.de/35C3/everything.schedule.json';
+        requestString =
+            'https://streaming.media.ccc.de/configs/conferences/36c3/everything.schedule.json';
       } else {
         /// Only Main Rooms Fahrplan
         requestString =
-            'https://fahrplan.events.ccc.de/congress/2018/Fahrplan/schedule.json';
+            'https://fahrplan.events.ccc.de/congress/2019/Fahrplan/schedule.json';
       }
 
       final response = await http.get(
