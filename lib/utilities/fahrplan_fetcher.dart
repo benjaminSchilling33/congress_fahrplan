@@ -65,15 +65,15 @@ class FahrplanFetcher {
         connectivityResult == ConnectivityResult.wifi) {
       /// Fetch the fahrplan depending on what is set in the settings, if the timeout of 4 seconds expires load the
       String requestString =
-          'https://fahrplan.events.ccc.de/congress/2018/Fahrplan/schedule.json';
+          'https://fahrplan.events.ccc.de/congress/2019/Fahrplan/schedule.json';
 
       if (settings.getLoadFullFahrplan()) {
         /// Complete Fahrplan
-        requestString = 'https://data.c3voc.de/35C3/everything.schedule.json';
+        requestString = 'https://data.c3voc.de/36C3/everything.schedule.json';
       } else {
         /// Only Main Rooms Fahrplan
         requestString =
-            'https://fahrplan.events.ccc.de/congress/2018/Fahrplan/schedule.json';
+            'https://fahrplan.events.ccc.de/congress/2019/Fahrplan/schedule.json';
       }
 
       final response = await http.get(
@@ -87,7 +87,9 @@ class FahrplanFetcher {
       ).timeout(const Duration(seconds: 4));
 
       ///If the HTTP Status code is 200 OK use the Fahrplan from the response,
-      ///if the HTTP Status Code is 304 Not Modified use the local file.
+      ///Else if the HTTP Status Code is 304 Not Modified use the local file.
+      ///Else if a local fahrplan file is available use it
+      ///Else return empty fahrplan
       if (response.statusCode == 200 && response.bodyBytes != null) {
         fahrplanJson = utf8.decode(response.bodyBytes);
         FileStorage.writeIfNoneMatchFile(response.headers.keys
@@ -117,9 +119,9 @@ class FahrplanFetcher {
           );
         }
       } else {
-        throw Exception('Failed to load Fahrplan');
+        return new Fahrplan(isEmpty: true, noConnection: false);
       }
-
+      fp.noConnection = false;
       fp.isEmpty = false;
       return fp;
 
@@ -135,8 +137,9 @@ class FahrplanFetcher {
           );
         }
       } else {
-        return new Fahrplan(isEmpty: true);
+        return new Fahrplan(noConnection: false, isEmpty: true);
       }
+      fp.noConnection = false;
       fp.isEmpty = false;
       return fp;
     }

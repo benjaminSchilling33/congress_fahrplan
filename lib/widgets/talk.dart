@@ -21,6 +21,7 @@ class Talk extends StatelessWidget {
   final String subtitle;
   final String abstract;
   final String start;
+  final String duration;
   final String room;
   final String language;
   final DateTime date;
@@ -35,6 +36,7 @@ class Talk extends StatelessWidget {
       this.subtitle,
       this.abstract,
       this.start,
+      this.duration,
       this.room,
       this.date,
       this.language,
@@ -50,6 +52,7 @@ class Talk extends StatelessWidget {
       subtitle: json['subtitle'] != null ? json['subtitle'] : "",
       abstract: json['abstract'] != null ? json['abstract'] : "",
       start: json['start'] != null ? json['start'] : "",
+      duration: json['duration'] != null ? json['duration'] : "",
       room: room,
       language: json['language'] != null ? json['language'] : "",
       date: DateTime.parse(json['date']),
@@ -121,13 +124,15 @@ class Talk extends StatelessWidget {
   Text getCardSubtitle() {
     String textString = '';
     textString = textString +
-        ('$start' != '' ? ('$room' != '' ? '$start' + ' - ' : '$start') : '');
+        ('$start' != ''
+            ? ('$room' != '' ? '$start' + ' - ' : '$start')
+            : ' - ');
     textString = textString +
-        ('$room' != '' ? ('$track' != '' ? '$room' + ' - ' : '$room') : '');
+        ('$room' != '' ? ('$track' != '' ? '$room' + ' - ' : '$room') : ' - ');
     textString = textString +
         ('$track' != ''
             ? ('$language' != '' ? '$track' + ' - ' : '$track')
-            : '');
+            : ' - ');
     textString = textString + ('$language' != '' ? '$language' : '');
     return Text(textString);
   }
@@ -148,7 +153,7 @@ class Talk extends StatelessWidget {
       );
     }
 
-    /// Add the time details
+    /// Add the start details
     if (start != null && start != '') {
       widgets.add(Row(
         children: <Widget>[
@@ -158,6 +163,21 @@ class Talk extends StatelessWidget {
           ),
           Text(
             '$start',
+          ),
+        ],
+      ));
+    }
+
+    /// Add the duration details
+    if (duration != null && duration != '') {
+      widgets.add(Row(
+        children: <Widget>[
+          Container(
+            child: Icon(Icons.hourglass_empty),
+            padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+          ),
+          Text(
+            '$duration',
           ),
         ],
       ));
