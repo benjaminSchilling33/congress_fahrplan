@@ -13,7 +13,7 @@ class Conference {
   final String title;
   final String start;
   final String end;
-  final int daysCount;
+  int daysCount;
   final String timeslotDuration;
   final List<Day> days;
   final List<String> namesOfRooms;
@@ -23,28 +23,36 @@ class Conference {
     this.title,
     this.start,
     this.end,
-    this.daysCount,
     this.timeslotDuration,
     this.days,
     this.namesOfRooms,
   });
 
   factory Conference.fromJson(var json) {
-    return Conference(
+    Conference c = Conference(
       acronym: json['acronym'],
       title: json['title'],
       start: json['start'],
       end: json['end'],
-      daysCount: json['daysCount'],
       timeslotDuration: json['timeslot_duration'],
       days: jsonToDayList(json['days']),
     );
+    c.daysCount = 0;
+    for (Day d in c.days) {
+      if (d.talks.length > 0) {
+        c.daysCount++;
+      }
+    }
+    return c;
   }
 
   static List<Day> jsonToDayList(var json) {
     List<Day> days = new List<Day>();
     for (var j in json) {
-      days.add(Day.fromJson(j));
+      Day d = Day.fromJson(j);
+      if (d.talks.length > 0) {
+        days.add(d);
+      }
     }
     return days;
   }
@@ -52,22 +60,24 @@ class Conference {
   List<Widget> buildDayTabs() {
     List<Column> dayColumns = List<Column>();
     for (Day d in days) {
-      List<Widget> widgets = List<Widget>();
-      widgets.addAll(d.talks);
-      dayColumns.add(
-        Column(
-          children: <Widget>[
-            Expanded(
-              child: ListView.builder(
-                itemCount: d.talks.length,
-                itemBuilder: (context, index) {
-                  return d.talks[index];
-                },
+      if (d.talks.length > 0) {
+        List<Widget> widgets = List<Widget>();
+        widgets.addAll(d.talks);
+        dayColumns.add(
+          Column(
+            children: <Widget>[
+              Expanded(
+                child: ListView.builder(
+                  itemCount: d.talks.length,
+                  itemBuilder: (context, index) {
+                    return d.talks[index];
+                  },
+                ),
               ),
-            ),
-          ],
-        ),
-      );
+            ],
+          ),
+        );
+      }
     }
     return dayColumns;
   }
@@ -75,6 +85,9 @@ class Conference {
   List<Text> getDaysAsText() {
     List<Text> dayTexts = new List<Text>();
     for (Day d in days) {
+      if (d.talks.length == 0) {
+        continue;
+      }
       String weekday = '';
       switch (d.date.weekday) {
         case DateTime.monday:

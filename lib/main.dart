@@ -101,19 +101,41 @@ class CongressFahrplanApp extends StatelessWidget {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               favoriteProvider.initializeProvider(snapshot.data);
-              if (!favoriteProvider.fahrplan.isEmpty) {
+              if (!favoriteProvider.fahrplan.noConnection &&
+                  !favoriteProvider.fahrplan.isEmpty) {
                 return AllTalks(
                   theme: Theme.of(context),
+                );
+              } else if (favoriteProvider.fahrplan.noConnection) {
+                return new MaterialApp(
+                  theme: Theme.of(context),
+                  title: 'Congress Fahrplan',
+                  home: new Scaffold(
+                    backgroundColor: Color(0xff000000),
+                    body: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          SvgPicture.asset('assets/destruction.svg'),
+                          Text('No internet connection.'),
+                        ],
+                      ),
+                    ),
+                  ),
                 );
               } else {
                 return new MaterialApp(
                   theme: Theme.of(context),
                   title: 'Congress Fahrplan',
                   home: new Scaffold(
+                    backgroundColor: Color(0xff000000),
                     body: Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[Text('No internet connection.')],
+                        children: <Widget>[
+                          SvgPicture.asset('assets/destruction.svg'),
+                          Text('Fahrplan not yet released! Try again later.'),
+                        ],
                       ),
                     ),
                   ),

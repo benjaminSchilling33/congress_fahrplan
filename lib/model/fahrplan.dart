@@ -22,6 +22,7 @@ class Fahrplan {
   final String baseUrl;
   final Conference conference;
   bool isEmpty = false;
+  bool noConnection = false;
 
   List<Day> days;
   List<Room> rooms;
@@ -46,6 +47,7 @@ class Fahrplan {
     this.favoriteTalks,
     this.settings,
     this.isEmpty,
+    this.noConnection,
   });
 
   factory Fahrplan.fromJson(
@@ -97,10 +99,11 @@ class Fahrplan {
     );
   }
 
+  /// Room layout is shown when in landscape mode
   Widget buildRoomLayout(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: Text(getFahrplanTitle()),
+        title: Text(getFahrplanTitle() + ' - This view is still experimental'),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -120,10 +123,11 @@ class Fahrplan {
               bucket: bucket,
               child: PageView.builder(
                 scrollDirection: Axis.vertical,
-                itemCount: days.length,
+                itemCount: days.length + 1,
                 controller: PageController(viewportFraction: 0.90),
                 itemBuilder: (BuildContext context, int index) {
-                  return _buildCarousel(context, days[index], index);
+                  return _buildCarousel(context,
+                      days[index >= days.length ? index - 1 : index], index);
                 },
               ),
             ),
@@ -140,26 +144,31 @@ class Fahrplan {
   }
 
   Widget _buildCarousel(BuildContext context, Day d, int index) {
-    return Column(
-      key: PageStorageKey(d.date.toString() + '$index'),
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: <Widget>[
-        Expanded(
-          child: PageView.builder(
-            // store this controller in a State to save the carousel scroll position
-            itemCount: d.rooms.length,
-            controller: PageController(viewportFraction: 0.85),
-            itemBuilder: (BuildContext context, int itemIndex) {
-              return buildRoom(context, itemIndex, d, d.rooms[itemIndex].name);
-            },
-            onPageChanged: (int itemIndex) {
-              currentPageNotifier.value = itemIndex;
-            },
+    if (index >= days.length) {
+      return Column();
+    } else {
+      return Column(
+        key: PageStorageKey(d.date.toString() + '$index'),
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Expanded(
+            child: PageView.builder(
+              // store this controller in a State to save the carousel scroll position
+              itemCount: d.rooms.length,
+              controller: PageController(viewportFraction: 0.85),
+              itemBuilder: (BuildContext context, int itemIndex) {
+                return buildRoom(
+                    context, itemIndex, d, d.rooms[itemIndex].name);
+              },
+              onPageChanged: (int itemIndex) {
+                currentPageNotifier.value = itemIndex;
+              },
+            ),
           ),
-        ),
-      ],
-    );
+        ],
+      );
+    }
   }
 
   Widget buildRoom(
@@ -170,7 +179,7 @@ class Fahrplan {
       padding: EdgeInsets.fromLTRB(8, 0, 8, 16),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.grey,
+          color: Theme.of(context).appBarTheme.color,
           borderRadius: BorderRadius.all(Radius.circular(4.0)),
         ),
         child: Column(
