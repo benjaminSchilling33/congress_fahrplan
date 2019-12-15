@@ -7,6 +7,7 @@ Copyright (C) 2019 Benjamin Schilling
 
 import 'package:congress_fahrplan/model/day.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Conference {
   final String acronym;
@@ -82,43 +83,31 @@ class Conference {
     return dayColumns;
   }
 
-  List<Text> getDaysAsText() {
-    List<Text> dayTexts = new List<Text>();
+  List<Widget> getDaysAsText() {
+    List<Widget> dayTexts = new List<Widget>();
     for (Day d in days) {
       if (d.talks.length == 0) {
         continue;
       }
-      String weekday = '';
-      switch (d.date.weekday) {
-        case DateTime.monday:
-          weekday = 'Mon';
-          break;
-        case DateTime.tuesday:
-          weekday = 'Tue';
-          break;
-        case DateTime.wednesday:
-          weekday = 'Wed';
-          break;
-        case DateTime.thursday:
-          weekday = 'Thu';
-          break;
-        case DateTime.friday:
-          weekday = 'Fri';
-          break;
-        case DateTime.saturday:
-          weekday = 'Sat';
-          break;
-        case DateTime.sunday:
-          weekday = 'Sun';
-          break;
-      }
+      String weekday = new DateFormat.E().format(d.date);
+
       String dateString = d.date.month.toString() + '-' + d.date.day.toString();
-      dayTexts.add(new Text(
-        '$weekday | $dateString',
-        style: TextStyle(
-          fontSize: 16,
+      String semanticsDay = new DateFormat.EEEE().format(d.date) +
+          ' ' +
+          new DateFormat.yMMMMd().format(d.date);
+      dayTexts.add(
+        new Semantics(
+          label: semanticsDay,
+          child: ExcludeSemantics(
+            child: Text(
+              '$weekday | $dateString',
+              style: TextStyle(
+                fontSize: 16,
+              ),
+            ),
+          ),
         ),
-      ));
+      );
     }
     return dayTexts;
   }

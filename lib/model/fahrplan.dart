@@ -65,11 +65,6 @@ class Fahrplan {
   }
 
   Widget buildDayLayout(BuildContext context) {
-    /*if (dayTabCache == null) {
-      dayTabCache = TabBarView(
-        children: this.conference.buildDayTabs(),
-      );
-    }*/
     dayTabCache = TabBarView(
       children: this.conference.buildDayTabs(),
     );

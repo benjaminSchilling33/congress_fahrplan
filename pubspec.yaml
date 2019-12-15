@@ -16,7 +16,7 @@ description: Congress Fahrplan written in flutter
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0+11
+version: 1.0.0+12
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
@@ -33,6 +33,8 @@ dependencies:
   url_launcher: ^5.2.5
   connectivity: ^0.4.5+3
   flutter_svg: ^0.15.0
+  intl: ^0.16.0
+  share: ^0.6.3+5
 
 dev_dependencies:
   flutter_test:

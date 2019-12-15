@@ -17,27 +17,32 @@ class FlatIconTextButton extends StatelessWidget {
   @override
   build(BuildContext context) {
     return FlatButton(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.fromLTRB(12, 0, 0, 0),
-              child: Icon(
-                icon,
-                color: onPressed != null
-                    ? Theme.of(context).iconTheme.color
-                    : null,
-              ),
+        child: Semantics(
+          label: '$text',
+          child: ExcludeSemantics(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.fromLTRB(12, 0, 0, 0),
+                  child: Icon(
+                    icon,
+                    color: onPressed != null
+                        ? Theme.of(context).iconTheme.color
+                        : null,
+                  ),
+                ),
+                Container(
+                    padding: EdgeInsets.fromLTRB(12, 0, 0, 0),
+                    child: Text(
+                      text,
+                      style: onPressed != null
+                          ? Theme.of(context).textTheme.subtitle
+                          : null,
+                    )),
+              ],
             ),
-            Container(
-                padding: EdgeInsets.fromLTRB(12, 0, 0, 0),
-                child: Text(
-                  text,
-                  style: onPressed != null
-                      ? Theme.of(context).textTheme.subtitle
-                      : null,
-                )),
-          ],
+          ),
         ),
         onPressed: onPressed);
   }

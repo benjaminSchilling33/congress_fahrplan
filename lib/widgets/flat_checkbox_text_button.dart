@@ -17,27 +17,32 @@ class FlatCheckBoxTextButton extends StatelessWidget {
   @override
   build(BuildContext context) {
     return FlatButton(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-              child: Checkbox(
-                value: value,
-                onChanged: null,
-                checkColor: Theme.of(context).toggleableActiveColor,
-              ),
+        child: Semantics(
+          label: 'Load complete fahrplan checkbox',
+          child: ExcludeSemantics(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                  child: Checkbox(
+                    value: value,
+                    onChanged: null,
+                    checkColor: Theme.of(context).toggleableActiveColor,
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                  child: Text(
+                    text,
+                    style: onPressed != null
+                        ? Theme.of(context).textTheme.subtitle
+                        : null,
+                  ),
+                ),
+              ],
             ),
-            Container(
-              padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-              child: Text(
-                text,
-                style: onPressed != null
-                    ? Theme.of(context).textTheme.subtitle
-                    : null,
-              ),
-            ),
-          ],
+          ),
         ),
         onPressed: onPressed);
   }

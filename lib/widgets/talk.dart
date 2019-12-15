@@ -6,6 +6,7 @@ Copyright (C) 2019 Benjamin Schilling
 */
 
 import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:flutter/material.dart';
@@ -77,51 +78,74 @@ class Talk extends StatelessWidget {
   @override
   build(BuildContext context) {
     return Card(
-      child: ListTile(
-        title: Text(title),
-        subtitle: getCardSubtitle(),
-        leading: Ink(
-          child: Consumer<FavoriteProvider>(
-            builder: (context, favoriteProvider, child) => IconButton(
-                tooltip: "Add to favorites.",
-                icon: Icon(
-                  favorite ? Icons.favorite : Icons.favorite_border,
-                ),
-                onPressed: () =>
-                    favoriteProvider.favoriteTalk(context, this, day)),
-          ),
-        ),
-        trailing: Ink(
-          decoration: ShapeDecoration(
-            shape: CircleBorder(),
-          ),
-          child: IconButton(
-            tooltip: "Show details.",
-            icon: Icon(
-              Icons.info,
-              color: Colors.white,
+      child: Semantics(
+        child: ListTile(
+          title: Semantics(
+              label: 'Talk title, $title',
+              child: ExcludeSemantics(child: Text(title))),
+          subtitle: getCardSubtitle(),
+          leading: Ink(
+            child: Consumer<FavoriteProvider>(
+              builder: (context, favoriteProvider, child) => IconButton(
+                  tooltip: "Add talk $title to favorites.",
+                  icon: Icon(
+                    favorite ? Icons.favorite : Icons.favorite_border,
+                  ),
+                  onPressed: () =>
+                      favoriteProvider.favoriteTalk(context, this, day)),
             ),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) => SimpleDialog(
-                  title: Text('$title'),
-                  children: <Widget>[
-                    Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: getDetails())
-                  ],
-                  contentPadding: EdgeInsets.all(10),
-                ),
-              );
-            },
+          ),
+          trailing: Ink(
+            decoration: ShapeDecoration(
+              shape: CircleBorder(),
+            ),
+            child: IconButton(
+              tooltip: "Show talk $title details.",
+              icon: Icon(
+                Icons.info,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) => SimpleDialog(
+                    contentPadding: EdgeInsets.all(10),
+                    title: Text('$title'),
+                    children: <Widget>[
+                      BlockSemantics(
+                        child: Column(
+                          children: getDetails(),
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          Semantics(
+                            label: 'Share $title',
+                            child: ExcludeSemantics(
+                              child: IconButton(
+                                icon: Icon(
+                                  Icons.share,
+                                ),
+                                onPressed: () =>
+                                    Share.share('Check out this talk: $url'),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                );
+              },
+            ),
           ),
         ),
       ),
     );
   }
 
-  Text getCardSubtitle() {
+  Semantics getCardSubtitle() {
     String textString = '';
     textString = textString +
         ('$start' != ''
@@ -134,7 +158,9 @@ class Talk extends StatelessWidget {
             ? ('$language' != '' ? '$track' + ' - ' : '$track')
             : ' - ');
     textString = textString + ('$language' != '' ? '$language' : '');
-    return Text(textString);
+    return Semantics(
+        label: 'Start $start, Room $room, Track $track, Language $language',
+        child: ExcludeSemantics(child: Text(textString)));
   }
 
   List<Widget> getDetails() {
@@ -143,11 +169,14 @@ class Talk extends StatelessWidget {
     /// Add the subtitle
     if (subtitle != null && subtitle != '') {
       widgets.add(
-        Container(
-          padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-          child: Text(
-            '$subtitle',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+        Semantics(
+          label: 'Subtitle $subtitle',
+          child: Container(
+            padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+            child: Text(
+              '$subtitle',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+            ),
           ),
         ),
       );
@@ -155,102 +184,144 @@ class Talk extends StatelessWidget {
 
     /// Add the start details
     if (start != null && start != '') {
-      widgets.add(Row(
-        children: <Widget>[
-          Container(
-            child: Icon(Icons.access_time),
-            padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+      widgets.add(
+        Semantics(
+          label: 'Start $start',
+          child: ExcludeSemantics(
+            child: Row(
+              children: <Widget>[
+                Container(
+                  child: Icon(Icons.access_time),
+                  padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                ),
+                Text(
+                  '$start',
+                ),
+              ],
+            ),
           ),
-          Text(
-            '$start',
-          ),
-        ],
-      ));
+        ),
+      );
     }
 
     /// Add the duration details
     if (duration != null && duration != '') {
-      widgets.add(Row(
-        children: <Widget>[
-          Container(
-            child: Icon(Icons.hourglass_empty),
-            padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+      widgets.add(
+        Semantics(
+          label: 'Duration $duration',
+          child: ExcludeSemantics(
+            child: Row(
+              children: <Widget>[
+                Container(
+                  child: Icon(Icons.hourglass_empty),
+                  padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                ),
+                Text(
+                  '$duration',
+                ),
+              ],
+            ),
           ),
-          Text(
-            '$duration',
-          ),
-        ],
-      ));
+        ),
+      );
     }
 
     /// Add the room details
     if (room != null && room != '') {
-      widgets.add(Row(
-        children: <Widget>[
-          Container(
-            child: Icon(Icons.room),
-            padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+      widgets.add(
+        Semantics(
+          label: 'Room $room',
+          child: ExcludeSemantics(
+            child: Row(
+              children: <Widget>[
+                Container(
+                  child: Icon(Icons.room),
+                  padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                ),
+                Text(
+                  '$room',
+                ),
+              ],
+            ),
           ),
-          Text(
-            '$room',
-          ),
-        ],
-      ));
+        ),
+      );
     }
 
     /// Add the track details
     if (track != null && track != '') {
-      widgets.add(Row(
-        children: <Widget>[
-          Container(
-            child: Icon(Icons.school),
-            padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+      widgets.add(
+        Semantics(
+          label: 'Track $track',
+          child: ExcludeSemantics(
+            child: Row(
+              children: <Widget>[
+                Container(
+                  child: Icon(Icons.school),
+                  padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                ),
+                Text(
+                  '$track',
+                ),
+              ],
+            ),
           ),
-          Text(
-            '$track',
-          ),
-        ],
-      ));
+        ),
+      );
     }
 
     /// Add the language details
     if (language != null && language != '') {
-      widgets.add(Row(
-        children: <Widget>[
-          Container(
-            child: Icon(Icons.translate),
-            padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+      widgets.add(
+        Semantics(
+          label: 'Language $language',
+          child: ExcludeSemantics(
+            child: Row(
+              children: <Widget>[
+                Container(
+                  child: Icon(Icons.translate),
+                  padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                ),
+                Text(
+                  '$language',
+                ),
+              ],
+            ),
           ),
-          Text(
-            '$language',
-          ),
-        ],
-      ));
+        ),
+      );
     }
 
     /// Add the url details
     if (url != null && url != '') {
-      widgets.add(Row(
-        children: <Widget>[
-          Container(
-            child: Icon(Icons.open_in_browser),
-            padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-          ),
-          Expanded(
-            child: Linkify(
-              onOpen: (link) async {
-                if (await canLaunch(url)) {
-                  await launch(url);
-                } else {
-                  throw 'Could not launch $link';
-                }
-              },
-              text: "$url",
-              style: TextStyle(),
+      widgets.add(
+        Semantics(
+          label: 'Open Talk details in Browser',
+          child: ExcludeSemantics(
+            child: Row(
+              children: <Widget>[
+                Container(
+                  child: Icon(Icons.open_in_browser),
+                  padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                ),
+                Expanded(
+                  child: Linkify(
+                    onOpen: (link) async {
+                      if (await canLaunch(url)) {
+                        await launch(url);
+                      } else {
+                        throw 'Could not launch $link';
+                      }
+                    },
+                    text: "$url",
+                    style: TextStyle(),
+                  ),
+                )
+              ],
             ),
-          )
-        ],
-      ));
+          ),
+        ),
+      );
     }
 
     /// Add the persons details
@@ -260,31 +331,41 @@ class Talk extends StatelessWidget {
         personsString += p.publicName +
             (persons.last.publicName == p.publicName ? '' : ' - ');
       }
-      widgets.add(Row(
-        children: <Widget>[
-          Container(
-            child: Icon(Icons.group),
-            padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+      widgets.add(Semantics(
+        label: 'Presenter $personsString',
+        child: ExcludeSemantics(
+          child: Row(
+            children: <Widget>[
+              Container(
+                child: Icon(Icons.group),
+                padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+              ),
+              Text(personsString),
+            ],
           ),
-          Text(personsString),
-        ],
+        ),
       ));
     }
 
     /// Add the abstract text
     if (abstract != null && abstract != '') {
       widgets.add(
-        SingleChildScrollView(
-          padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                'Abstract: ',
-                style: TextStyle(fontWeight: FontWeight.bold),
+        Semantics(
+          label: 'Abstract $abstract',
+          child: ExcludeSemantics(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    'Abstract: ',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text('$abstract'),
+                ],
               ),
-              Text('$abstract'),
-            ],
+            ),
           ),
         ),
       );
