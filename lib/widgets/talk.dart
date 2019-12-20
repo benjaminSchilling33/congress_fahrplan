@@ -1,6 +1,6 @@
 /*
 congress_fahrplan
-This is the dart file contains the Talk StatelessWidget.
+This is the dart file containing the Talk StatelessWidget.
 SPDX-License-Identifier: GPL-2.0-only
 Copyright (C) 2019 Benjamin Schilling
 */

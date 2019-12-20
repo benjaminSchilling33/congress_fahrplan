@@ -1,10 +1,15 @@
 /*
 congress_fahrplan
-This is the dart file contains the FahrplanDrawer StatelessWidget.
+This is the dart file containing the FahrplanDrawer StatelessWidget.
 SPDX-License-Identifier: GPL-2.0-only
 Copyright (C) 2019 Benjamin Schilling
 */
 
+import 'dart:collection';
+
+import 'package:congress_fahrplan/widgets/sync_calendar.dart';
+import 'package:congress_fahrplan/widgets/talk.dart';
+import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -81,6 +86,11 @@ class FahrplanDrawer extends StatelessWidget {
             },
           ),
           FlatIconTextButton(
+            icon: Icons.sync,
+            text: 'Sync favorites with calendar',
+            onPressed: () => showSyncCalendar(context, favorites),
+          ),
+          FlatIconTextButton(
             icon: Icons.share,
             text: 'Share this app',
             onPressed: () => Share.share(
@@ -108,6 +118,29 @@ class FahrplanDrawer extends StatelessWidget {
       await launch(url);
     } else {
       throw 'Could not launch $url';
+    }
+  }
+
+  showSyncCalendar(BuildContext context, FavoriteProvider favorites) async {
+    DeviceCalendarPlugin deviceCalendar = DeviceCalendarPlugin();
+    Result<bool> permissionsAvailable = await deviceCalendar.hasPermissions();
+    if (!permissionsAvailable.data) {
+      permissionsAvailable = await deviceCalendar.requestPermissions();
+    }
+    if (permissionsAvailable.data) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) => SimpleDialog(
+          contentPadding: EdgeInsets.all(10),
+          title: Text('Sync favorites'),
+          children: <Widget>[
+            SyncCalendar(
+              calendarPlugin: deviceCalendar,
+              provider: favorites,
+            ),
+          ],
+        ),
+      );
     }
   }
 }

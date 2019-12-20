@@ -1,6 +1,6 @@
 /*
 congress_fahrplan
-This is the dart file that contains the Settings class.
+This is the dart file that containing the Settings class.
 SPDX-License-Identifier: GPL-2.0-only
 Copyright (C) 2019 Benjamin Schilling
 */

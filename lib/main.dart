@@ -1,6 +1,6 @@
 /*
 congress_fahrplan
-This is the dart file contains the main method and the CongressFahrplanApp class.
+This is the dart file containing the main method, the ThemeWrapper and the CongressFahrplanApp class.
 SPDX-License-Identifier: GPL-2.0-only
 Copyright (C) 2019 Benjamin Schilling
 */
@@ -79,6 +79,7 @@ class ThemeWrapper extends StatelessWidget {
             color: Color(0xFFFE5000),
           ),
         ),
+        buttonColor: Color(0xFFFE5000),
         iconTheme: IconThemeData(
           color: Color(0xFFFE5000),
         ),
