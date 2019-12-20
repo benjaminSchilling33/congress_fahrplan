@@ -34,19 +34,30 @@ class SyncCalendar extends StatelessWidget {
               itemCount: calendars.length,
               itemBuilder: (context, index) {
                 return RaisedButton(
-                  child: Text(calendars[index].name),
+                  child: Row(
+                    children: <Widget>[
+                      Icon(Icons.sync),
+                      Container(
+                        width: 200,
+                        child: Text(
+                          calendars[index].name,
+                          overflow: TextOverflow.clip,
+                        ),
+                      ),
+                    ],
+                  ),
                   onPressed: () => syncCalendar(provider, calendars[index]),
                 );
               },
             ),
           );
         }
-        return Text('Waiting');
+        return CircularProgressIndicator();
       },
     );
   }
 
-  syncCalendar(FavoriteProvider provider, Calendar calendar) async {
+  syncCalendar(FavoriteProvider provider, Calendar calendar) {
     List<Event> events = List<Event>();
 
     for (Talk fav in provider.fahrplan.favoriteTalks) {
@@ -63,13 +74,7 @@ class SyncCalendar extends StatelessWidget {
       events.add(e);
     }
     for (Event e in events) {
-      print(e.calendarId);
-      print(e.title);
-      print(e.start);
-      print(e.end);
-      print(e.description);
-      Result<String> res = await calendarPlugin.createOrUpdateEvent(e);
-      print(res.data);
+      calendarPlugin.createOrUpdateEvent(e);
     }
   }
 }
