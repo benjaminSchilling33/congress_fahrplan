@@ -12,7 +12,6 @@ import 'package:congress_fahrplan/widgets/talk.dart';
 import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class SyncCalendar extends StatelessWidget {
   final DeviceCalendarPlugin calendarPlugin;
@@ -46,7 +45,8 @@ class SyncCalendar extends StatelessWidget {
                       ),
                     ],
                   ),
-                  onPressed: () => syncCalendar(provider, calendars[index]),
+                  onPressed: () =>
+                      syncCalendar(context, provider, calendars[index]),
                 );
               },
             ),
@@ -57,7 +57,8 @@ class SyncCalendar extends StatelessWidget {
     );
   }
 
-  syncCalendar(FavoriteProvider provider, Calendar calendar) {
+  syncCalendar(
+      BuildContext context, FavoriteProvider provider, Calendar calendar) {
     List<Event> events = List<Event>();
 
     for (Talk fav in provider.fahrplan.favoriteTalks) {
@@ -76,5 +77,6 @@ class SyncCalendar extends StatelessWidget {
     for (Event e in events) {
       calendarPlugin.createOrUpdateEvent(e);
     }
+    Navigator.pop(context);
   }
 }
