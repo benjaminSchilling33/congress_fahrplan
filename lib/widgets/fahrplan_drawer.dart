@@ -11,6 +11,7 @@ import 'package:congress_fahrplan/widgets/sync_calendar.dart';
 import 'package:congress_fahrplan/widgets/talk.dart';
 import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:provider/provider.dart';
 
 import 'package:congress_fahrplan/widgets/favorites.dart';
@@ -107,7 +108,12 @@ class FahrplanDrawer extends StatelessWidget {
             text: 'Report Bug',
             onPressed: () => launchUrl(
                 'https://github.com/benjaminSchilling33/congress_fahrplan/issues'),
-          )
+          ),
+          FlatIconTextButton(
+            icon: Icons.color_lens,
+            text: 'Design by bleeptrack',
+            onPressed: () => launchUrl('http://bleeptrack.de/'),
+          ),
         ],
       ),
     );

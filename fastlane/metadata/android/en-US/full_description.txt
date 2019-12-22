@@ -1,0 +1,9 @@
+Overview of all talks of the Chaos Communication Congress
+
+Uses everything.schedule.json or schedule.json
+Lightning fast, written in Flutter, 100% OSS
+Focused on simplicity, prepared to be used with TalkBack for accessibility
+
+Developed as Open Source (GPL v2):
+https://github.com/benjaminSchilling33/congress_fahrplan
+

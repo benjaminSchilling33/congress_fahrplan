@@ -9,7 +9,7 @@ Build the app using `flutter build apk --split-per-abi`.
 
 ## How to build for release
 
-Increment the `flutterVersionCode` and `flutterVersionName` in `android/app/build.gradle`
+Increment the `flutterVersionCode` and `flutterVersionName` in `android/app/build.gradle` as well as `version` in pubspec.yaml
 
 Required `key.properties` in `./android/`.
 

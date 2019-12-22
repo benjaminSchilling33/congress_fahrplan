@@ -1,0 +1,1 @@
+* Simple visual hint when calendar sync is done

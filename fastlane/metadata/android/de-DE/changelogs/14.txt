@@ -1,0 +1,1 @@
+* Einfacher visueller Hinweis wenn Kalendersync abgeschlossen ist

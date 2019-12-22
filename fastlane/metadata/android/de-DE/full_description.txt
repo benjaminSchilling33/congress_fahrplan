@@ -1,0 +1,7 @@
+Talkübersicht für den Chaos Communication Congress
+
+Benutzt everything.schedule.json oder schedule.json
+Optimiert für TalkBack um Barrierefreiheit zu erreichen
+
+Entwickelt als Open Source (GPL v2):
+https://github.com/benjaminSchilling33/congress_fahrplan
