@@ -314,7 +314,6 @@ class Talk extends StatelessWidget {
                       }
                     },
                     text: "$url",
-                    style: TextStyle(),
                   ),
                 )
               ],

@@ -77,6 +77,17 @@ class SyncCalendar extends StatelessWidget {
     for (Event e in events) {
       calendarPlugin.createOrUpdateEvent(e);
     }
-    Navigator.pop(context);
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: Text('Sync successful'),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('Dismiss'),
+            onPressed: () => Navigator.pop(context),
+          )
+        ],
+      ),
+    );
   }
 }
