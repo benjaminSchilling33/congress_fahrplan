@@ -83,7 +83,7 @@ class SyncCalendar extends StatelessWidget {
         title: Text('Sync successful'),
         actions: <Widget>[
           FlatButton(
-            child: Text('Dismiss'),
+            child: Text('Ok'),
             onPressed: () => Navigator.pop(context),
           )
         ],
