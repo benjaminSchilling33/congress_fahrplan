@@ -107,47 +107,6 @@ class CongressFahrplanApp extends StatelessWidget {
                 return AllTalks(
                   theme: Theme.of(context),
                 );
-              } else if (favoriteProvider.fahrplan.fetchState ==
-                  FahrplanFetchState.noDataConnection) {
-                return new MaterialApp(
-                  theme: Theme.of(context),
-                  title: 'Congress Fahrplan',
-                  home: new Scaffold(
-                    backgroundColor: Color(0xff000000),
-                    body: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          SvgPicture.asset('assets/destruction.svg'),
-                          Text('Please enable mobile data or Wifi.'),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              } else if (favoriteProvider.fahrplan.fetchState ==
-                  FahrplanFetchState.timeout) {
-                return new MaterialApp(
-                  theme: Theme.of(context),
-                  title: 'Congress Fahrplan',
-                  home: new Scaffold(
-                    backgroundColor: Color(0xff000000),
-                    body: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          SvgPicture.asset('assets/destruction.svg'),
-                          Text(
-                            'Could not fetch Fahrplan!',
-                          ),
-                          Text(
-                            'Please check your network connection.',
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
               } else {
                 return new MaterialApp(
                   theme: Theme.of(context),
@@ -163,7 +122,7 @@ class CongressFahrplanApp extends StatelessWidget {
                             'Could not fetch Fahrplan!',
                           ),
                           Text(
-                            'Please check your network connection.',
+                            favoriteProvider.fahrplan.fetchMessage,
                           ),
                         ],
                       ),

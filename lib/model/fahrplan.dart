@@ -29,6 +29,7 @@ class Fahrplan {
   final String baseUrl;
   final Conference conference;
   final FahrplanFetchState fetchState;
+  final String fetchMessage;
 
   List<Day> days;
   List<Room> rooms;
@@ -53,6 +54,7 @@ class Fahrplan {
     this.favoriteTalks,
     this.settings,
     this.fetchState,
+    this.fetchMessage,
   });
 
   factory Fahrplan.fromJson(var json, FavoritedTalks favTalks,

@@ -95,9 +95,7 @@ class FahrplanFetcher {
             },
           )
           .timeout(const Duration(seconds: 10))
-          .catchError((e) {
-            print('timeout');
-          });
+          .catchError((e) {});
 
       ///If the HTTP Status code is 200 OK use the Fahrplan from the response,
       ///Else if the HTTP Status Code is 304 Not Modified use the local file.
@@ -132,7 +130,10 @@ class FahrplanFetcher {
             );
           }
         } else {
-          return new Fahrplan(fetchState: FahrplanFetchState.timeout);
+          return new Fahrplan(
+            fetchState: FahrplanFetchState.timeout,
+            fetchMessage: 'Please check your network connection.',
+          );
         }
       } else {
         if (fahrplanFile != null) {
@@ -146,7 +147,10 @@ class FahrplanFetcher {
             );
           }
         } else {
-          return new Fahrplan(fetchState: FahrplanFetchState.timeout);
+          return new Fahrplan(
+            fetchState: FahrplanFetchState.timeout,
+            fetchMessage: 'Please check your network connection.',
+          );
         }
       }
 
@@ -163,7 +167,10 @@ class FahrplanFetcher {
           );
         }
       } else {
-        return new Fahrplan(fetchState: FahrplanFetchState.noDataConnection);
+        return new Fahrplan(
+          fetchState: FahrplanFetchState.noDataConnection,
+          fetchMessage: 'Please enable mobile data or Wifi.',
+        );
       }
     }
   }
