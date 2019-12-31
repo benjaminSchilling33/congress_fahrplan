@@ -30,7 +30,6 @@ class Talk extends StatelessWidget {
   final String url;
   final List<Person> persons;
   bool favorite;
-  BuildContext talkContext;
 
   Talk(
       {this.id,
@@ -108,7 +107,6 @@ class Talk extends StatelessWidget {
                 color: Colors.white,
               ),
               onPressed: () {
-                talkContext = context;
                 showDialog(
                   context: context,
                   builder: (BuildContext context) => SimpleDialog(
