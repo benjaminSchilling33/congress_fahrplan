@@ -5,6 +5,7 @@ SPDX-License-Identifier: GPL-2.0-only
 Copyright (C) 2019 Benjamin Schilling
 */
 
+import 'package:flutter/services.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -29,6 +30,7 @@ class Talk extends StatelessWidget {
   final String url;
   final List<Person> persons;
   bool favorite;
+  BuildContext talkContext;
 
   Talk(
       {this.id,
@@ -106,6 +108,7 @@ class Talk extends StatelessWidget {
                 color: Colors.white,
               ),
               onPressed: () {
+                talkContext = context;
                 showDialog(
                   context: context,
                   builder: (BuildContext context) => SimpleDialog(
@@ -121,9 +124,21 @@ class Talk extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
                           Semantics(
+                            label: 'Copy abstract.',
+                            child: IconButton(
+                              icon: Icon(Icons.content_copy),
+                              tooltip: 'Copy abstract.',
+                              onPressed: () {
+                                Clipboard.setData(
+                                    ClipboardData(text: abstract));
+                              },
+                            ),
+                          ),
+                          Semantics(
                             label: 'Share $title',
                             child: ExcludeSemantics(
                               child: IconButton(
+                                tooltip: 'Share talk.',
                                 icon: Icon(
                                   Icons.share,
                                 ),

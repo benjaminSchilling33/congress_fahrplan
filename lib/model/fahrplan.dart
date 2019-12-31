@@ -17,12 +17,18 @@ import 'package:congress_fahrplan/widgets/talk.dart';
 import 'package:congress_fahrplan/widgets/fahrplan_drawer.dart';
 import 'package:congress_fahrplan/model/settings.dart';
 
+enum FahrplanFetchState {
+  successful,
+  timeout,
+  noDataConnection,
+  noFile,
+}
+
 class Fahrplan {
   final String version;
   final String baseUrl;
   final Conference conference;
-  bool isEmpty = false;
-  bool noConnection = false;
+  final FahrplanFetchState fetchState;
 
   List<Day> days;
   List<Room> rooms;
@@ -46,12 +52,11 @@ class Fahrplan {
     this.favTalkIds,
     this.favoriteTalks,
     this.settings,
-    this.isEmpty,
-    this.noConnection,
+    this.fetchState,
   });
 
-  factory Fahrplan.fromJson(
-      var json, FavoritedTalks favTalks, Settings settings) {
+  factory Fahrplan.fromJson(var json, FavoritedTalks favTalks,
+      Settings settings, FahrplanFetchState fetchState) {
     return Fahrplan(
       version: json['version'],
       baseUrl: json['base_url'],
@@ -61,6 +66,7 @@ class Fahrplan {
       favTalkIds: favTalks,
       favoriteTalks: new List<Talk>(),
       settings: settings,
+      fetchState: fetchState,
     );
   }
 

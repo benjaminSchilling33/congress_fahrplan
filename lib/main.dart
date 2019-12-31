@@ -102,12 +102,13 @@ class CongressFahrplanApp extends StatelessWidget {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               favoriteProvider.initializeProvider(snapshot.data);
-              if (!favoriteProvider.fahrplan.noConnection &&
-                  !favoriteProvider.fahrplan.isEmpty) {
+              if (favoriteProvider.fahrplan.fetchState ==
+                  FahrplanFetchState.successful) {
                 return AllTalks(
                   theme: Theme.of(context),
                 );
-              } else if (favoriteProvider.fahrplan.noConnection) {
+              } else if (favoriteProvider.fahrplan.fetchState ==
+                  FahrplanFetchState.noDataConnection) {
                 return new MaterialApp(
                   theme: Theme.of(context),
                   title: 'Congress Fahrplan',
@@ -118,7 +119,30 @@ class CongressFahrplanApp extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           SvgPicture.asset('assets/destruction.svg'),
-                          Text('No internet connection.'),
+                          Text('Please enable mobile data or Wifi.'),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              } else if (favoriteProvider.fahrplan.fetchState ==
+                  FahrplanFetchState.timeout) {
+                return new MaterialApp(
+                  theme: Theme.of(context),
+                  title: 'Congress Fahrplan',
+                  home: new Scaffold(
+                    backgroundColor: Color(0xff000000),
+                    body: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          SvgPicture.asset('assets/destruction.svg'),
+                          Text(
+                            'Could not fetch Fahrplan!',
+                          ),
+                          Text(
+                            'Please check your network connection.',
+                          ),
                         ],
                       ),
                     ),
@@ -135,7 +159,12 @@ class CongressFahrplanApp extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           SvgPicture.asset('assets/destruction.svg'),
-                          Text('Fahrplan not yet released! Try again later.'),
+                          Text(
+                            'Could not fetch Fahrplan!',
+                          ),
+                          Text(
+                            'Please check your network connection.',
+                          ),
                         ],
                       ),
                     ),

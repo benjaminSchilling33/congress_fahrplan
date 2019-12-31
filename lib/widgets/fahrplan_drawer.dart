@@ -5,13 +5,9 @@ SPDX-License-Identifier: GPL-2.0-only
 Copyright (C) 2019 Benjamin Schilling
 */
 
-import 'dart:collection';
-
 import 'package:congress_fahrplan/widgets/sync_calendar.dart';
-import 'package:congress_fahrplan/widgets/talk.dart';
 import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:provider/provider.dart';
 
 import 'package:congress_fahrplan/widgets/favorites.dart';

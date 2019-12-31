@@ -16,8 +16,11 @@ import 'package:congress_fahrplan/widgets/talk.dart';
 class FahrplanDecoder {
   // Decodes the Fahrplan, initializes it and sets all favorited talks
   Fahrplan decodeFahrplanFromJson(
-      Map<String, dynamic> json, FavoritedTalks favTalks, Settings settings) {
-    Fahrplan f = Fahrplan.fromJson(json, favTalks, settings);
+      Map<String, dynamic> json,
+      FavoritedTalks favTalks,
+      Settings settings,
+      FahrplanFetchState fetchState) {
+    Fahrplan f = Fahrplan.fromJson(json, favTalks, settings, fetchState);
 
     //Initialize days, rooms and sort talks of days
 

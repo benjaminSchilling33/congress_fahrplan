@@ -56,11 +56,11 @@ class FahrplanFetcher {
     }
 
     /// Fetch the Fahrplan from the REST API
-    Fahrplan fp;
     Settings settings = await Settings.restoreSettingsFromFile();
 
     /// Check for network connectivity
-    var connectivityResult = await (Connectivity().checkConnectivity());
+    ConnectivityResult connectivityResult =
+        await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile ||
         connectivityResult == ConnectivityResult.wifi) {
       /// Fetch the fahrplan depending on what is set in the settings, if the timeout of 4 seconds expires load the
@@ -76,72 +76,81 @@ class FahrplanFetcher {
             'https://fahrplan.events.ccc.de/congress/2019/Fahrplan/schedule.json';
       }
 
-      final response = await http.get(
-        '$requestString',
-        headers: {
-          "If-Modified-Since": fahrplanFile != null
-              ? HttpDate.format(fahrplanFileLastModified.toUtc())
-              : "",
-          "If-None-Match": ifNoneMatchFile != null ? ifNoneMatch : "",
-        },
-      ).timeout(const Duration(seconds: 4));
+      final response = await http
+          .get(
+            '$requestString',
+            headers: {
+              "If-Modified-Since": fahrplanFile != null
+                  ? HttpDate.format(fahrplanFileLastModified.toUtc())
+                  : "",
+              "If-None-Match": ifNoneMatchFile != null ? ifNoneMatch : "",
+            },
+          )
+          .timeout(const Duration(seconds: 10))
+          .catchError((e) {
+            print('timeout');
+          });
 
       ///If the HTTP Status code is 200 OK use the Fahrplan from the response,
       ///Else if the HTTP Status Code is 304 Not Modified use the local file.
       ///Else if a local fahrplan file is available use it
       ///Else return empty fahrplan
-      if (response.statusCode == 200 && response.bodyBytes != null) {
-        fahrplanJson = utf8.decode(response.bodyBytes);
-        FileStorage.writeIfNoneMatchFile(response.headers.keys
-            .firstWhere((key) => key.toLowerCase() == 'etag'));
-        FileStorage.writeDataFile(fahrplanJson);
-        fp = new FahrplanDecoder().decodeFahrplanFromJson(
-          json.decode(fahrplanJson)['schedule'],
-          favTalks,
-          settings,
-        );
-      } else if (response.statusCode == 304 && fahrplanFile != null) {
-        fahrplanJson = await fahrplanFile.readAsString();
-        if (fahrplanJson != null && fahrplanJson != '') {
-          fp = new FahrplanDecoder().decodeFahrplanFromJson(
+      if (response != null) {
+        if (response.statusCode == 200 && response.bodyBytes != null) {
+          fahrplanJson = utf8.decode(response.bodyBytes);
+          FileStorage.writeIfNoneMatchFile(response.headers.keys
+              .firstWhere((key) => key.toLowerCase() == 'etag'));
+          FileStorage.writeDataFile(fahrplanJson);
+          return new FahrplanDecoder().decodeFahrplanFromJson(
             json.decode(fahrplanJson)['schedule'],
             favTalks,
             settings,
+            FahrplanFetchState.successful,
           );
-        }
-      } else if (fahrplanFile != null) {
-        fahrplanJson = await fahrplanFile.readAsString();
-        if (fahrplanJson != null && fahrplanJson != '') {
-          fp = new FahrplanDecoder().decodeFahrplanFromJson(
-            json.decode(fahrplanJson)['schedule'],
-            favTalks,
-            settings,
-          );
+        } else if (response.statusCode == 304 && fahrplanFile != null) {
+          fahrplanJson = await fahrplanFile.readAsString();
+          if (fahrplanJson != null && fahrplanJson != '') {
+            return new FahrplanDecoder().decodeFahrplanFromJson(
+              json.decode(fahrplanJson)['schedule'],
+              favTalks,
+              settings,
+              FahrplanFetchState.successful,
+            );
+          }
+        } else {
+          return new Fahrplan(fetchState: FahrplanFetchState.timeout);
         }
       } else {
-        return new Fahrplan(isEmpty: true, noConnection: false);
+        if (fahrplanFile != null) {
+          fahrplanJson = await fahrplanFile.readAsString();
+          if (fahrplanJson != null && fahrplanJson != '') {
+            return new FahrplanDecoder().decodeFahrplanFromJson(
+              json.decode(fahrplanJson)['schedule'],
+              favTalks,
+              settings,
+              FahrplanFetchState.successful,
+            );
+          }
+        } else {
+          return new Fahrplan(fetchState: FahrplanFetchState.timeout);
+        }
       }
-      fp.noConnection = false;
-      fp.isEmpty = false;
-      return fp;
 
       /// If not connected, try to load from file, otherwise set Fahrplan.isEmpty
     } else {
       if (fahrplanFile != null) {
         fahrplanJson = await fahrplanFile.readAsString();
         if (fahrplanJson != null && fahrplanJson != '') {
-          fp = new FahrplanDecoder().decodeFahrplanFromJson(
+          return new FahrplanDecoder().decodeFahrplanFromJson(
             json.decode(fahrplanJson)['schedule'],
             favTalks,
             settings,
+            FahrplanFetchState.successful,
           );
         }
       } else {
-        return new Fahrplan(noConnection: false, isEmpty: true);
+        return new Fahrplan(fetchState: FahrplanFetchState.noDataConnection);
       }
-      fp.noConnection = false;
-      fp.isEmpty = false;
-      return fp;
     }
   }
 }

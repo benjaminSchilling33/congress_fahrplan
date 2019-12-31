@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:congress_fahrplan/provider/favorite_provider.dart';
 
 class AllTalks extends StatelessWidget {
-  ThemeData theme;
+  final ThemeData theme;
 
   AllTalks({Key key, this.theme}) : super(key: key);
 
