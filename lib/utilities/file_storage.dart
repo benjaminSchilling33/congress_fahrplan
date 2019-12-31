@@ -58,7 +58,7 @@ class FileStorage {
   }
 
   static Future<File> writeIfNoneMatchFile(String data) async {
-    final file = await localDataFile;
+    final file = await localIfNoneMatchFile;
 
     // Write the file
     return file.writeAsString('$data', mode: FileMode.write);
@@ -66,7 +66,7 @@ class FileStorage {
 
   static Future<String> readIfNoneMatchFile() async {
     try {
-      final file = await localDataFile;
+      final file = await localIfNoneMatchFile;
 
       // Read the file
       String contents = await file.readAsString();

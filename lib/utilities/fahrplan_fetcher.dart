@@ -22,10 +22,12 @@ import 'package:congress_fahrplan/model/settings.dart';
 class FahrplanFetcher {
   static Future<Fahrplan> fetchFahrplan() async {
     File fahrplanFile;
-    File ifNoneMatchFile;
     DateTime fahrplanFileLastModified;
-    String ifNoneMatch;
     String fahrplanJson;
+
+    /// Used to reduce traffic
+    String ifNoneMatch;
+    String ifModifiedSince;
 
     ///Fetch the favorites from the local file
     FavoritedTalks favTalks;
@@ -49,15 +51,24 @@ class FahrplanFetcher {
       fahrplanFileLastModified = await fahrplanFile.lastModified();
     }
 
-    ///Load the If None Match file
+    ///Load the If-None-Match
     if (await FileStorage.ifNoneMatchFileAvailable) {
-      ifNoneMatchFile = await FileStorage.localIfNoneMatchFile;
-      ifNoneMatch = await fahrplanFile.readAsString();
+      ifNoneMatch = await FileStorage.readIfNoneMatchFile();
+      print('if none match file available, content: $ifNoneMatch');
+    } else {
+      ifNoneMatch = "";
+      print('if none match file not available, content: $ifNoneMatch');
     }
 
-    /// Fetch the Fahrplan from the REST API
+    /// Set If-Modified-Since
+    ifModifiedSince = fahrplanFile != null
+        ? HttpDate.format(fahrplanFileLastModified.toUtc())
+        : "";
+
+    /// Load the Settings
     Settings settings = await Settings.restoreSettingsFromFile();
 
+    /// Fetch the Fahrplan from the REST API
     /// Check for network connectivity
     ConnectivityResult connectivityResult =
         await (Connectivity().checkConnectivity());
@@ -75,15 +86,12 @@ class FahrplanFetcher {
         requestString =
             'https://fahrplan.events.ccc.de/congress/2019/Fahrplan/schedule.json';
       }
-
       final response = await http
           .get(
             '$requestString',
             headers: {
-              "If-Modified-Since": fahrplanFile != null
-                  ? HttpDate.format(fahrplanFileLastModified.toUtc())
-                  : "",
-              "If-None-Match": ifNoneMatchFile != null ? ifNoneMatch : "",
+              "If-Modified-Since": ifModifiedSince,
+              "If-None-Match": ifNoneMatch,
             },
           )
           .timeout(const Duration(seconds: 10))
@@ -96,11 +104,17 @@ class FahrplanFetcher {
       ///Else if a local fahrplan file is available use it
       ///Else return empty fahrplan
       if (response != null) {
+        print(response.statusCode);
         if (response.statusCode == 200 && response.bodyBytes != null) {
           fahrplanJson = utf8.decode(response.bodyBytes);
-          FileStorage.writeIfNoneMatchFile(response.headers.keys
-              .firstWhere((key) => key.toLowerCase() == 'etag'));
+
+          /// Store the etag
+          String etag = response.headers['etag'];
+          FileStorage.writeIfNoneMatchFile('$etag');
+
+          /// Store the fetched JSON
           FileStorage.writeDataFile(fahrplanJson);
+
           return new FahrplanDecoder().decodeFahrplanFromJson(
             json.decode(fahrplanJson)['schedule'],
             favTalks,
