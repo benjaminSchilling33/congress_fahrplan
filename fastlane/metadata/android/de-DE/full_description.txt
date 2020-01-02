@@ -2,6 +2,7 @@ Talkübersicht für den Chaos Communication Congress
 
 Benutzt everything.schedule.json oder schedule.json
 Optimiert für TalkBack um Barrierefreiheit zu erreichen
+Favoriten können mit dem Kalender bidirektional gesynct werden, ermöglicht das einfache wiederherstellen der Favoriten.
 
 Entwickelt als Open Source (GPL v2):
 https://github.com/benjaminSchilling33/congress_fahrplan
