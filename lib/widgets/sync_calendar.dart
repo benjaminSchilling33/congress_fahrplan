@@ -7,6 +7,7 @@ Copyright (C) 2019 Benjamin Schilling
 
 import 'dart:collection';
 
+import 'package:congress_fahrplan/model/day.dart';
 import 'package:congress_fahrplan/provider/favorite_provider.dart';
 import 'package:congress_fahrplan/widgets/talk.dart';
 import 'package:device_calendar/device_calendar.dart';
@@ -57,25 +58,61 @@ class SyncCalendar extends StatelessWidget {
     );
   }
 
-  syncCalendar(
-      BuildContext context, FavoriteProvider provider, Calendar calendar) {
-    List<Event> events = List<Event>();
+  syncCalendar(BuildContext context, FavoriteProvider provider,
+      Calendar calendar) async {
+    /// Get all events from calendar
+    Result<UnmodifiableListView<Event>> resultExistingEvents =
+        await calendarPlugin.retrieveEvents(
+            calendar.id,
+            RetrieveEventsParams(
+                startDate: DateTime.parse(provider.fahrplan.conference.start),
+                endDate: DateTime.parse(provider.fahrplan.conference.end)));
+    UnmodifiableListView<Event> calendarEvents = resultExistingEvents.data;
+    print(provider.fahrplan.conference.start);
+    print(provider.fahrplan.conference.end);
 
-    for (Talk fav in provider.fahrplan.favoriteTalks) {
-      int durationH = int.parse(fav.duration.split(":")[0]);
-      int durationM = int.parse(fav.duration.split(":")[1]);
-      DateTime end =
-          fav.date.add(Duration(hours: durationH, minutes: durationM));
-      Event e = Event(calendar.id);
-      e.title = fav.title;
-      e.start = fav.date;
-      e.description = fav.abstract;
-      e.location = fav.room;
-      e.end = end;
-      events.add(e);
+    /// Sync calendar to favorites
+    for (Event calendarEvent in calendarEvents) {
+      for (Day d in provider.fahrplan.days) {
+        if (d.date.year == calendarEvent.start.year &&
+            d.date.month == calendarEvent.start.month &&
+            d.date.day == calendarEvent.start.day) {
+          for (Talk t in d.talks) {
+            if (t.title == calendarEvent.title) {
+              if (!t.favorite) {
+                provider.favoriteTalk(t, d.date);
+              }
+            }
+          }
+        }
+      }
     }
-    for (Event e in events) {
-      calendarPlugin.createOrUpdateEvent(e);
+
+    /// Sync favorites to calendar
+    for (Talk fav in provider.fahrplan.favoriteTalks) {
+      bool eventFound = false;
+
+      /// Search for event in calendar
+      for (Event calendarEvent in calendarEvents) {
+        if (calendarEvent.title == fav.title) {
+          eventFound = true;
+        }
+      }
+
+      /// If event not found, add it
+      if (!eventFound) {
+        int durationH = int.parse(fav.duration.split(":")[0]);
+        int durationM = int.parse(fav.duration.split(":")[1]);
+        DateTime end =
+            fav.date.add(Duration(hours: durationH, minutes: durationM));
+        Event e = Event(calendar.id);
+        e.title = fav.title;
+        e.start = fav.date;
+        e.description = fav.abstract;
+        e.location = fav.room;
+        e.end = end;
+        calendarPlugin.createOrUpdateEvent(e);
+      }
     }
     showDialog(
       context: context,

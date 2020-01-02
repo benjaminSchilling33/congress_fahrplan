@@ -26,7 +26,6 @@ class Settings {
     if (await FileStorage.settingsFileAvailable) {
       settingsFile = await FileStorage.localSettingsFile;
       String settingsJsonString = await settingsFile.readAsString();
-      print(settingsJsonString);
       if (settingsJsonString != null && settingsJsonString != '') {
         return Settings.fromJson(json.decode(settingsJsonString));
       }

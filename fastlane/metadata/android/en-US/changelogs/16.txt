@@ -1,1 +1,1 @@
-* Less traffic consumed by caching the Fahrplan locally
+* Less traffic created by caching the Fahrplan locally

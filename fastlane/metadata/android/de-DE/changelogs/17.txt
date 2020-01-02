@@ -1,0 +1,1 @@
+* Bi-direktionaler Kalender Sync ermöglicht es schon gesyncte Talks aus dem Kalender wiederherzustellen.

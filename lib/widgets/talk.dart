@@ -88,12 +88,24 @@ class Talk extends StatelessWidget {
           leading: Ink(
             child: Consumer<FavoriteProvider>(
               builder: (context, favoriteProvider, child) => IconButton(
-                  tooltip: "Add talk $title to favorites.",
-                  icon: Icon(
-                    favorite ? Icons.favorite : Icons.favorite_border,
-                  ),
-                  onPressed: () =>
-                      favoriteProvider.favoriteTalk(context, this, day)),
+                tooltip: "Add talk $title to favorites.",
+                icon: Icon(
+                  favorite ? Icons.favorite : Icons.favorite_border,
+                ),
+                onPressed: () {
+                  favoriteProvider.favoriteTalk(this, day);
+                  Scaffold.of(context).showSnackBar(SnackBar(
+                    content: favorite == false
+                        ? Text('\"$title\" added to favorites.')
+                        : Text('\"$title\" removed from favorites.'),
+                    action: SnackBarAction(
+                      label: "Revert",
+                      onPressed: () => favoriteProvider.favoriteTalk(this, day),
+                    ),
+                    duration: Duration(seconds: 3),
+                  ));
+                },
+              ),
             ),
           ),
           trailing: Ink(

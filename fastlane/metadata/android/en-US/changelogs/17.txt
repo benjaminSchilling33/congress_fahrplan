@@ -1,0 +1,1 @@
+* Bi-directional calendar sync allows to restore favorites from already synced talks.

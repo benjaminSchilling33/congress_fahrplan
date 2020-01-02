@@ -36,9 +36,9 @@ class FavoriteProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void favoriteTalk(BuildContext context, Talk talk, DateTime talkDate) {
+  void favoriteTalk(Talk talk, DateTime talkDay) {
     for (Talk t
-        in fahrplan.days.firstWhere((day) => day.date == talkDate).talks) {
+        in fahrplan.days.firstWhere((day) => day.date == talkDay).talks) {
       /// Check for 1. a matching talk id, 2. favorite is not set and (if favorites has elements) 3. that the talk not exists in favorite talks
       if (t.id == talk.id && !t.favorite) {
         if (fahrplan.favoriteTalks.length > 0) {
@@ -46,41 +46,18 @@ class FavoriteProvider extends ChangeNotifier {
             if (fav.id == talk.id) {
               return;
             } else {
-              if (context != null) {
-                String talkName = talk.title;
-                Scaffold.of(context).showSnackBar(SnackBar(
-                  content: Text('\"$talkName\" added to favorites.'),
-                  action: SnackBarAction(
-                    label: "Revert",
-                    onPressed: () => this.favoriteTalk(null, talk, talkDate),
-                  ),
-                  duration: Duration(seconds: 3),
-                ));
-              }
-
-              favorite(t, talk, talkDate);
+              _favorite(t, talk, talkDay);
               return;
             }
           }
         } else {
-          if (context != null) {
-            String talkName = talk.title;
-            Scaffold.of(context).showSnackBar(SnackBar(
-              content: Text('\"$talkName\" added to favorites.'),
-              action: SnackBarAction(
-                label: "Revert",
-                onPressed: () => this.favoriteTalk(null, talk, talkDate),
-              ),
-              duration: Duration(seconds: 3),
-            ));
-          }
-          favorite(t, talk, talkDate);
+          _favorite(t, talk, talkDay);
           return;
         }
       } else if (t.id == talk.id && t.favorite) {
         /// If the talk exists and is favorites, remove it from the list of favorites
         fahrplan.days
-            .firstWhere((day) => day.date == talkDate)
+            .firstWhere((day) => day.date == talkDay)
             .rooms
             .firstWhere((room) => room.name == talk.room)
             .talks
@@ -92,23 +69,12 @@ class FavoriteProvider extends ChangeNotifier {
         fahrplan.favoriteTalks.removeWhere((ta) => ta.id == talk.id);
         fahrplan.favoriteTalks.sort((a, b) => a.date.compareTo(b.date));
         notifyListeners();
-        if (context != null) {
-          String talkName = talk.title;
-          Scaffold.of(context).showSnackBar(SnackBar(
-            content: Text('\"$talkName\" removed from favorites.'),
-            action: SnackBarAction(
-              label: "Revert",
-              onPressed: () => this.favoriteTalk(null, talk, talkDate),
-            ),
-            duration: Duration(seconds: 3),
-          ));
-        }
         return;
       }
     }
   }
 
-  void favorite(Talk t, Talk talk, DateTime talkDate) {
+  void _favorite(Talk t, Talk talk, DateTime talkDate) {
     /// Set favorite of talk in correct room to true
     fahrplan.days
         .firstWhere((day) => day.date == talkDate)

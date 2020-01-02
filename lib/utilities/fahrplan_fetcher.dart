@@ -35,7 +35,6 @@ class FahrplanFetcher {
     if (await FileStorage.favoriteFileAvailable) {
       favoriteFile = await FileStorage.localFavoriteFile;
       String favoriteData = await favoriteFile.readAsString();
-      print(favoriteData);
       if (favoriteData != null) {
         favTalks = FavoritedTalks.fromJson(json.decode(favoriteData));
       }
@@ -54,10 +53,8 @@ class FahrplanFetcher {
     ///Load the If-None-Match
     if (await FileStorage.ifNoneMatchFileAvailable) {
       ifNoneMatch = await FileStorage.readIfNoneMatchFile();
-      print('if none match file available, content: $ifNoneMatch');
     } else {
       ifNoneMatch = "";
-      print('if none match file not available, content: $ifNoneMatch');
     }
 
     /// Set If-Modified-Since
@@ -102,7 +99,6 @@ class FahrplanFetcher {
       ///Else if a local fahrplan file is available use it
       ///Else return empty fahrplan
       if (response != null) {
-        print(response.statusCode);
         if (response.statusCode == 200 && response.bodyBytes != null) {
           fahrplanJson = utf8.decode(response.bodyBytes);
 
