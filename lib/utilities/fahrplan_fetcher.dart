@@ -91,7 +91,7 @@ class FahrplanFetcher {
               "If-None-Match": ifNoneMatch,
             },
           )
-          .timeout(const Duration(seconds: 10))
+          .timeout(const Duration(seconds: 20))
           .catchError((e) {});
 
       ///If the HTTP Status code is 200 OK use the Fahrplan from the response,

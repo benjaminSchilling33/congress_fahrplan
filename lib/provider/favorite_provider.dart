@@ -13,12 +13,14 @@ import 'package:congress_fahrplan/widgets/talk.dart';
 import 'package:congress_fahrplan/model/fahrplan.dart';
 
 import 'package:congress_fahrplan/utilities/fahrplan_fetcher.dart';
+import 'package:package_info/package_info.dart';
 
 class FavoriteProvider extends ChangeNotifier {
   final List<Widget> _favorites = [];
   Future<Fahrplan> futureFahrplan;
   Fahrplan fahrplan;
   bool isInitialized = false;
+  String packageVersion = '';
 
   UnmodifiableListView<Widget> get favorites =>
       UnmodifiableListView(_favorites);
@@ -28,6 +30,9 @@ class FavoriteProvider extends ChangeNotifier {
   }
 
   void initializeProvider(Fahrplan fahrplan) async {
+    PackageInfo.fromPlatform().then((PackageInfo pi) {
+      packageVersion = pi.version;
+    });
     this.fahrplan = fahrplan;
     isInitialized = true;
   }

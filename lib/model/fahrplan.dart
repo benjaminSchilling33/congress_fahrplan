@@ -6,6 +6,7 @@ Copyright (C) 2019 Benjamin Schilling
 */
 
 import 'package:flutter/material.dart';
+import 'package:package_info/package_info.dart';
 
 import 'package:page_view_indicators/linear_progress_page_indicator.dart';
 

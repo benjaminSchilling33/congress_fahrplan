@@ -11,7 +11,6 @@ import 'package:congress_fahrplan/model/day.dart';
 import 'package:congress_fahrplan/provider/favorite_provider.dart';
 import 'package:congress_fahrplan/widgets/talk.dart';
 import 'package:device_calendar/device_calendar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SyncCalendar extends StatelessWidget {

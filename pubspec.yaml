@@ -36,6 +36,7 @@ dependencies:
   intl: ^0.16.0
   share: ^0.6.3+5
   device_calendar: ^1.0.0+2
+  package_info: ^0.4.0+13
 
 dev_dependencies:
   flutter_test:
