@@ -7,14 +7,12 @@ Copyright (C) 2019 Benjamin Schilling
 
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/material.dart';
 
-import 'package:provider/provider.dart';
 import 'package:congress_fahrplan/provider/favorite_provider.dart';
-
 import 'package:congress_fahrplan/utilities/fahrplan_fetcher.dart';
-
 import 'package:congress_fahrplan/utilities/file_storage.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart' hide BuildContext;
 
 class Settings {
   int loadFullFahrplan = 0;
@@ -55,7 +53,7 @@ class Settings {
       loadFullFahrplan = value == true ? 1 : 0;
       writeFile();
 
-      var favorites = Provider.of<FavoriteProvider>(context);
+      var favorites = Provider.of<FavoriteProvider>(context, listen: false);
       favorites.futureFahrplan = null;
 
       favorites.notifyMainListeners();

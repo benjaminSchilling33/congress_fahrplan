@@ -2,10 +2,11 @@
 congress_fahrplan
 This is the dart file containing the SyncCalendar StatelessWidget.
 SPDX-License-Identifier: GPL-2.0-only
-Copyright (C) 2019 Benjamin Schilling
+Copyright (C) 2019 - 2020 Benjamin Schilling
 */
 
 import 'dart:collection';
+import 'dart:core';
 
 import 'package:congress_fahrplan/model/day.dart';
 import 'package:congress_fahrplan/provider/favorite_provider.dart';
@@ -100,10 +101,10 @@ class SyncCalendar extends StatelessWidget {
 
       /// If event not found, add it
       if (!eventFound) {
-        int durationH = int.parse(fav.duration.split(":")[0]);
-        int durationM = int.parse(fav.duration.split(":")[1]);
-        DateTime end =
-            fav.date.add(Duration(hours: durationH, minutes: durationM));
+        double durationH = double.parse(fav.duration.split(":")[0]);
+        double durationM = double.parse(fav.duration.split(":")[1]);
+        DateTime end = fav.date.add(
+            Duration(hours: durationH.toInt(), minutes: durationM.toInt()));
         Event e = Event(calendar.id);
         e.title = fav.title;
         e.start = fav.date;

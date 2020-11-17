@@ -5,18 +5,16 @@ SPDX-License-Identifier: GPL-2.0-only
 Copyright (C) 2019 Benjamin Schilling
 */
 
+import 'package:congress_fahrplan/model/favorited_talks.dart';
+import 'package:congress_fahrplan/model/settings.dart';
+import 'package:congress_fahrplan/widgets/fahrplan_drawer.dart';
+import 'package:congress_fahrplan/widgets/talk.dart';
 import 'package:flutter/material.dart';
-import 'package:package_info/package_info.dart';
-
 import 'package:page_view_indicators/linear_progress_page_indicator.dart';
 
 import 'conference.dart';
 import 'day.dart';
 import 'room.dart';
-import 'package:congress_fahrplan/model/favorited_talks.dart';
-import 'package:congress_fahrplan/widgets/talk.dart';
-import 'package:congress_fahrplan/widgets/fahrplan_drawer.dart';
-import 'package:congress_fahrplan/model/settings.dart';
 
 enum FahrplanFetchState {
   successful,
@@ -95,7 +93,7 @@ class Fahrplan {
         drawer: FahrplanDrawer(
           title: Text(
             'Overview',
-            style: Theme.of(context).textTheme.title,
+            style: Theme.of(context).textTheme.headline6,
           ),
         ),
         body: dayTabCache,
@@ -141,7 +139,7 @@ class Fahrplan {
       drawer: FahrplanDrawer(
         title: Text(
           'Overview',
-          style: Theme.of(context).textTheme.title,
+          style: Theme.of(context).textTheme.headline6,
         ),
       ),
     );
