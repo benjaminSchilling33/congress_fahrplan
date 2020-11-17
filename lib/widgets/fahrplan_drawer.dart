@@ -5,18 +5,15 @@ SPDX-License-Identifier: GPL-2.0-only
 Copyright (C) 2019 Benjamin Schilling
 */
 
+import 'package:congress_fahrplan/provider/favorite_provider.dart';
+import 'package:congress_fahrplan/widgets/all_talks.dart';
+import 'package:congress_fahrplan/widgets/favorites.dart';
+import 'package:congress_fahrplan/widgets/flat_checkbox_text_button.dart';
+import 'package:congress_fahrplan/widgets/flat_icon_text_button.dart';
 import 'package:congress_fahrplan/widgets/sync_calendar.dart';
 import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/material.dart';
-import 'package:package_info/package_info.dart';
-import 'package:provider/provider.dart';
-
-import 'package:congress_fahrplan/widgets/favorites.dart';
-import 'package:congress_fahrplan/widgets/all_talks.dart';
-import 'package:congress_fahrplan/widgets/flat_icon_text_button.dart';
-import 'package:congress_fahrplan/widgets/flat_checkbox_text_button.dart';
-
-import 'package:congress_fahrplan/provider/favorite_provider.dart';
+import 'package:provider/provider.dart' hide BuildContext;
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -98,7 +95,7 @@ class FahrplanDrawer extends StatelessWidget {
             icon: Icons.security,
             text: 'Show Data Privacy Policy',
             onPressed: () => launchUrl(
-                'https://delusionsoftware.de/congress-fahrplan-datenschutzerklarung-privacy-policy/'),
+                'https://github.com/benjaminSchilling33/congress_fahrplan/wiki/Congress-Fahrplan-Datenschutzerkl%C3%A4rung-(Privacy-Policy)'),
           ),
           FlatIconTextButton(
             icon: Icons.bug_report,
@@ -108,8 +105,8 @@ class FahrplanDrawer extends StatelessWidget {
           ),
           FlatIconTextButton(
             icon: Icons.color_lens,
-            text: 'Design by bleeptrack',
-            onPressed: () => launchUrl('http://bleeptrack.de/'),
+            text: 'Design by kreatur.works',
+            onPressed: () => launchUrl('https://kreatur.works/'),
           ),
           Container(
             padding: EdgeInsets.fromLTRB(32, 0, 0, 0),

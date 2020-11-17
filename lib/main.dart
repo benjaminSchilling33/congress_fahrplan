@@ -2,17 +2,17 @@
 congress_fahrplan
 This is the dart file containing the main method, the ThemeWrapper and the CongressFahrplanApp class.
 SPDX-License-Identifier: GPL-2.0-only
-Copyright (C) 2019 Benjamin Schilling
+Copyright (C) 2019 -2020 Benjamin Schilling
 */
 
+import 'dart:ui';
+
+import 'package:congress_fahrplan/model/fahrplan.dart';
+import 'package:congress_fahrplan/provider/favorite_provider.dart';
+import 'package:congress_fahrplan/widgets/all_talks.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:provider/provider.dart';
-
-import 'package:congress_fahrplan/widgets/all_talks.dart';
-import 'package:congress_fahrplan/provider/favorite_provider.dart';
-import 'package:congress_fahrplan/model/fahrplan.dart';
+import 'package:provider/provider.dart' hide BuildContext;
 
 void main() {
   runApp(ThemeWrapper());
@@ -23,6 +23,7 @@ class ThemeWrapper extends StatelessWidget {
 
   Widget build(BuildContext context) {
     return new MaterialApp(
+      title: 'Congress Fahrplan',
       theme: ThemeData(
         brightness: Brightness.dark,
         backgroundColor: Color(0xff000000),
@@ -30,25 +31,25 @@ class ThemeWrapper extends StatelessWidget {
           indicator: UnderlineTabIndicator(),
         ),
         primaryColorDark: Color(0xff000000),
-        indicatorColor: Color(0xFFFE5000),
-        accentColor: Color(0xFFFE5000),
+        indicatorColor: Color(0xFFB239FF),
+        accentColor: Color(0xFFB239FF),
         textTheme: TextTheme(
-          title: TextStyle(
+          headline6: TextStyle(
             color: Color(0xFFD0D0CE),
           ),
-          body1: TextStyle(
+          bodyText2: TextStyle(
             color: Color(0xFFD0D0CE),
           ),
-          body2: TextStyle(
+          bodyText1: TextStyle(
             color: Color(0xFFD0D0CE),
           ),
-          subtitle: TextStyle(
+          subtitle2: TextStyle(
             color: Color(0xFFD0D0CE),
           ),
-          subhead: TextStyle(
+          subtitle1: TextStyle(
             color: Color(0xFFD0D0CE),
           ),
-          display1: TextStyle(
+          headline4: TextStyle(
             color: Color(0xFFD0D0CE),
           ),
           caption: TextStyle(
@@ -57,7 +58,7 @@ class ThemeWrapper extends StatelessWidget {
           overline: TextStyle(
             color: Color(0xFFD0D0CE),
           ),
-          headline: TextStyle(
+          headline5: TextStyle(
             color: Color(0xFFD0D0CE),
           ),
         ),
@@ -76,14 +77,14 @@ class ThemeWrapper extends StatelessWidget {
         appBarTheme: AppBarTheme(
           color: Color(0xFF1a1a1a),
           iconTheme: IconThemeData(
-            color: Color(0xFFFE5000),
+            color: Color(0xFFB239FF),
           ),
         ),
-        buttonColor: Color(0xFFFE5000),
+        buttonColor: Color(0xFFB239FF),
         iconTheme: IconThemeData(
-          color: Color(0xFFFE5000),
+          color: Color(0xFFB239FF),
         ),
-        toggleableActiveColor: Color(0xFFFE5000),
+        toggleableActiveColor: Color(0xFFB239FF),
       ),
       home: CongressFahrplanApp(key: key),
     );
@@ -95,7 +96,7 @@ class CongressFahrplanApp extends StatelessWidget {
 
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      builder: (context) => FavoriteProvider(),
+      create: (context) => FavoriteProvider(),
       child: Consumer<FavoriteProvider>(
         builder: (context, favoriteProvider, child) => FutureBuilder<Fahrplan>(
           future: favoriteProvider.futureFahrplan,
@@ -108,46 +109,40 @@ class CongressFahrplanApp extends StatelessWidget {
                   theme: Theme.of(context),
                 );
               } else {
-                return new MaterialApp(
-                  theme: Theme.of(context),
-                  title: 'Congress Fahrplan',
-                  home: new Scaffold(
+                return SafeArea(
+                  child: Scaffold(
                     backgroundColor: Color(0xff000000),
-                    body: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          SvgPicture.asset('assets/destruction.svg'),
-                          Text(
-                            'Could not fetch Fahrplan!',
-                          ),
-                          Text(
-                            favoriteProvider.fahrplan.fetchMessage,
-                          ),
-                        ],
-                      ),
+                    body: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Image.asset('assets/logo_sd_violet.png'),
+                        Text(
+                          'Could not fetch Fahrplan!',
+                        ),
+                        Text(
+                          favoriteProvider.fahrplan.fetchMessage,
+                        ),
+                      ],
                     ),
                   ),
                 );
               }
             } else {
-              return new MaterialApp(
-                theme: Theme.of(context),
-                title: 'Congress Fahrplan',
-                home: new Scaffold(
+              return SafeArea(
+                child: Scaffold(
                   backgroundColor: Color(0xff000000),
-                  body: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        SvgPicture.asset('assets/destruction.svg'),
-                        CircularProgressIndicator(),
-                        Container(
-                          child: Text('Fetching Fahrplan'),
-                          padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                        ),
-                      ],
-                    ),
+                  body: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                          padding: EdgeInsets.fromLTRB(40, 40, 40, 40),
+                          child: Image.asset('assets/logo_sd_violet.png')),
+                      CircularProgressIndicator(),
+                      Container(
+                        child: Text('Fetching Fahrplan'),
+                        padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      ),
+                    ],
                   ),
                 ),
               );

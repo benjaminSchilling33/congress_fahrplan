@@ -5,14 +5,13 @@ SPDX-License-Identifier: GPL-2.0-only
 Copyright (C) 2019 Benjamin Schilling
 */
 
+import 'package:congress_fahrplan/provider/favorite_provider.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:provider/provider.dart' hide BuildContext;
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:congress_fahrplan/provider/favorite_provider.dart';
 
 /// The Talk widget stores all data about it and build a card with all data relevant for it.
 class Talk extends StatelessWidget {

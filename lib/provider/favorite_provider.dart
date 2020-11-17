@@ -6,13 +6,12 @@ Copyright (C) 2019 Benjamin Schilling
 */
 
 import 'dart:collection';
+
+import 'package:congress_fahrplan/model/fahrplan.dart';
+import 'package:congress_fahrplan/utilities/fahrplan_fetcher.dart';
+import 'package:congress_fahrplan/widgets/talk.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-import 'package:congress_fahrplan/widgets/talk.dart';
-import 'package:congress_fahrplan/model/fahrplan.dart';
-
-import 'package:congress_fahrplan/utilities/fahrplan_fetcher.dart';
 import 'package:package_info/package_info.dart';
 
 class FavoriteProvider extends ChangeNotifier {
@@ -21,6 +20,8 @@ class FavoriteProvider extends ChangeNotifier {
   Fahrplan fahrplan;
   bool isInitialized = false;
   String packageVersion = '';
+
+  bool oldTalkNoticeDismissed = false;
 
   UnmodifiableListView<Widget> get favorites =>
       UnmodifiableListView(_favorites);

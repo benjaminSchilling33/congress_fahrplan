@@ -9,17 +9,25 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:http/http.dart' as http;
-import 'package:connectivity/connectivity.dart';
-
-import 'package:congress_fahrplan/utilities/file_storage.dart';
-import 'package:congress_fahrplan/utilities/fahrplan_decoder.dart';
-
 import 'package:congress_fahrplan/model/fahrplan.dart';
 import 'package:congress_fahrplan/model/favorited_talks.dart';
 import 'package:congress_fahrplan/model/settings.dart';
+import 'package:congress_fahrplan/utilities/fahrplan_decoder.dart';
+import 'package:congress_fahrplan/utilities/file_storage.dart';
+import 'package:connectivity/connectivity.dart';
+import 'package:http/http.dart' as http;
 
 class FahrplanFetcher {
+  static String minimalFahrplanUrl =
+      'https://fahrplan.events.ccc.de/congress/2019/Fahrplan/schedule.json';
+  static String completeFahrplanUrl =
+      'https://data.c3voc.de/36C3/everything.schedule.json';
+
+  static List<String> oldUrls = [
+    'https://fahrplan.events.ccc.de/congress/2019/Fahrplan/schedule.json',
+    'https://data.c3voc.de/36C3/everything.schedule.json'
+  ];
+
   static Future<Fahrplan> fetchFahrplan() async {
     File fahrplanFile;
     DateTime fahrplanFileLastModified;
@@ -72,16 +80,14 @@ class FahrplanFetcher {
     if (connectivityResult == ConnectivityResult.mobile ||
         connectivityResult == ConnectivityResult.wifi) {
       /// Fetch the fahrplan depending on what is set in the settings, if the timeout of 4 seconds expires load the
-      String requestString =
-          'https://fahrplan.events.ccc.de/congress/2019/Fahrplan/schedule.json';
+      String requestString = FahrplanFetcher.minimalFahrplanUrl;
 
       if (settings.getLoadFullFahrplan()) {
         /// Complete Fahrplan
-        requestString = 'https://data.c3voc.de/36C3/everything.schedule.json';
+        requestString = FahrplanFetcher.completeFahrplanUrl;
       } else {
         /// Only Main Rooms Fahrplan
-        requestString =
-            'https://fahrplan.events.ccc.de/congress/2019/Fahrplan/schedule.json';
+        requestString = FahrplanFetcher.minimalFahrplanUrl;
       }
       final response = await http
           .get(
