@@ -349,25 +349,24 @@ class Talk extends StatelessWidget {
 
     /// Add the persons details
     if (persons != null && persons.length > 0) {
-      String personsString = '';
       for (Person p in persons) {
-        personsString += p.publicName +
-            (persons.last.publicName == p.publicName ? '' : ' - ');
-      }
-      widgets.add(Semantics(
-        label: 'Presenter $personsString',
-        child: ExcludeSemantics(
-          child: Row(
-            children: <Widget>[
-              Container(
-                child: Icon(Icons.group),
-                padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-              ),
-              Text(personsString),
-            ],
+        widgets.add(Semantics(
+          label: 'Presenter ${p.publicName}',
+          child: ExcludeSemantics(
+            child: Row(
+              children: <Widget>[
+                Container(
+                  child: Icon(Icons.group),
+                  padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                ),
+                Text(p.publicName.length > 20
+                    ? '${p.publicName.substring(0, 19)}...'
+                    : '${p.publicName}'),
+              ],
+            ),
           ),
-        ),
-      ));
+        ));
+      }
     }
 
     /// Add the abstract text
@@ -398,15 +397,15 @@ class Talk extends StatelessWidget {
 }
 
 class Person {
-  int id;
+  String id;
   String publicName;
 
   Person({this.id, this.publicName});
 
   factory Person.fromJson(var json) {
     return Person(
-      id: json['id'] != null ? json['id'] : 0,
-      publicName: json['public_name'] != null ? json['public_name'] : "",
+      id: json['id'] != null ? '${json['id']}' : '',
+      publicName: json['public_name'] != null ? json['public_name'] : '',
     );
   }
 }

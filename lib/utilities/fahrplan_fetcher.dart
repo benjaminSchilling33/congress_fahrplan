@@ -19,9 +19,9 @@ import 'package:http/http.dart' as http;
 
 class FahrplanFetcher {
   static String minimalFahrplanUrl =
-      'https://fahrplan.events.ccc.de/congress/2019/Fahrplan/schedule.json';
+      'https://fahrplan.events.ccc.de/rc3/2020/Fahrplan/schedule.json';
   static String completeFahrplanUrl =
-      'https://data.c3voc.de/36C3/everything.schedule.json';
+      'https://data.c3voc.de/rC3/everything.schedule.json';
 
   static List<String> oldUrls = [
     'https://fahrplan.events.ccc.de/congress/2019/Fahrplan/schedule.json',
@@ -79,7 +79,8 @@ class FahrplanFetcher {
         await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile ||
         connectivityResult == ConnectivityResult.wifi) {
-      /// Fetch the fahrplan depending on what is set in the settings, if the timeout of 4 seconds expires load the
+      /// Fetch the fahrplan depending on what is set in the settings,
+      /// if the timeout expires load the local fahrplan
       String requestString = FahrplanFetcher.minimalFahrplanUrl;
 
       if (settings.getLoadFullFahrplan()) {

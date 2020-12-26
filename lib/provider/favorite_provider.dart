@@ -45,7 +45,10 @@ class FavoriteProvider extends ChangeNotifier {
   void favoriteTalk(Talk talk, DateTime talkDay) {
     for (Talk t
         in fahrplan.days.firstWhere((day) => day.date == talkDay).talks) {
-      /// Check for 1. a matching talk id, 2. favorite is not set and (if favorites has elements) 3. that the talk not exists in favorite talks
+      /// Check for
+      /// 1. a matching talk id,
+      /// 2. favorite is not set and (if favorites has elements) ,
+      /// 3. that the talk not exists in favorite talks
       if (t.id == talk.id && !t.favorite) {
         if (fahrplan.favoriteTalks.length > 0) {
           for (Talk fav in fahrplan.favoriteTalks) {

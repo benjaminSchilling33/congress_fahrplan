@@ -65,7 +65,7 @@ class ThemeWrapper extends StatelessWidget {
         cardColor: Color(0xFF3b3b3b),
         snackBarTheme: SnackBarThemeData(
           backgroundColor: Color(0xFF4d4d4d),
-          actionTextColor: Color(0xFFFE50000),
+          actionTextColor: Color(0xFFB239FF),
           contentTextStyle: TextStyle(
             color: Color(0xFFD0D0CE),
           ),
