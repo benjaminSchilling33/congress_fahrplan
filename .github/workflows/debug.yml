@@ -24,4 +24,4 @@ jobs:
         echo "keyAlias=123" >> android/key.properties
         echo "storeFile=123" >> android/key.properties
     - run: flutter pub get
-    - run: flutter build apk
+    - run: flutter build apk --debug
