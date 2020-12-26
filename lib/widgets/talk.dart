@@ -94,7 +94,7 @@ class Talk extends StatelessWidget {
                 onPressed: () {
                   favoriteProvider.favoriteTalk(this, day);
                   Scaffold.of(context).showSnackBar(SnackBar(
-                    content: favorite == false
+                    content: favorite == true
                         ? Text('\"$title\" added to favorites.')
                         : Text('\"$title\" removed from favorites.'),
                     action: SnackBarAction(
