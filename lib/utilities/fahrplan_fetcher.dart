@@ -2,7 +2,7 @@
 congress_fahrplan
 This is the dart file containing the FahrplanFetcher class needed to fetch the Fahrplan.
 SPDX-License-Identifier: GPL-2.0-only
-Copyright (C) 2019 Benjamin Schilling
+Copyright (C) 2019 - 2020 Benjamin Schilling
 */
 
 import 'dart:async';
