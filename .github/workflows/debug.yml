@@ -16,7 +16,7 @@ jobs:
         java-version: '12.x'
     - uses: subosito/flutter-action@v1
       with:
-        flutter-channel: 'dev'
+        channel: 'dev'
         flutter-version: '1.23.0-4.0.pre'
     - name: Prepare keystore    
       run: |
