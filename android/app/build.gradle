@@ -20,6 +20,12 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
+allprojects {
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << '-Xlint:-options' 
+    }
+}
+
 android {
     compileSdkVersion 28
 
