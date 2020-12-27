@@ -46,6 +46,8 @@ class Talk extends StatelessWidget {
       this.favorite});
 
   factory Talk.fromJson(var json, String room) {
+    print("talk fromJson");
+    print(json);
     return Talk(
       id: json['id'] != null ? json['id'] : 0,
       title: json['title'] != null ? json['title'] : "",
@@ -58,7 +60,8 @@ class Talk extends StatelessWidget {
       language: json['language'] != null ? json['language'] : "",
       date: DateTime.parse(json['date']),
       url: json['url'] != null ? json['url'] : "",
-      persons: jsonToPersonList(json['persons']),
+      persons:
+          json['persons'] != null ? jsonToPersonList(json['persons']) : null,
       favorite: false,
     );
   }
