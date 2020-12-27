@@ -22,7 +22,7 @@ class FahrplanDecoder {
     Fahrplan f = Fahrplan.fromJson(json, favTalks, settings, fetchState);
 
     //Initialize days, rooms and sort talks of days
-    List<Room> allRooms = new List<Room>();
+    List<Room> allRooms = [];
     for (Day d in f.conference.days) {
       f.days.add(d);
       allRooms.addAll(d.rooms);
@@ -30,7 +30,7 @@ class FahrplanDecoder {
     }
 
     // Create a reduced list of rooms and assign it to the fahrplan
-    List<Room> reducedRooms = new List<Room>();
+    List<Room> reducedRooms = [];
     for (Room r in allRooms) {
       if (reducedRooms.length != 0) {
         if (reducedRooms.firstWhere((room) => room.name == r.name,
@@ -71,6 +71,8 @@ class FahrplanDecoder {
       }
     }
 
+    /// Sort favorites
+    f.favoriteTalks.sort((a, b) => a.date.compareTo(b.date));
     return f;
   }
 }

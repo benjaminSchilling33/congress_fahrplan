@@ -12,7 +12,7 @@ import 'package:congress_fahrplan/provider/favorite_provider.dart';
 import 'package:congress_fahrplan/utilities/fahrplan_fetcher.dart';
 import 'package:congress_fahrplan/utilities/file_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart' hide BuildContext;
+import 'package:provider/provider.dart';
 
 class Settings {
   int loadFullFahrplan = 0;

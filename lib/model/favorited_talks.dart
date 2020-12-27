@@ -18,7 +18,7 @@ class FavoritedTalks {
         ids: json['ids'].cast<int>(),
       );
     }
-    return FavoritedTalks(ids: new List<int>());
+    return FavoritedTalks(ids: List<int>.empty(growable: true));
   }
 
   void addFavoriteTalk(int id) {

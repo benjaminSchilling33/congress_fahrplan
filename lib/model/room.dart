@@ -13,7 +13,7 @@ class Room extends StatelessWidget {
   final List<Talk> talks;
 
   static int numberOfRooms = 0;
-  static List<String> namesOfRooms = new List<String>();
+  static List<String> namesOfRooms = [];
 
   Room({
     this.name,
@@ -25,7 +25,7 @@ class Room extends StatelessWidget {
   }
 
   static List<Talk> jsonToTalkList(var json, String name, DateTime day) {
-    List<Talk> talkList = new List<Talk>();
+    List<Talk> talkList = [];
     for (var j in json) {
       Talk t = Talk.fromJson(j, name);
       t.setDay(day);

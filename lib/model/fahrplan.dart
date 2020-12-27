@@ -62,10 +62,10 @@ class Fahrplan {
       version: json['version'],
       baseUrl: json['base_url'],
       conference: Conference.fromJson(json['conference']),
-      days: new List<Day>(),
-      rooms: new List<Room>(),
+      days: List<Day>.empty(growable: true),
+      rooms: List<Room>.empty(growable: true),
       favTalkIds: favTalks,
-      favoriteTalks: new List<Talk>(),
+      favoriteTalks: List<Talk>.empty(growable: true),
       settings: settings,
       fetchState: fetchState,
     );
@@ -202,9 +202,9 @@ class Fahrplan {
   }
 
   List<Widget> buildFavoriteList() {
-    List<Column> dayColumns = new List<Column>();
+    List<Column> dayColumns = [];
     for (Day d in days) {
-      List<Widget> widgets = new List<Widget>();
+      List<Widget> widgets = [];
       widgets.addAll(favoriteTalks
           .where((talk) => talk.date.day == d.date.day)
           .where((talk) => conference.days

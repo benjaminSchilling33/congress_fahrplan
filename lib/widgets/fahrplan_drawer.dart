@@ -13,7 +13,7 @@ import 'package:congress_fahrplan/widgets/flat_icon_text_button.dart';
 import 'package:congress_fahrplan/widgets/sync_calendar.dart';
 import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart' hide BuildContext;
+import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 

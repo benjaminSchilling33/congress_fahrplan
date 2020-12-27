@@ -48,7 +48,7 @@ class FahrplanFetcher {
       }
     } else {
       favTalks = new FavoritedTalks(
-        ids: new List<int>(),
+        ids: List<int>.empty(growable: true),
       );
     }
 

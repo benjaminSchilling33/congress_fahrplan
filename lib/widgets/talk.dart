@@ -9,7 +9,7 @@ import 'package:congress_fahrplan/provider/favorite_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
-import 'package:provider/provider.dart' hide BuildContext;
+import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -64,7 +64,7 @@ class Talk extends StatelessWidget {
   }
 
   static List<Person> jsonToPersonList(var json) {
-    List<Person> persons = new List<Person>();
+    List<Person> persons = [];
     for (var j in json) {
       persons.add(Person.fromJson(j));
     }
@@ -188,7 +188,7 @@ class Talk extends StatelessWidget {
   }
 
   List<Widget> getDetails() {
-    List<Widget> widgets = new List<Widget>();
+    List<Widget> widgets = [];
 
     /// Add the subtitle
     if (subtitle != null && subtitle != '') {

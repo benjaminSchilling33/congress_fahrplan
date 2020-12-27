@@ -48,7 +48,7 @@ class Conference {
   }
 
   static List<Day> jsonToDayList(var json) {
-    List<Day> days = new List<Day>();
+    List<Day> days = [];
     for (var j in json) {
       Day d = Day.fromJson(j);
       if (d.talks.length > 0) {
@@ -59,10 +59,10 @@ class Conference {
   }
 
   List<Widget> buildDayTabs() {
-    List<Column> dayColumns = List<Column>();
+    List<Column> dayColumns = [];
     for (Day d in days) {
       if (d.talks.length > 0) {
-        List<Widget> widgets = List<Widget>();
+        List<Widget> widgets = [];
         widgets.addAll(d.talks);
         dayColumns.add(
           Column(
@@ -84,7 +84,7 @@ class Conference {
   }
 
   List<Widget> getDaysAsText() {
-    List<Widget> dayTexts = new List<Widget>();
+    List<Widget> dayTexts = [];
     for (Day d in days) {
       if (d.talks.length == 0) {
         continue;

@@ -8,7 +8,7 @@ Copyright (C) 2019 Benjamin Schilling
 import 'package:congress_fahrplan/provider/favorite_provider.dart';
 import 'package:congress_fahrplan/utilities/fahrplan_fetcher.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart' hide BuildContext;
+import 'package:provider/provider.dart';
 
 class AllTalks extends StatelessWidget {
   final ThemeData theme;

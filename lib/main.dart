@@ -12,7 +12,7 @@ import 'package:congress_fahrplan/provider/favorite_provider.dart';
 import 'package:congress_fahrplan/widgets/all_talks.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:provider/provider.dart' hide BuildContext;
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(ThemeWrapper());
