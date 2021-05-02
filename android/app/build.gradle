@@ -30,9 +30,9 @@ android {
     defaultConfig {
         applicationId "de.delusionsoftware.congress_fahrplan"
         minSdkVersion 16
-        targetSdkVersion 28
-        versionCode 17
-        versionName '1.0.17'
+        targetSdkVersion 29
+        versionCode 22
+        versionName '1.1.4'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 

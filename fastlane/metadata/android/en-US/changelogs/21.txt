@@ -1,0 +1,1 @@
+* Fix bug with unsorted favorited talks after restarting the app

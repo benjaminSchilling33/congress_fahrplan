@@ -2,15 +2,14 @@
 congress_fahrplan
 This is the dart file containing the FahrplanDecoder class.
 SPDX-License-Identifier: GPL-2.0-only
-Copyright (C) 2019 Benjamin Schilling
+Copyright (C) 2019 - 2020 Benjamin Schilling
 */
 
-import 'package:congress_fahrplan/model/fahrplan.dart';
 import 'package:congress_fahrplan/model/day.dart';
-import 'package:congress_fahrplan/model/room.dart';
+import 'package:congress_fahrplan/model/fahrplan.dart';
 import 'package:congress_fahrplan/model/favorited_talks.dart';
+import 'package:congress_fahrplan/model/room.dart';
 import 'package:congress_fahrplan/model/settings.dart';
-
 import 'package:congress_fahrplan/widgets/talk.dart';
 
 class FahrplanDecoder {
@@ -23,8 +22,7 @@ class FahrplanDecoder {
     Fahrplan f = Fahrplan.fromJson(json, favTalks, settings, fetchState);
 
     //Initialize days, rooms and sort talks of days
-
-    List<Room> allRooms = new List<Room>();
+    List<Room> allRooms = [];
     for (Day d in f.conference.days) {
       f.days.add(d);
       allRooms.addAll(d.rooms);
@@ -32,7 +30,7 @@ class FahrplanDecoder {
     }
 
     // Create a reduced list of rooms and assign it to the fahrplan
-    List<Room> reducedRooms = new List<Room>();
+    List<Room> reducedRooms = [];
     for (Room r in allRooms) {
       if (reducedRooms.length != 0) {
         if (reducedRooms.firstWhere((room) => room.name == r.name,
@@ -72,6 +70,9 @@ class FahrplanDecoder {
         }
       }
     }
+
+    /// Sort favorites
+    f.favoriteTalks.sort((a, b) => a.date.compareTo(b.date));
     return f;
   }
 }

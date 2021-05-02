@@ -26,7 +26,7 @@ class Day {
   }
 
   static List<Room> jsonToRoomList(Map<String, dynamic> json, DateTime day) {
-    List<Room> roomList = new List<Room>();
+    List<Room> roomList = [];
     List<String> roomNames = new List<String>.from(json.keys);
     for (var rn in roomNames) {
       roomList.add(Room.fromJson(json[rn], rn, day));
@@ -35,7 +35,7 @@ class Day {
   }
 
   static List<Talk> jsonToTalkList(var json, DateTime day) {
-    List<Talk> talkList = new List<Talk>();
+    List<Talk> talkList = [];
     List<String> roomNames = new List<String>.from(json.keys);
     for (var rn in roomNames) {
       talkList.addAll(Room.fromJson(json[rn], rn, day).talks);

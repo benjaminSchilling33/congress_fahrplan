@@ -2,7 +2,7 @@
 congress_fahrplan
 This is the dart file containing the FahrplanFetcher class needed to fetch the Fahrplan.
 SPDX-License-Identifier: GPL-2.0-only
-Copyright (C) 2019 Benjamin Schilling
+Copyright (C) 2019 - 2020 Benjamin Schilling
 */
 
 import 'dart:async';
@@ -18,6 +18,16 @@ import 'package:connectivity/connectivity.dart';
 import 'package:http/http.dart' as http;
 
 class FahrplanFetcher {
+  static String minimalFahrplanUrl =
+      'https://fahrplan.events.ccc.de/rc3/2020/Fahrplan/schedule.json';
+  static String completeFahrplanUrl =
+      'https://data.c3voc.de/rC3/everything.schedule.json';
+
+  static List<String> oldUrls = [
+    'https://fahrplan.events.ccc.de/congress/2019/Fahrplan/schedule.json',
+    'https://data.c3voc.de/36C3/everything.schedule.json'
+  ];
+
   static Future<Fahrplan> fetchFahrplan() async {
     File fahrplanFile;
     DateTime fahrplanFileLastModified;
@@ -38,7 +48,7 @@ class FahrplanFetcher {
       }
     } else {
       favTalks = new FavoritedTalks(
-        ids: new List<int>(),
+        ids: List<int>.empty(growable: true),
       );
     }
 
@@ -69,17 +79,16 @@ class FahrplanFetcher {
         await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile ||
         connectivityResult == ConnectivityResult.wifi) {
-      /// Fetch the fahrplan depending on what is set in the settings, if the timeout of 4 seconds expires load the
-      String requestString =
-          'https://fahrplan.events.ccc.de/congress/2019/Fahrplan/schedule.json';
+      /// Fetch the fahrplan depending on what is set in the settings,
+      /// if the timeout expires load the local fahrplan
+      String requestString = FahrplanFetcher.minimalFahrplanUrl;
 
       if (settings.getLoadFullFahrplan()) {
         /// Complete Fahrplan
-        requestString = 'https://data.c3voc.de/36C3/everything.schedule.json';
+        requestString = FahrplanFetcher.completeFahrplanUrl;
       } else {
         /// Only Main Rooms Fahrplan
-        requestString =
-            'https://fahrplan.events.ccc.de/congress/2019/Fahrplan/schedule.json';
+        requestString = FahrplanFetcher.minimalFahrplanUrl;
       }
       final response = await http
           .get(
@@ -89,7 +98,7 @@ class FahrplanFetcher {
               "If-None-Match": ifNoneMatch,
             },
           )
-          .timeout(const Duration(seconds: 10))
+          .timeout(const Duration(seconds: 20))
           .catchError((e) {});
 
       ///If the HTTP Status code is 200 OK use the Fahrplan from the response,

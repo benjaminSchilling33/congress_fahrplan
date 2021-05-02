@@ -5,12 +5,10 @@ SPDX-License-Identifier: GPL-2.0-only
 Copyright (C) 2019 Benjamin Schilling
 */
 
-import 'package:flutter/material.dart';
-
-import 'package:provider/provider.dart';
 import 'package:congress_fahrplan/provider/favorite_provider.dart';
-
 import 'package:congress_fahrplan/widgets/fahrplan_drawer.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Favorites extends StatelessWidget {
   Favorites({Key key}) : super(key: key);
@@ -38,7 +36,7 @@ class Favorites extends StatelessWidget {
           drawer: FahrplanDrawer(
             title: Text(
               'Favorites',
-              style: Theme.of(context).textTheme.title,
+              style: Theme.of(context).textTheme.headline6,
             ),
           ),
           body: TabBarView(

@@ -5,17 +5,16 @@ SPDX-License-Identifier: GPL-2.0-only
 Copyright (C) 2019 Benjamin Schilling
 */
 
+import 'package:congress_fahrplan/model/favorited_talks.dart';
+import 'package:congress_fahrplan/model/settings.dart';
+import 'package:congress_fahrplan/widgets/fahrplan_drawer.dart';
+import 'package:congress_fahrplan/widgets/talk.dart';
 import 'package:flutter/material.dart';
-
 import 'package:page_view_indicators/linear_progress_page_indicator.dart';
 
 import 'conference.dart';
 import 'day.dart';
 import 'room.dart';
-import 'package:congress_fahrplan/model/favorited_talks.dart';
-import 'package:congress_fahrplan/widgets/talk.dart';
-import 'package:congress_fahrplan/widgets/fahrplan_drawer.dart';
-import 'package:congress_fahrplan/model/settings.dart';
 
 enum FahrplanFetchState {
   successful,
@@ -63,10 +62,10 @@ class Fahrplan {
       version: json['version'],
       baseUrl: json['base_url'],
       conference: Conference.fromJson(json['conference']),
-      days: new List<Day>(),
-      rooms: new List<Room>(),
+      days: List<Day>.empty(growable: true),
+      rooms: List<Room>.empty(growable: true),
       favTalkIds: favTalks,
-      favoriteTalks: new List<Talk>(),
+      favoriteTalks: List<Talk>.empty(growable: true),
       settings: settings,
       fetchState: fetchState,
     );
@@ -94,7 +93,7 @@ class Fahrplan {
         drawer: FahrplanDrawer(
           title: Text(
             'Overview',
-            style: Theme.of(context).textTheme.title,
+            style: Theme.of(context).textTheme.headline6,
           ),
         ),
         body: dayTabCache,
@@ -140,7 +139,7 @@ class Fahrplan {
       drawer: FahrplanDrawer(
         title: Text(
           'Overview',
-          style: Theme.of(context).textTheme.title,
+          style: Theme.of(context).textTheme.headline6,
         ),
       ),
     );
@@ -203,9 +202,9 @@ class Fahrplan {
   }
 
   List<Widget> buildFavoriteList() {
-    List<Column> dayColumns = new List<Column>();
+    List<Column> dayColumns = [];
     for (Day d in days) {
-      List<Widget> widgets = new List<Widget>();
+      List<Widget> widgets = [];
       widgets.addAll(favoriteTalks
           .where((talk) => talk.date.day == d.date.day)
           .where((talk) => conference.days

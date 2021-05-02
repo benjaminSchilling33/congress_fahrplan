@@ -2,17 +2,16 @@
 congress_fahrplan
 This is the dart file containing the Talk StatelessWidget.
 SPDX-License-Identifier: GPL-2.0-only
-Copyright (C) 2019 Benjamin Schilling
+Copyright (C) 2019 - 2020 Benjamin Schilling
 */
 
+import 'package:congress_fahrplan/provider/favorite_provider.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:congress_fahrplan/provider/favorite_provider.dart';
 
 /// The Talk widget stores all data about it and build a card with all data relevant for it.
 class Talk extends StatelessWidget {
@@ -47,6 +46,8 @@ class Talk extends StatelessWidget {
       this.favorite});
 
   factory Talk.fromJson(var json, String room) {
+    print("talk fromJson");
+    print(json);
     return Talk(
       id: json['id'] != null ? json['id'] : 0,
       title: json['title'] != null ? json['title'] : "",
@@ -59,13 +60,14 @@ class Talk extends StatelessWidget {
       language: json['language'] != null ? json['language'] : "",
       date: DateTime.parse(json['date']),
       url: json['url'] != null ? json['url'] : "",
-      persons: jsonToPersonList(json['persons']),
+      persons:
+          json['persons'] != null ? jsonToPersonList(json['persons']) : null,
       favorite: false,
     );
   }
 
   static List<Person> jsonToPersonList(var json) {
-    List<Person> persons = new List<Person>();
+    List<Person> persons = [];
     for (var j in json) {
       persons.add(Person.fromJson(j));
     }
@@ -95,7 +97,7 @@ class Talk extends StatelessWidget {
                 onPressed: () {
                   favoriteProvider.favoriteTalk(this, day);
                   Scaffold.of(context).showSnackBar(SnackBar(
-                    content: favorite == false
+                    content: favorite == true
                         ? Text('\"$title\" added to favorites.')
                         : Text('\"$title\" removed from favorites.'),
                     action: SnackBarAction(
@@ -189,7 +191,7 @@ class Talk extends StatelessWidget {
   }
 
   List<Widget> getDetails() {
-    List<Widget> widgets = new List<Widget>();
+    List<Widget> widgets = [];
 
     /// Add the subtitle
     if (subtitle != null && subtitle != '') {
@@ -350,25 +352,24 @@ class Talk extends StatelessWidget {
 
     /// Add the persons details
     if (persons != null && persons.length > 0) {
-      String personsString = '';
       for (Person p in persons) {
-        personsString += p.publicName +
-            (persons.last.publicName == p.publicName ? '' : ' - ');
-      }
-      widgets.add(Semantics(
-        label: 'Presenter $personsString',
-        child: ExcludeSemantics(
-          child: Row(
-            children: <Widget>[
-              Container(
-                child: Icon(Icons.group),
-                padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-              ),
-              Text(personsString),
-            ],
+        widgets.add(Semantics(
+          label: 'Presenter ${p.publicName}',
+          child: ExcludeSemantics(
+            child: Row(
+              children: <Widget>[
+                Container(
+                  child: Icon(Icons.group),
+                  padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                ),
+                Text(p.publicName.length > 20
+                    ? '${p.publicName.substring(0, 19)}...'
+                    : '${p.publicName}'),
+              ],
+            ),
           ),
-        ),
-      ));
+        ));
+      }
     }
 
     /// Add the abstract text
@@ -399,15 +400,15 @@ class Talk extends StatelessWidget {
 }
 
 class Person {
-  int id;
+  String id;
   String publicName;
 
   Person({this.id, this.publicName});
 
   factory Person.fromJson(var json) {
     return Person(
-      id: json['id'] != null ? json['id'] : 0,
-      publicName: json['public_name'] != null ? json['public_name'] : "",
+      id: json['id'] != null ? '${json['id']}' : '',
+      publicName: json['public_name'] != null ? json['public_name'] : '',
     );
   }
 }

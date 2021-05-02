@@ -37,7 +37,7 @@ class FlatIconTextButton extends StatelessWidget {
                     child: Text(
                       text,
                       style: onPressed != null
-                          ? Theme.of(context).textTheme.subtitle
+                          ? Theme.of(context).textTheme.subtitle2
                           : null,
                     )),
               ],
