@@ -9,15 +9,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:http/http.dart' as http;
-import 'package:connectivity/connectivity.dart';
-
-import 'package:congress_fahrplan/utilities/file_storage.dart';
-import 'package:congress_fahrplan/utilities/fahrplan_decoder.dart';
-
 import 'package:congress_fahrplan/model/fahrplan.dart';
 import 'package:congress_fahrplan/model/favorited_talks.dart';
 import 'package:congress_fahrplan/model/settings.dart';
+import 'package:congress_fahrplan/utilities/fahrplan_decoder.dart';
+import 'package:congress_fahrplan/utilities/file_storage.dart';
+import 'package:connectivity/connectivity.dart';
+import 'package:http/http.dart' as http;
 
 class FahrplanFetcher {
   static Future<Fahrplan> fetchFahrplan() async {
@@ -160,6 +158,11 @@ class FahrplanFetcher {
             favTalks,
             settings,
             FahrplanFetchState.successful,
+          );
+        } else {
+          return new Fahrplan(
+            fetchState: FahrplanFetchState.noDataConnection,
+            fetchMessage: 'Please enable mobile data or Wifi.',
           );
         }
       } else {
