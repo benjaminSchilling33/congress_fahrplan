@@ -13,7 +13,8 @@ import 'package:congress_fahrplan/provider/favorite_provider.dart';
 import 'package:congress_fahrplan/widgets/talk.dart';
 import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/material.dart';
-import 'package:timezone/browser.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart';
 
 class SyncCalendar extends StatelessWidget {
   final DeviceCalendarPlugin? calendarPlugin;
@@ -110,6 +111,7 @@ class SyncCalendar extends StatelessWidget {
             Duration(hours: durationH.toInt(), minutes: durationM.toInt()));
         Event e = Event(calendar.id);
         e.title = fav.title;
+        tz.initializeTimeZones();
         e.start = TZDateTime.from(fav.date!, getLocation('Germany/Berlin'));
         e.description = fav.abstract;
         e.location = fav.room;
