@@ -19,12 +19,11 @@ import 'package:http/http.dart' as http;
 
 class FahrplanFetcher {
   static String minimalFahrplanUrl =
-      'https://fahrplan.events.ccc.de/rc3/2020/Fahrplan/schedule.json';
+      'https://static.rc3.world/schedule/everything.json';
 
   static bool multipleSchedules = false;
 
-  static String completeFahrplanUrl =
-      'https://static.rc3.world/schedule/everything.json';
+  static String completeFahrplanUrl = '';
 
   static List<String> oldUrls = [
     'https://fahrplan.events.ccc.de/rc3/2020/Fahrplan/schedule.json',

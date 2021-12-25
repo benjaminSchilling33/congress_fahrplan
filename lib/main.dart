@@ -83,7 +83,7 @@ class ThemeWrapper extends StatelessWidget {
         ),
         toggleableActiveColor: Color(0xFFB239FF),
       ),
-      home: CongressFahrplanApp(key: key!),
+      home: CongressFahrplanApp(key: key),
     );
   }
 }
