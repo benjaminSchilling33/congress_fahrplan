@@ -28,8 +28,8 @@ class ThemeWrapper extends StatelessWidget {
           indicator: UnderlineTabIndicator(),
         ),
         primaryColorDark: Color(0xff000000),
-        indicatorColor: Color(0xFFB239FF),
-        accentColor: Color(0xFFB239FF),
+        indicatorColor: Color(0xFF4D7FFA),
+        accentColor: Color(0xFF4D7FFA),
         textTheme: TextTheme(
           headline6: TextStyle(
             color: Color(0xFFD0D0CE),
@@ -62,7 +62,7 @@ class ThemeWrapper extends StatelessWidget {
         cardColor: Color(0xFF3b3b3b),
         snackBarTheme: SnackBarThemeData(
           backgroundColor: Color(0xFF4d4d4d),
-          actionTextColor: Color(0xFFB239FF),
+          actionTextColor: Color(0xFF4D7FFA),
           contentTextStyle: TextStyle(
             color: Color(0xFFD0D0CE),
           ),
@@ -74,14 +74,14 @@ class ThemeWrapper extends StatelessWidget {
         appBarTheme: AppBarTheme(
           color: Color(0xFF1a1a1a),
           iconTheme: IconThemeData(
-            color: Color(0xFFB239FF),
+            color: Color(0xFF4D7FFA),
           ),
         ),
-        buttonColor: Color(0xFFB239FF),
+        buttonColor: Color(0xFF4D7FFA),
         iconTheme: IconThemeData(
-          color: Color(0xFFB239FF),
+          color: Color(0xFF4D7FFA),
         ),
-        toggleableActiveColor: Color(0xFFB239FF),
+        toggleableActiveColor: Color(0xFF4D7FFA),
       ),
       home: CongressFahrplanApp(key: key),
     );
@@ -108,36 +108,45 @@ class CongressFahrplanApp extends StatelessWidget {
               } else {
                 return SafeArea(
                   child: Scaffold(
-                    backgroundColor: Color(0xff000000),
-                    body: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Image.asset('assets/logo_sd_violet.png'),
-                        Text(
-                          'Could not fetch Fahrplan!',
-                        ),
-                        Text(
-                          favoriteProvider.fahrplan!.fetchMessage!,
-                        ),
-                      ],
-                    ),
-                  ),
+                      backgroundColor: Color(0xff000000),
+                      body: Stack(
+                        children: [
+                          Image.asset('assets/background.jpg'),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Image.asset('assets/icon.png'),
+                              Text(
+                                'Could not fetch Fahrplan!',
+                              ),
+                              Text(
+                                favoriteProvider.fahrplan!.fetchMessage!,
+                              ),
+                            ],
+                          ),
+                        ],
+                      )),
                 );
               }
             } else {
               return SafeArea(
                 child: Scaffold(
                   backgroundColor: Color(0xff000000),
-                  body: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                          padding: EdgeInsets.fromLTRB(40, 40, 40, 40),
-                          child: Image.asset('assets/logo_sd_violet.png')),
-                      CircularProgressIndicator(),
-                      Container(
-                        child: Text('Fetching Fahrplan'),
-                        padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  body: Stack(
+                    children: [
+                      Image.asset('assets/background.jpg'),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Container(
+                              padding: EdgeInsets.fromLTRB(40, 40, 40, 40),
+                              child: Image.asset('assets/icon.png')),
+                          CircularProgressIndicator(),
+                          Container(
+                            child: Text('Fetching Fahrplan'),
+                            padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          ),
+                        ],
                       ),
                     ],
                   ),
