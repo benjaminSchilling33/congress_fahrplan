@@ -10,14 +10,13 @@ import 'dart:collection';
 import 'package:congress_fahrplan/model/fahrplan.dart';
 import 'package:congress_fahrplan/utilities/fahrplan_fetcher.dart';
 import 'package:congress_fahrplan/widgets/talk.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 
 class FavoriteProvider extends ChangeNotifier {
   final List<Widget> _favorites = [];
-  Future<Fahrplan> futureFahrplan;
-  Fahrplan fahrplan;
+  Future<Fahrplan>? futureFahrplan;
+  Fahrplan? fahrplan;
   bool isInitialized = false;
   String packageVersion = '';
 
@@ -44,14 +43,14 @@ class FavoriteProvider extends ChangeNotifier {
 
   void favoriteTalk(Talk talk, DateTime talkDay) {
     for (Talk t
-        in fahrplan.days.firstWhere((day) => day.date == talkDay).talks) {
+        in fahrplan!.days!.firstWhere((day) => day.date == talkDay).talks!) {
       /// Check for
       /// 1. a matching talk id,
       /// 2. favorite is not set and (if favorites has elements) ,
       /// 3. that the talk not exists in favorite talks
-      if (t.id == talk.id && !t.favorite) {
-        if (fahrplan.favoriteTalks.length > 0) {
-          for (Talk fav in fahrplan.favoriteTalks) {
+      if (t.id == talk.id && !t.favorite!) {
+        if (fahrplan!.favoriteTalks!.length > 0) {
+          for (Talk fav in fahrplan!.favoriteTalks!) {
             if (fav.id == talk.id) {
               return;
             } else {
@@ -63,20 +62,20 @@ class FavoriteProvider extends ChangeNotifier {
           _favorite(t, talk, talkDay);
           return;
         }
-      } else if (t.id == talk.id && t.favorite) {
+      } else if (t.id == talk.id && t.favorite!) {
         /// If the talk exists and is favorites, remove it from the list of favorites
-        fahrplan.days
+        fahrplan!.days!
             .firstWhere((day) => day.date == talkDay)
-            .rooms
+            .rooms!
             .firstWhere((room) => room.name == talk.room)
-            .talks
-            .firstWhere((ta) => (ta.id == talk.id && ta.favorite))
+            .talks!
+            .firstWhere((ta) => (ta.id == talk.id && ta.favorite!))
             .favorite = false;
         talk.favorite = false;
         t.favorite = false;
-        fahrplan.favTalkIds.removeFavoriteTalk(talk.id);
-        fahrplan.favoriteTalks.removeWhere((ta) => ta.id == talk.id);
-        fahrplan.favoriteTalks.sort((a, b) => a.date.compareTo(b.date));
+        fahrplan!.favTalkIds!.removeFavoriteTalk(talk.id!);
+        fahrplan!.favoriteTalks!.removeWhere((ta) => ta.id == talk.id);
+        fahrplan!.favoriteTalks!.sort((a, b) => a.date!.compareTo(b.date!));
         notifyListeners();
         return;
       }
@@ -85,12 +84,12 @@ class FavoriteProvider extends ChangeNotifier {
 
   void _favorite(Talk t, Talk talk, DateTime talkDate) {
     /// Set favorite of talk in correct room to true
-    fahrplan.days
+    fahrplan!.days!
         .firstWhere((day) => day.date == talkDate)
-        .rooms
+        .rooms!
         .firstWhere((room) => room.name == talk.room, orElse: null)
-        .talks
-        .firstWhere((ta) => (ta.id == talk.id && !ta.favorite))
+        .talks!
+        .firstWhere((ta) => (ta.id == talk.id && !ta.favorite!))
         .favorite = true;
 
     /// Set favorite of this talk to true
@@ -98,9 +97,9 @@ class FavoriteProvider extends ChangeNotifier {
 
     /// Set favorite of talk in day to true
     t.favorite = true;
-    fahrplan.favTalkIds.addFavoriteTalk(talk.id);
-    fahrplan.favoriteTalks.add(talk);
-    fahrplan.favoriteTalks.sort((a, b) => a.date.compareTo(b.date));
+    fahrplan!.favTalkIds!.addFavoriteTalk(talk.id!);
+    fahrplan!.favoriteTalks!.add(talk);
+    fahrplan!.favoriteTalks!.sort((a, b) => a.date!.compareTo(b.date!));
     notifyListeners();
   }
 }

@@ -17,14 +17,14 @@ import 'package:provider/provider.dart';
 class Settings {
   int loadFullFahrplan = 0;
 
-  Settings({this.loadFullFahrplan});
+  Settings({required this.loadFullFahrplan});
 
   static Future<Settings> restoreSettingsFromFile() async {
     File settingsFile;
     if (await FileStorage.settingsFileAvailable) {
       settingsFile = await FileStorage.localSettingsFile;
       String settingsJsonString = await settingsFile.readAsString();
-      if (settingsJsonString != null && settingsJsonString != '') {
+      if (settingsJsonString != '') {
         return Settings.fromJson(json.decode(settingsJsonString));
       }
     }
@@ -32,12 +32,9 @@ class Settings {
   }
 
   factory Settings.fromJson(Map json) {
-    if (json != null) {
-      return Settings(
-        loadFullFahrplan: json['loadfullfahrplan'],
-      );
-    }
-    return Settings(loadFullFahrplan: 0);
+    return Settings(
+      loadFullFahrplan: json['loadfullfahrplan'],
+    );
   }
 
   bool getLoadFullFahrplan() {
@@ -54,8 +51,6 @@ class Settings {
       writeFile();
 
       var favorites = Provider.of<FavoriteProvider>(context, listen: false);
-      favorites.futureFahrplan = null;
-
       favorites.notifyMainListeners();
       favorites.futureFahrplan = FahrplanFetcher.fetchFahrplan();
     }

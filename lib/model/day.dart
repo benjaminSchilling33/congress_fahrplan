@@ -9,11 +9,11 @@ import 'package:congress_fahrplan/model/room.dart';
 import 'package:congress_fahrplan/widgets/talk.dart';
 
 class Day {
-  final int index;
-  final DateTime date;
+  final int? index;
+  final DateTime? date;
 
-  final List<Room> rooms;
-  final List<Talk> talks;
+  final List<Room>? rooms;
+  final List<Talk>? talks;
 
   Day({this.index, this.date, this.rooms, this.talks});
 
@@ -38,7 +38,7 @@ class Day {
     List<Talk> talkList = [];
     List<String> roomNames = new List<String>.from(json.keys);
     for (var rn in roomNames) {
-      talkList.addAll(Room.fromJson(json[rn], rn, day).talks);
+      talkList.addAll(Room.fromJson(json[rn], rn, day).talks!);
     }
     return talkList;
   }

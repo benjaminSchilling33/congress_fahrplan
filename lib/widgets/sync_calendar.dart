@@ -13,41 +13,43 @@ import 'package:congress_fahrplan/provider/favorite_provider.dart';
 import 'package:congress_fahrplan/widgets/talk.dart';
 import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/material.dart';
+import 'package:timezone/browser.dart';
 
 class SyncCalendar extends StatelessWidget {
-  final DeviceCalendarPlugin calendarPlugin;
-  final FavoriteProvider provider;
+  final DeviceCalendarPlugin? calendarPlugin;
+  final FavoriteProvider? provider;
   SyncCalendar({this.calendarPlugin, this.provider});
 
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: calendarPlugin.retrieveCalendars(),
-      builder: (context, snapshot) {
+      future: calendarPlugin!.retrieveCalendars(),
+      builder: (BuildContext context,
+          AsyncSnapshot<Result<UnmodifiableListView<Calendar>>> snapshot) {
         if (snapshot.hasData) {
           Result<UnmodifiableListView<Calendar>> calendarResults =
-              snapshot.data;
-          UnmodifiableListView<Calendar> calendars = calendarResults.data;
+              snapshot.data!;
+          UnmodifiableListView<Calendar> calendars = calendarResults.data!;
           return Container(
             height: 300,
             width: 300,
             child: ListView.builder(
               itemCount: calendars.length,
               itemBuilder: (context, index) {
-                return RaisedButton(
+                return ElevatedButton(
                   child: Row(
                     children: <Widget>[
                       Icon(Icons.sync),
                       Container(
                         width: 200,
                         child: Text(
-                          calendars[index].name,
+                          calendars[index].name!,
                           overflow: TextOverflow.clip,
                         ),
                       ),
                     ],
                   ),
                   onPressed: () =>
-                      syncCalendar(context, provider, calendars[index]),
+                      syncCalendar(context, provider!, calendars[index]),
                 );
               },
             ),
@@ -62,25 +64,26 @@ class SyncCalendar extends StatelessWidget {
       Calendar calendar) async {
     /// Get all events from calendar
     Result<UnmodifiableListView<Event>> resultExistingEvents =
-        await calendarPlugin.retrieveEvents(
+        await calendarPlugin!.retrieveEvents(
             calendar.id,
             RetrieveEventsParams(
-                startDate: DateTime.parse(provider.fahrplan.conference.start),
-                endDate: DateTime.parse(provider.fahrplan.conference.end)));
-    UnmodifiableListView<Event> calendarEvents = resultExistingEvents.data;
-    print(provider.fahrplan.conference.start);
-    print(provider.fahrplan.conference.end);
+                startDate:
+                    DateTime.parse(provider.fahrplan!.conference!.start!),
+                endDate: DateTime.parse(provider.fahrplan!.conference!.end!)));
+    UnmodifiableListView<Event>? calendarEvents = resultExistingEvents.data;
+    print(provider.fahrplan!.conference!.start!);
+    print(provider.fahrplan!.conference!.end!);
 
     /// Sync calendar to favorites
-    for (Event calendarEvent in calendarEvents) {
-      for (Day d in provider.fahrplan.days) {
-        if (d.date.year == calendarEvent.start.year &&
-            d.date.month == calendarEvent.start.month &&
-            d.date.day == calendarEvent.start.day) {
-          for (Talk t in d.talks) {
+    for (Event calendarEvent in calendarEvents!) {
+      for (Day d in provider.fahrplan!.days!) {
+        if (d.date!.year == calendarEvent.start?.year &&
+            d.date!.month == calendarEvent.start?.month &&
+            d.date!.day == calendarEvent.start?.day) {
+          for (Talk t in d.talks!) {
             if (t.title == calendarEvent.title) {
-              if (!t.favorite) {
-                provider.favoriteTalk(t, d.date);
+              if (!t.favorite!) {
+                provider.favoriteTalk(t, d.date!);
               }
             }
           }
@@ -89,7 +92,7 @@ class SyncCalendar extends StatelessWidget {
     }
 
     /// Sync favorites to calendar
-    for (Talk fav in provider.fahrplan.favoriteTalks) {
+    for (Talk fav in provider.fahrplan!.favoriteTalks!) {
       bool eventFound = false;
 
       /// Search for event in calendar
@@ -101,17 +104,17 @@ class SyncCalendar extends StatelessWidget {
 
       /// If event not found, add it
       if (!eventFound) {
-        double durationH = double.parse(fav.duration.split(":")[0]);
-        double durationM = double.parse(fav.duration.split(":")[1]);
-        DateTime end = fav.date.add(
+        double durationH = double.parse(fav.duration!.split(":")[0]);
+        double durationM = double.parse(fav.duration!.split(":")[1]);
+        DateTime end = fav.date!.add(
             Duration(hours: durationH.toInt(), minutes: durationM.toInt()));
         Event e = Event(calendar.id);
         e.title = fav.title;
-        e.start = fav.date;
+        e.start = TZDateTime.from(fav.date!, getLocation('Germany/Berlin'));
         e.description = fav.abstract;
         e.location = fav.room;
-        e.end = end;
-        calendarPlugin.createOrUpdateEvent(e);
+        e.end = TZDateTime.from(end, getLocation('Germany/Berlin'));
+        calendarPlugin!.createOrUpdateEvent(e);
       }
     }
     showDialog(
@@ -119,7 +122,7 @@ class SyncCalendar extends StatelessWidget {
       builder: (BuildContext context) => AlertDialog(
         title: Text('Sync successful'),
         actions: <Widget>[
-          FlatButton(
+          TextButton(
             child: Text('Ok'),
             onPressed: () => Navigator.pop(context),
           )

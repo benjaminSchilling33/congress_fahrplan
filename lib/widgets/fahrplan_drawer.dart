@@ -6,6 +6,7 @@ Copyright (C) 2019 - 2020 Benjamin Schilling
 */
 
 import 'package:congress_fahrplan/provider/favorite_provider.dart';
+import 'package:congress_fahrplan/utilities/fahrplan_fetcher.dart';
 import 'package:congress_fahrplan/widgets/all_talks.dart';
 import 'package:congress_fahrplan/widgets/favorites.dart';
 import 'package:congress_fahrplan/widgets/flat_checkbox_text_button.dart';
@@ -18,13 +19,13 @@ import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class FahrplanDrawer extends StatelessWidget {
-  final Text title;
+  final Text? title;
   FahrplanDrawer({this.title});
 
   @override
   build(BuildContext context) {
     var favorites = Provider.of<FavoriteProvider>(context);
-    String acronym = favorites.fahrplan.conference.acronym;
+    String acronym = favorites.fahrplan!.conference!.acronym!;
 
     return Scaffold(
       backgroundColor: Colors.black54,
@@ -43,7 +44,7 @@ class FahrplanDrawer extends StatelessWidget {
           FlatIconTextButton(
             icon: Icons.calendar_today,
             text: 'Show Overview',
-            onPressed: title.data == 'Favorites'
+            onPressed: title!.data == 'Favorites'
                 ? () {
                     Navigator.pushReplacement(
                       context,
@@ -56,12 +57,12 @@ class FahrplanDrawer extends StatelessWidget {
                       ),
                     );
                   }
-                : null,
+                : () {},
           ),
           FlatIconTextButton(
             icon: Icons.favorite,
             text: 'Show Favorites',
-            onPressed: title.data == 'Overview'
+            onPressed: title!.data == 'Overview'
                 ? () {
                     Navigator.pushReplacement(
                       context,
@@ -70,16 +71,19 @@ class FahrplanDrawer extends StatelessWidget {
                       ),
                     );
                   }
-                : null,
+                : () {},
           ),
-          FlatCheckBoxTextButton(
-            value: favorites.fahrplan.settings.getLoadFullFahrplan(),
-            text: 'Load complete Fahrplan',
-            onPressed: () {
-              favorites.fahrplan.settings.setLoadFullFahrplan(
-                  !favorites.fahrplan.settings.getLoadFullFahrplan(), context);
-            },
-          ),
+          FahrplanFetcher.multipleSchedules
+              ? FlatCheckBoxTextButton(
+                  value: favorites.fahrplan!.settings!.getLoadFullFahrplan(),
+                  text: 'Load complete Fahrplan',
+                  onPressed: () {
+                    favorites.fahrplan!.settings!.setLoadFullFahrplan(
+                        !favorites.fahrplan!.settings!.getLoadFullFahrplan(),
+                        context);
+                  },
+                )
+              : Container(),
           FlatIconTextButton(
             icon: Icons.sync,
             text: 'Sync favorites with calendar',
@@ -130,10 +134,10 @@ class FahrplanDrawer extends StatelessWidget {
   showSyncCalendar(BuildContext context, FavoriteProvider favorites) async {
     DeviceCalendarPlugin deviceCalendar = DeviceCalendarPlugin();
     Result<bool> permissionsAvailable = await deviceCalendar.hasPermissions();
-    if (!permissionsAvailable.data) {
+    if (!permissionsAvailable.data!) {
       permissionsAvailable = await deviceCalendar.requestPermissions();
     }
-    if (permissionsAvailable.data) {
+    if (permissionsAvailable.data!) {
       showDialog(
         context: context,
         builder: (BuildContext context) => SimpleDialog(

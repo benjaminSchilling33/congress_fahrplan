@@ -8,15 +8,15 @@ Copyright (C) 2019 Benjamin Schilling
 import 'package:flutter/material.dart';
 
 class FlatCheckBoxTextButton extends StatelessWidget {
-  final bool value;
-  final String text;
-  final Function onPressed;
+  final bool? value;
+  final String? text;
+  final Function? onPressed;
 
   FlatCheckBoxTextButton({this.value, this.text, this.onPressed});
 
   @override
   build(BuildContext context) {
-    return FlatButton(
+    return TextButton(
         child: Semantics(
           label: 'Load complete fahrplan checkbox',
           child: ExcludeSemantics(
@@ -34,16 +34,14 @@ class FlatCheckBoxTextButton extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                   child: Text(
-                    text,
-                    style: onPressed != null
-                        ? Theme.of(context).textTheme.subtitle2
-                        : null,
+                    text!,
+                    style: Theme.of(context).textTheme.subtitle2,
                   ),
                 ),
               ],
             ),
           ),
         ),
-        onPressed: onPressed);
+        onPressed: () => onPressed!);
   }
 }

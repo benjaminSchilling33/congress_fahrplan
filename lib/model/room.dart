@@ -9,8 +9,8 @@ import 'package:congress_fahrplan/widgets/talk.dart';
 import 'package:flutter/material.dart';
 
 class Room extends StatelessWidget {
-  final String name;
-  final List<Talk> talks;
+  final String? name;
+  final List<Talk>? talks;
 
   static int numberOfRooms = 0;
   static List<String> namesOfRooms = [];

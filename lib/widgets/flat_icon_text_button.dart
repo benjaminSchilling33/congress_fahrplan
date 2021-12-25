@@ -12,11 +12,12 @@ class FlatIconTextButton extends StatelessWidget {
   final String text;
   final Function onPressed;
 
-  FlatIconTextButton({this.icon, this.text, this.onPressed});
+  FlatIconTextButton(
+      {required this.icon, required this.text, required this.onPressed});
 
   @override
   build(BuildContext context) {
-    return FlatButton(
+    return TextButton(
         child: Semantics(
           label: '$text',
           child: ExcludeSemantics(
@@ -27,23 +28,19 @@ class FlatIconTextButton extends StatelessWidget {
                   padding: EdgeInsets.fromLTRB(12, 0, 0, 0),
                   child: Icon(
                     icon,
-                    color: onPressed != null
-                        ? Theme.of(context).iconTheme.color
-                        : null,
+                    color: Theme.of(context).iconTheme.color,
                   ),
                 ),
                 Container(
                     padding: EdgeInsets.fromLTRB(12, 0, 0, 0),
                     child: Text(
                       text,
-                      style: onPressed != null
-                          ? Theme.of(context).textTheme.subtitle2
-                          : null,
+                      style: Theme.of(context).textTheme.subtitle2,
                     )),
               ],
             ),
           ),
         ),
-        onPressed: onPressed);
+        onPressed: () => onPressed);
   }
 }

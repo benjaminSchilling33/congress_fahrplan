@@ -5,13 +5,10 @@ SPDX-License-Identifier: GPL-2.0-only
 Copyright (C) 2019 -2020 Benjamin Schilling
 */
 
-import 'dart:ui';
-
 import 'package:congress_fahrplan/model/fahrplan.dart';
 import 'package:congress_fahrplan/provider/favorite_provider.dart';
 import 'package:congress_fahrplan/widgets/all_talks.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -19,7 +16,7 @@ void main() {
 }
 
 class ThemeWrapper extends StatelessWidget {
-  ThemeWrapper({Key key}) : super(key: key);
+  ThemeWrapper({Key? key}) : super(key: key);
 
   Widget build(BuildContext context) {
     return new MaterialApp(
@@ -86,13 +83,13 @@ class ThemeWrapper extends StatelessWidget {
         ),
         toggleableActiveColor: Color(0xFFB239FF),
       ),
-      home: CongressFahrplanApp(key: key),
+      home: CongressFahrplanApp(key: key!),
     );
   }
 }
 
 class CongressFahrplanApp extends StatelessWidget {
-  CongressFahrplanApp({Key key}) : super(key: key);
+  CongressFahrplanApp({Key? key}) : super(key: key);
 
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -100,10 +97,10 @@ class CongressFahrplanApp extends StatelessWidget {
       child: Consumer<FavoriteProvider>(
         builder: (context, favoriteProvider, child) => FutureBuilder<Fahrplan>(
           future: favoriteProvider.futureFahrplan,
-          builder: (context, snapshot) {
+          builder: (context, AsyncSnapshot<Fahrplan> snapshot) {
             if (snapshot.hasData) {
-              favoriteProvider.initializeProvider(snapshot.data);
-              if (favoriteProvider.fahrplan.fetchState ==
+              favoriteProvider.initializeProvider(snapshot.data!);
+              if (favoriteProvider.fahrplan!.fetchState ==
                   FahrplanFetchState.successful) {
                 return AllTalks(
                   theme: Theme.of(context),
@@ -120,7 +117,7 @@ class CongressFahrplanApp extends StatelessWidget {
                           'Could not fetch Fahrplan!',
                         ),
                         Text(
-                          favoriteProvider.fahrplan.fetchMessage,
+                          favoriteProvider.fahrplan!.fetchMessage!,
                         ),
                       ],
                     ),
