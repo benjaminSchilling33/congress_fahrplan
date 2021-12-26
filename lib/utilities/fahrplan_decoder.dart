@@ -23,23 +23,22 @@ class FahrplanDecoder {
 
     //Initialize days, rooms and sort talks of days
     List<Room> allRooms = [];
-    for (Day d in f.conference.days) {
-      f.days.add(d);
-      allRooms.addAll(d.rooms);
-      d.talks.sort((a, b) => a.date.compareTo(b.date));
+    for (Day d in f.conference!.days!) {
+      f.days!.add(d);
+      allRooms.addAll(d.rooms!);
+      d.talks!.sort((a, b) => a.date!.compareTo(b.date!));
     }
 
     // Create a reduced list of rooms and assign it to the fahrplan
     List<Room> reducedRooms = [];
     for (Room r in allRooms) {
       if (reducedRooms.length != 0) {
-        if (reducedRooms.firstWhere((room) => room.name == r.name,
-                orElse: () => null) !=
-            null) {
+        // If room with specific name already exists, add the talks to this room, otherwise add the new room
+        if (reducedRooms.any((room) => room.name == r.name)) {
           reducedRooms
               .firstWhere((room) => room.name == r.name)
-              .talks
-              .addAll(r.talks);
+              .talks!
+              .addAll(r.talks!);
         } else {
           reducedRooms.add(r);
         }
@@ -50,20 +49,20 @@ class FahrplanDecoder {
     f.rooms = reducedRooms;
 
     //set all favorites talks for each day and each rooms of each day
-    for (int i in f.favTalkIds.ids) {
-      for (Day d in f.days) {
-        for (Talk t in d.talks) {
+    for (int i in f.favTalkIds!.ids) {
+      for (Day d in f.days!) {
+        for (Talk t in d.talks!) {
           if (t.id == i) {
-            f.favoriteTalks.add(t);
-            d.talks.elementAt(d.talks.indexOf(t)).favorite = true;
+            f.favoriteTalks!.add(t);
+            d.talks!.elementAt(d.talks!.indexOf(t)).favorite = true;
             break;
           }
         }
-        for (Room r in d.rooms) {
-          for (Talk t in r.talks) {
+        for (Room r in d.rooms!) {
+          for (Talk t in r.talks!) {
             if (t.id == i) {
-              f.favoriteTalks.add(t);
-              r.talks.elementAt(r.talks.indexOf(t)).favorite = true;
+              f.favoriteTalks!.add(t);
+              r.talks!.elementAt(r.talks!.indexOf(t)).favorite = true;
               break;
             }
           }
@@ -72,7 +71,7 @@ class FahrplanDecoder {
     }
 
     /// Sort favorites
-    f.favoriteTalks.sort((a, b) => a.date.compareTo(b.date));
+    f.favoriteTalks!.sort((a, b) => a.date!.compareTo(b.date!));
     return f;
   }
 }

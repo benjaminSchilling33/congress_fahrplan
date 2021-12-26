@@ -12,38 +12,36 @@ class FlatIconTextButton extends StatelessWidget {
   final String text;
   final Function onPressed;
 
-  FlatIconTextButton({this.icon, this.text, this.onPressed});
+  FlatIconTextButton(
+      {required this.icon, required this.text, required this.onPressed});
 
   @override
   build(BuildContext context) {
-    return FlatButton(
-        child: Semantics(
-          label: '$text',
-          child: ExcludeSemantics(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.fromLTRB(12, 0, 0, 0),
-                  child: Icon(
-                    icon,
-                    color: onPressed != null
-                        ? Theme.of(context).iconTheme.color
-                        : null,
-                  ),
+    return TextButton(
+      child: Semantics(
+        label: '$text',
+        child: ExcludeSemantics(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.fromLTRB(12, 0, 0, 0),
+                child: Icon(
+                  icon,
+                  color: Theme.of(context).iconTheme.color,
                 ),
-                Container(
-                    padding: EdgeInsets.fromLTRB(12, 0, 0, 0),
-                    child: Text(
-                      text,
-                      style: onPressed != null
-                          ? Theme.of(context).textTheme.subtitle2
-                          : null,
-                    )),
-              ],
-            ),
+              ),
+              Container(
+                  padding: EdgeInsets.fromLTRB(12, 0, 0, 0),
+                  child: Text(
+                    text,
+                    style: Theme.of(context).textTheme.subtitle2,
+                  )),
+            ],
           ),
         ),
-        onPressed: onPressed);
+      ),
+      onPressed: () => onPressed(),
+    );
   }
 }

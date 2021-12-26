@@ -10,15 +10,12 @@ import 'package:congress_fahrplan/utilities/file_storage.dart';
 class FavoritedTalks {
   final List<int> ids;
 
-  FavoritedTalks({this.ids});
+  FavoritedTalks({required this.ids});
 
   factory FavoritedTalks.fromJson(Map json) {
-    if (json != null) {
-      return FavoritedTalks(
-        ids: json['ids'].cast<int>(),
-      );
-    }
-    return FavoritedTalks(ids: List<int>.empty(growable: true));
+    return FavoritedTalks(
+      ids: json['ids'].cast<int>(),
+    );
   }
 
   void addFavoriteTalk(int id) {

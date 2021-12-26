@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class Favorites extends StatelessWidget {
-  Favorites({Key key}) : super(key: key);
+  Favorites({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,27 +20,24 @@ class Favorites extends StatelessWidget {
     var favorites = Provider.of<FavoriteProvider>(context);
     return new MaterialApp(
       theme: Theme.of(context),
-      title: favorites.fahrplan.getFahrplanTitle(),
+      title: favorites.fahrplan!.getFahrplanTitle(),
       home: new DefaultTabController(
-        length: favorites.fahrplan.days.length,
+        length: favorites.fahrplan!.days!.length,
         child: new Scaffold(
           appBar: new AppBar(
-            title: new Text(favorites.fahrplan.getFavoritesTitle()),
+            title: new Text(favorites.fahrplan!.getFavoritesTitle()),
             bottom: TabBar(
-              tabs: favorites.fahrplan.conference.getDaysAsText(),
+              tabs: favorites.fahrplan!.conference!.getDaysAsText(),
               indicator: UnderlineTabIndicator(
                 borderSide: BorderSide(color: Theme.of(context).indicatorColor),
               ),
             ),
           ),
           drawer: FahrplanDrawer(
-            title: Text(
-              'Favorites',
-              style: Theme.of(context).textTheme.headline6,
-            ),
+            title: 'Favorites',
           ),
           body: TabBarView(
-            children: favorites.fahrplan.buildFavoriteList(),
+            children: favorites.fahrplan!.buildFavoriteList(),
           ),
         ),
       ),

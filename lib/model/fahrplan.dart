@@ -24,24 +24,24 @@ enum FahrplanFetchState {
 }
 
 class Fahrplan {
-  final String version;
-  final String baseUrl;
-  final Conference conference;
-  final FahrplanFetchState fetchState;
-  final String fetchMessage;
+  final String? version;
+  final String? baseUrl;
+  final Conference? conference;
+  final FahrplanFetchState? fetchState;
+  final String? fetchMessage;
 
-  List<Day> days;
-  List<Room> rooms;
+  List<Day>? days;
+  List<Room>? rooms;
 
-  List<Talk> favoriteTalks;
-  FavoritedTalks favTalkIds;
+  List<Talk>? favoriteTalks;
+  FavoritedTalks? favTalkIds;
 
-  Widget dayTabCache;
+  Widget? dayTabCache;
 
   final currentPageNotifier = ValueNotifier<int>(0);
   final PageStorageBucket bucket = PageStorageBucket();
 
-  final Settings settings;
+  final Settings? settings;
 
   Fahrplan({
     this.version,
@@ -73,16 +73,16 @@ class Fahrplan {
 
   Widget buildDayLayout(BuildContext context) {
     dayTabCache = TabBarView(
-      children: this.conference.buildDayTabs(),
+      children: this.conference!.buildDayTabs(),
     );
     return new DefaultTabController(
-      length: conference.daysCount,
+      length: conference!.daysCount!,
       child: new Scaffold(
         appBar: new AppBar(
           title: Text(getFahrplanTitle()),
           bottom: PreferredSize(
             child: TabBar(
-              tabs: conference.getDaysAsText(),
+              tabs: conference!.getDaysAsText(),
               indicator: UnderlineTabIndicator(
                 borderSide: BorderSide(color: Theme.of(context).indicatorColor),
               ),
@@ -91,10 +91,7 @@ class Fahrplan {
           ),
         ),
         drawer: FahrplanDrawer(
-          title: Text(
-            'Overview',
-            style: Theme.of(context).textTheme.headline6,
-          ),
+          title: 'Overview',
         ),
         body: dayTabCache,
       ),
@@ -113,7 +110,7 @@ class Fahrplan {
           LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constrains) =>
                 LinearProgressPageIndicator(
-              itemCount: rooms.length,
+              itemCount: rooms!.length,
               currentPageNotifier: currentPageNotifier,
               progressColor: Theme.of(context).indicatorColor,
               width: constrains.maxWidth,
@@ -125,11 +122,11 @@ class Fahrplan {
               bucket: bucket,
               child: PageView.builder(
                 scrollDirection: Axis.vertical,
-                itemCount: days.length + 1,
+                itemCount: days!.length + 1,
                 controller: PageController(viewportFraction: 0.90),
                 itemBuilder: (BuildContext context, int index) {
                   return _buildCarousel(context,
-                      days[index >= days.length ? index - 1 : index], index);
+                      days![index >= days!.length ? index - 1 : index], index);
                 },
               ),
             ),
@@ -137,16 +134,13 @@ class Fahrplan {
         ],
       ),
       drawer: FahrplanDrawer(
-        title: Text(
-          'Overview',
-          style: Theme.of(context).textTheme.headline6,
-        ),
+        title: 'Overview',
       ),
     );
   }
 
   Widget _buildCarousel(BuildContext context, Day d, int index) {
-    if (index >= days.length) {
+    if (index >= days!.length) {
       return Column();
     } else {
       return Column(
@@ -157,11 +151,11 @@ class Fahrplan {
           Expanded(
             child: PageView.builder(
               // store this controller in a State to save the carousel scroll position
-              itemCount: d.rooms.length,
+              itemCount: d.rooms!.length,
               controller: PageController(viewportFraction: 0.85),
               itemBuilder: (BuildContext context, int itemIndex) {
                 return buildRoom(
-                    context, itemIndex, d, d.rooms[itemIndex].name);
+                    context, itemIndex, d, d.rooms![itemIndex].name!);
               },
               onPageChanged: (int itemIndex) {
                 currentPageNotifier.value = itemIndex;
@@ -175,8 +169,8 @@ class Fahrplan {
 
   Widget buildRoom(
       BuildContext context, int itemIndex, Day d, String roomName) {
-    int month = d.date.month;
-    int day = d.date.day;
+    int month = d.date!.month;
+    int day = d.date!.day;
     return Padding(
       padding: EdgeInsets.fromLTRB(8, 0, 8, 16),
       child: Container(
@@ -189,9 +183,9 @@ class Fahrplan {
             Text('$month-$day - $roomName'),
             Expanded(
               child: ListView.builder(
-                itemCount: d.rooms[itemIndex].talks.length,
+                itemCount: d.rooms![itemIndex].talks!.length,
                 itemBuilder: (context, index) {
-                  return d.rooms[itemIndex].talks[index];
+                  return d.rooms![itemIndex].talks![index];
                 },
               ),
             ),
@@ -203,13 +197,13 @@ class Fahrplan {
 
   List<Widget> buildFavoriteList() {
     List<Column> dayColumns = [];
-    for (Day d in days) {
+    for (Day d in days!) {
       List<Widget> widgets = [];
-      widgets.addAll(favoriteTalks
-          .where((talk) => talk.date.day == d.date.day)
-          .where((talk) => conference.days
-              .firstWhere((date) => date.date.day == talk.day.day)
-              .talks
+      widgets.addAll(favoriteTalks!
+          .where((talk) => talk.date!.day == d.date!.day)
+          .where((talk) => conference!.days!
+              .firstWhere((date) => date.date!.day == talk.day!.day)
+              .talks!
               .contains(talk)));
       dayColumns.add(
         Column(
@@ -230,12 +224,12 @@ class Fahrplan {
   }
 
   String getFahrplanTitle() {
-    String acronym = conference.acronym;
+    String acronym = conference!.acronym!;
     return 'Congress Fahrplan - $acronym';
   }
 
   String getFavoritesTitle() {
-    String acronym = conference.acronym;
+    String acronym = conference!.acronym!;
     return 'Favorites - $acronym';
   }
 }

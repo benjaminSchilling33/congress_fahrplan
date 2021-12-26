@@ -15,20 +15,20 @@ import 'package:url_launcher/url_launcher.dart';
 
 /// The Talk widget stores all data about it and build a card with all data relevant for it.
 class Talk extends StatelessWidget {
-  DateTime day;
-  final int id;
-  final String title;
-  final String track;
-  final String subtitle;
-  final String abstract;
-  final String start;
-  final String duration;
-  final String room;
-  final String language;
-  final DateTime date;
-  final String url;
-  final List<Person> persons;
-  bool favorite;
+  DateTime? day;
+  final int? id;
+  final String? title;
+  final String? track;
+  final String? subtitle;
+  final String? abstract;
+  final String? start;
+  final String? duration;
+  final String? room;
+  final String? language;
+  final DateTime? date;
+  final String? url;
+  final List<Person>? persons;
+  bool? favorite;
 
   Talk(
       {this.id,
@@ -85,24 +85,25 @@ class Talk extends StatelessWidget {
         child: ListTile(
           title: Semantics(
               label: 'Talk title, $title',
-              child: ExcludeSemantics(child: Text(title))),
+              child: ExcludeSemantics(child: Text(title!))),
           subtitle: getCardSubtitle(),
           leading: Ink(
             child: Consumer<FavoriteProvider>(
               builder: (context, favoriteProvider, child) => IconButton(
                 tooltip: "Add talk $title to favorites.",
                 icon: Icon(
-                  favorite ? Icons.favorite : Icons.favorite_border,
+                  favorite! ? Icons.favorite : Icons.favorite_border,
                 ),
                 onPressed: () {
-                  favoriteProvider.favoriteTalk(this, day);
+                  favoriteProvider.favoriteTalk(this, day!);
                   Scaffold.of(context).showSnackBar(SnackBar(
                     content: favorite == true
                         ? Text('\"$title\" added to favorites.')
                         : Text('\"$title\" removed from favorites.'),
                     action: SnackBarAction(
                       label: "Revert",
-                      onPressed: () => favoriteProvider.favoriteTalk(this, day),
+                      onPressed: () =>
+                          favoriteProvider.favoriteTalk(this, day!),
                     ),
                     duration: Duration(seconds: 3),
                   ));
@@ -194,7 +195,7 @@ class Talk extends StatelessWidget {
     List<Widget> widgets = [];
 
     /// Add the subtitle
-    if (subtitle != null && subtitle != '') {
+    if (subtitle != '') {
       widgets.add(
         Semantics(
           label: 'Subtitle $subtitle',
@@ -210,7 +211,7 @@ class Talk extends StatelessWidget {
     }
 
     /// Add the start details
-    if (start != null && start != '') {
+    if (start != '') {
       widgets.add(
         Semantics(
           label: 'Start $start',
@@ -232,7 +233,7 @@ class Talk extends StatelessWidget {
     }
 
     /// Add the duration details
-    if (duration != null && duration != '') {
+    if (duration != '') {
       widgets.add(
         Semantics(
           label: 'Duration $duration',
@@ -254,7 +255,7 @@ class Talk extends StatelessWidget {
     }
 
     /// Add the room details
-    if (room != null && room != '') {
+    if (room != '') {
       widgets.add(
         Semantics(
           label: 'Room $room',
@@ -276,7 +277,7 @@ class Talk extends StatelessWidget {
     }
 
     /// Add the track details
-    if (track != null && track != '') {
+    if (track != '') {
       widgets.add(
         Semantics(
           label: 'Track $track',
@@ -298,7 +299,7 @@ class Talk extends StatelessWidget {
     }
 
     /// Add the language details
-    if (language != null && language != '') {
+    if (language != '') {
       widgets.add(
         Semantics(
           label: 'Language $language',
@@ -320,7 +321,7 @@ class Talk extends StatelessWidget {
     }
 
     /// Add the url details
-    if (url != null && url != '') {
+    if (url != '') {
       widgets.add(
         Semantics(
           label: 'Open Talk details in Browser',
@@ -334,8 +335,8 @@ class Talk extends StatelessWidget {
                 Expanded(
                   child: Linkify(
                     onOpen: (link) async {
-                      if (await canLaunch(url)) {
-                        await launch(url);
+                      if (await canLaunch(url!)) {
+                        await launch(url!);
                       } else {
                         throw 'Could not launch $link';
                       }
@@ -351,8 +352,8 @@ class Talk extends StatelessWidget {
     }
 
     /// Add the persons details
-    if (persons != null && persons.length > 0) {
-      for (Person p in persons) {
+    if (persons!.length > 0) {
+      for (Person p in persons!) {
         widgets.add(Semantics(
           label: 'Presenter ${p.publicName}',
           child: ExcludeSemantics(
@@ -362,8 +363,8 @@ class Talk extends StatelessWidget {
                   child: Icon(Icons.group),
                   padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
                 ),
-                Text(p.publicName.length > 20
-                    ? '${p.publicName.substring(0, 19)}...'
+                Text(p.publicName!.length > 20
+                    ? '${p.publicName!.substring(0, 19)}...'
                     : '${p.publicName}'),
               ],
             ),
@@ -373,7 +374,7 @@ class Talk extends StatelessWidget {
     }
 
     /// Add the abstract text
-    if (abstract != null && abstract != '') {
+    if (abstract != '') {
       widgets.add(
         Semantics(
           label: 'Abstract $abstract',
@@ -400,8 +401,8 @@ class Talk extends StatelessWidget {
 }
 
 class Person {
-  String id;
-  String publicName;
+  String? id;
+  String? publicName;
 
   Person({this.id, this.publicName});
 

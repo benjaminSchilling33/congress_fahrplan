@@ -11,28 +11,28 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AllTalks extends StatelessWidget {
-  final ThemeData theme;
+  final ThemeData? theme;
 
-  AllTalks({Key key, this.theme}) : super(key: key);
+  AllTalks({Key? key, this.theme}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var favorites = Provider.of<FavoriteProvider>(context);
     return new MaterialApp(
       theme: theme,
-      title: favorites.fahrplan.getFahrplanTitle(),
+      title: favorites.fahrplan!.getFahrplanTitle(),
       home: OrientationBuilder(
         builder: (context, orientation) {
           if (orientation == Orientation.portrait) {
             ///Portrait Orientation
             Future.delayed(
                 Duration.zero, () => openOutdatedDialog(context, favorites));
-            return favorites.fahrplan.buildDayLayout(context);
+            return favorites.fahrplan!.buildDayLayout(context);
           } else {
             ///Landscape Orientation
             Future.delayed(
                 Duration.zero, () => openOutdatedDialog(context, favorites));
-            return favorites.fahrplan.buildRoomLayout(context);
+            return favorites.fahrplan!.buildRoomLayout(context);
           }
         },
       ),
@@ -56,7 +56,7 @@ class AllTalks extends StatelessWidget {
             Semantics(
               label: 'Dismiss',
               child: ExcludeSemantics(
-                child: FlatButton(
+                child: TextButton(
                   onPressed: () {
                     provider.oldTalkNoticeDismissed = true;
                     Navigator.pop(context);

@@ -10,14 +10,14 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class Conference {
-  final String acronym;
-  final String title;
-  final String start;
-  final String end;
-  int daysCount;
-  final String timeslotDuration;
-  final List<Day> days;
-  final List<String> namesOfRooms;
+  final String? acronym;
+  final String? title;
+  final String? start;
+  final String? end;
+  int? daysCount;
+  final String? timeslotDuration;
+  final List<Day>? days;
+  final List<String>? namesOfRooms;
 
   Conference({
     this.acronym,
@@ -39,9 +39,9 @@ class Conference {
       days: jsonToDayList(json['days']),
     );
     c.daysCount = 0;
-    for (Day d in c.days) {
-      if (d.talks.length > 0) {
-        c.daysCount++;
+    for (Day d in c.days!) {
+      if (d.talks!.length > 0) {
+        c.daysCount = c.daysCount! + 1;
       }
     }
     return c;
@@ -51,7 +51,7 @@ class Conference {
     List<Day> days = [];
     for (var j in json) {
       Day d = Day.fromJson(j);
-      if (d.talks.length > 0) {
+      if (d.talks!.length > 0) {
         days.add(d);
       }
     }
@@ -60,18 +60,18 @@ class Conference {
 
   List<Widget> buildDayTabs() {
     List<Column> dayColumns = [];
-    for (Day d in days) {
-      if (d.talks.length > 0) {
+    for (Day d in days!) {
+      if (d.talks!.length > 0) {
         List<Widget> widgets = [];
-        widgets.addAll(d.talks);
+        widgets.addAll(d.talks!);
         dayColumns.add(
           Column(
             children: <Widget>[
               Expanded(
                 child: ListView.builder(
-                  itemCount: d.talks.length,
+                  itemCount: d.talks!.length,
                   itemBuilder: (context, index) {
-                    return d.talks[index];
+                    return d.talks![index];
                   },
                 ),
               ),
@@ -85,16 +85,17 @@ class Conference {
 
   List<Widget> getDaysAsText() {
     List<Widget> dayTexts = [];
-    for (Day d in days) {
-      if (d.talks.length == 0) {
+    for (Day d in days!) {
+      if (d.talks!.length == 0) {
         continue;
       }
-      String weekday = new DateFormat.E().format(d.date);
+      String weekday = new DateFormat.E().format(d.date!);
 
-      String dateString = d.date.month.toString() + '-' + d.date.day.toString();
-      String semanticsDay = new DateFormat.EEEE().format(d.date) +
+      String dateString =
+          d.date!.month.toString() + '-' + d.date!.day.toString();
+      String semanticsDay = new DateFormat.EEEE().format(d.date!) +
           ' ' +
-          new DateFormat.yMMMMd().format(d.date);
+          new DateFormat.yMMMMd().format(d.date!);
       dayTexts.add(
         new Semantics(
           label: semanticsDay,
