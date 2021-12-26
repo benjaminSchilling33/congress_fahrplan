@@ -91,10 +91,7 @@ class Fahrplan {
           ),
         ),
         drawer: FahrplanDrawer(
-          title: Text(
-            'Overview',
-            style: Theme.of(context).textTheme.headline6,
-          ),
+          title: 'Overview',
         ),
         body: dayTabCache,
       ),
@@ -137,10 +134,7 @@ class Fahrplan {
         ],
       ),
       drawer: FahrplanDrawer(
-        title: Text(
-          'Overview',
-          style: Theme.of(context).textTheme.headline6,
-        ),
+        title: 'Overview',
       ),
     );
   }

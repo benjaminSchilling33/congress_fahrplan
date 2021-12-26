@@ -34,10 +34,7 @@ class Favorites extends StatelessWidget {
             ),
           ),
           drawer: FahrplanDrawer(
-            title: Text(
-              'Favorites',
-              style: Theme.of(context).textTheme.headline6,
-            ),
+            title: 'Favorites',
           ),
           body: TabBarView(
             children: favorites.fahrplan!.buildFavoriteList(),

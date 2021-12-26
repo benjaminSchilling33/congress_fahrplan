@@ -19,7 +19,7 @@ import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class FahrplanDrawer extends StatelessWidget {
-  final Text? title;
+  final String? title;
   FahrplanDrawer({this.title});
 
   @override
@@ -30,7 +30,10 @@ class FahrplanDrawer extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.black54,
       appBar: AppBar(
-        title: title,
+        title: Text(
+          '$title',
+          style: Theme.of(context).textTheme.headline6,
+        ),
         leading: Semantics(
           label: 'Close menu',
           child: IconButton(
@@ -41,11 +44,11 @@ class FahrplanDrawer extends StatelessWidget {
       ),
       body: ListView(
         children: <Widget>[
-          FlatIconTextButton(
-            icon: Icons.calendar_today,
-            text: 'Show Overview',
-            onPressed: title!.data == 'Favorites'
-                ? () {
+          title! == 'Favorites'
+              ? FlatIconTextButton(
+                  icon: Icons.calendar_today,
+                  text: 'Show Overview',
+                  onPressed: () {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
@@ -56,23 +59,21 @@ class FahrplanDrawer extends StatelessWidget {
                         },
                       ),
                     );
-                  }
-                : () {},
-          ),
-          FlatIconTextButton(
-            icon: Icons.favorite,
-            text: 'Show Favorites',
-            onPressed: title!.data == 'Overview'
-                ? () {
+                  },
+                )
+              : FlatIconTextButton(
+                  icon: Icons.favorite,
+                  text: 'Show Favorites',
+                  onPressed: () {
+                    print('Show favorites pressed.');
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                         builder: (context) => Favorites(),
                       ),
                     );
-                  }
-                : () {},
-          ),
+                  },
+                ),
           FahrplanFetcher.multipleSchedules
               ? FlatCheckBoxTextButton(
                   value: favorites.fahrplan!.settings!.getLoadFullFahrplan(),
