@@ -2,7 +2,7 @@
 congress_fahrplan
 This is the dart file containing the Favorites screen StatelessWidget
 SPDX-License-Identifier: GPL-2.0-only
-Copyright (C) 2019 Benjamin Schilling
+Copyright (C) 2019 - 2021 Benjamin Schilling
 */
 
 import 'package:congress_fahrplan/provider/favorite_provider.dart';
