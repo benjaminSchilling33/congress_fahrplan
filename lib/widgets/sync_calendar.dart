@@ -2,7 +2,7 @@
 congress_fahrplan
 This is the dart file containing the SyncCalendar StatelessWidget.
 SPDX-License-Identifier: GPL-2.0-only
-Copyright (C) 2019 - 2020 Benjamin Schilling
+Copyright (C) 2019 - 2021 Benjamin Schilling
 */
 
 import 'dart:collection';

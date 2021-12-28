@@ -1,7 +1,7 @@
 # congress_fahrplan
 # This is the pubspec file specifying all dependencies
 # SPDX-License-Identifier: GPL-2.0-only
-# Copyright (C) 2019 - 2020 Benjamin Schilling
+# Copyright (C) 2019 - 2021 Benjamin Schilling
 
 name: congress_fahrplan
 description: Congress Fahrplan written in flutter
