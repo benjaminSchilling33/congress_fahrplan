@@ -101,7 +101,7 @@ class Conference {
           label: semanticsDay,
           child: ExcludeSemantics(
             child: Text(
-              '$weekday | $dateString',
+              '$weekday\n$dateString',
               style: TextStyle(
                 fontSize: 16,
               ),

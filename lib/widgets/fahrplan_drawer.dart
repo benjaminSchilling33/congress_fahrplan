@@ -110,7 +110,7 @@ class FahrplanDrawer extends StatelessWidget {
           ),
           FlatIconTextButton(
             icon: Icons.color_lens,
-            text: 'Design adapted from\nrC3 design by kreatur.works',
+            text: 'Design adapted from\n37c3 design',
             onPressed: () => launchUrlInternal('https://kreatur.works/'),
           ),
           Container(

@@ -15,6 +15,80 @@ void main() {
   runApp(ThemeWrapper());
 }
 
+class Colors {
+  static Color base_black() {
+    return Color(0xff000000);
+  }
+
+  static Color base_white() {
+    return Color(0xffffffff);
+  }
+
+  static Color base_grey_light() {
+    return Color(0xffd9d9d9);
+  }
+
+  static Color base_grey_medium() {
+    return Color(0xffaaaaaa);
+  }
+
+  static Color base_medium_dark_grey() {
+    return Color(0xff7a7a7a);
+  }
+
+  static Color base_dark_grey() {
+    return Color(0xff202020);
+  }
+
+  static Color primary_accent_light_blue() {
+    return Color(0xff2d42ff);
+  }
+
+  static Color primary_accent_dark_blue() {
+    return Color(0xff0b1575);
+  }
+
+  static Color primary_accent_light_red() {
+    return Color(0xffde4040);
+  }
+
+  static Color primary_accent_dark_red() {
+    return Color(0xff561010);
+  }
+
+  static Color primary_accent_light_green() {
+    return Color(0xff79ff5e);
+  }
+
+  static Color primary_accent_dark_green() {
+    return Color(0xff2b8d18);
+  }
+
+  static Color secondary_accent_light_turquoise() {
+    return Color(0xff29ffff);
+  }
+
+  static Color secondary_accent_dark_turquoise() {
+    return Color(0xff006b6b);
+  }
+
+  static Color secondary_accent_light_purple() {
+    return Color(0xffde37ff);
+  }
+
+  static Color secondary_accent_dark_purple() {
+    return Color(0xff66007a);
+  }
+
+  static Color secondary_accent_light_yellow() {
+    return Color(0xfff6f675);
+  }
+
+  static Color secondary_accent_dark_yellow() {
+    return Color(0xff757501);
+  }
+}
+
 class ThemeWrapper extends StatelessWidget {
   ThemeWrapper({Key? key}) : super(key: key);
 
@@ -22,130 +96,62 @@ class ThemeWrapper extends StatelessWidget {
     return new MaterialApp(
       title: 'Congress Fahrplan',
       theme: ThemeData(
-      brightness: Brightness.dark,
-      backgroundColor: Color(0xff000000),
-      tabBarTheme: TabBarTheme(
-        indicator: UnderlineTabIndicator(),
-      ),
-      primaryColorDark: Color(0xff000000),
-      indicatorColor: Color(0xFF4D7FFA),
-      textTheme: TextTheme(
-        titleLarge: TextStyle(
-          color: Color(0xFFD0D0CE),
-        ),
-        bodyMedium: TextStyle(
-          color: Color(0xFFD0D0CE),
-        ),
-        bodyLarge: TextStyle(
-          color: Color(0xFFD0D0CE),
-        ),
-        titleSmall: TextStyle(
-          color: Color(0xFFD0D0CE),
-        ),
-        titleMedium: TextStyle(
-          color: Color(0xFFD0D0CE),
-        ),
-        headlineMedium: TextStyle(
-          color: Color(0xFFD0D0CE),
-        ),
-        bodySmall: TextStyle(
-          color: Color(0xFFD0D0CE),
-        ),
-        labelSmall: TextStyle(
-          color: Color(0xFFD0D0CE),
-        ),
-        headlineSmall: TextStyle(
-          color: Color(0xFFD0D0CE),
-        ),
-      ),
-      cardColor: Color(0xFF3b3b3b),
-      snackBarTheme: SnackBarThemeData(
-        backgroundColor: Color(0xFF4d4d4d),
-        actionTextColor: Color(0xFF4D7FFA),
-        contentTextStyle: TextStyle(
-          color: Color(0xFFD0D0CE),
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-        ),
-        elevation: 30,
-      ),
-      appBarTheme: AppBarTheme(
-        color: Color(0xFF1a1a1a),
-        iconTheme: IconThemeData(
-          color: Color(0xFF4D7FFA),
-        ),
-      ),
-      iconTheme: IconThemeData(
-        color: Color(0xFF4D7FFA),
-      ), colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Color(0xFF4D7FFA), brightness: Brightness.dark), checkboxTheme: CheckboxThemeData(
-      fillColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
-        if (states.contains(MaterialState.disabled)) { return null; }
-        if (states.contains(MaterialState.selected)) { return Color(0xFF4D7FFA); }
-        return null;
-      }),
-    ), radioTheme: RadioThemeData(
-      fillColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
-        if (states.contains(MaterialState.disabled)) { return null; }
-        if (states.contains(MaterialState.selected)) { return Color(0xFF4D7FFA); }
-        return null;
-      }),
-    ), switchTheme: SwitchThemeData(
-      thumbColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
-        if (states.contains(MaterialState.disabled)) { return null; }
-        if (states.contains(MaterialState.selected)) { return Color(0xFF4D7FFA); }
-        return null;
-      }),
-      trackColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
-        if (states.contains(MaterialState.disabled)) { return null; }
-        if (states.contains(MaterialState.selected)) { return Color(0xFF4D7FFA); }
-        return null;
-      }),
-    ),
-    ),
-      darkTheme: ThemeData(
         brightness: Brightness.dark,
-        backgroundColor: Color(0xff000000),
+        colorScheme: ColorScheme.dark(
+          background: Colors.base_black(),
+          brightness: Brightness.dark,
+          primary: Colors.base_white(),
+        ),
         tabBarTheme: TabBarTheme(
           indicator: UnderlineTabIndicator(),
         ),
-        primaryColorDark: Color(0xff000000),
-        indicatorColor: Color(0xFF4D7FFA),
+        primaryColor: Colors.base_white(),
+        primaryColorLight: Colors.base_white(),
+        primaryColorDark: Colors.base_dark_grey(),
+        indicatorColor: Colors.primary_accent_light_blue(),
         textTheme: TextTheme(
           titleLarge: TextStyle(
-            color: Color(0xFFD0D0CE),
+            color: Colors.base_white(),
           ),
           bodyMedium: TextStyle(
-            color: Color(0xFFD0D0CE),
+            color: Colors.base_white(),
           ),
           bodyLarge: TextStyle(
-            color: Color(0xFFD0D0CE),
+            color: Colors.base_white(),
           ),
           titleSmall: TextStyle(
-            color: Color(0xFFD0D0CE),
+            color: Colors.base_white(),
           ),
           titleMedium: TextStyle(
-            color: Color(0xFFD0D0CE),
+            color: Colors.base_white(),
           ),
           headlineMedium: TextStyle(
-            color: Color(0xFFD0D0CE),
+            color: Colors.base_white(),
           ),
           bodySmall: TextStyle(
-            color: Color(0xFFD0D0CE),
+            color: Colors.base_white(),
           ),
           labelSmall: TextStyle(
-            color: Color(0xFFD0D0CE),
+            color: Colors.base_white(),
           ),
           headlineSmall: TextStyle(
-            color: Color(0xFFD0D0CE),
+            color: Colors.base_white(),
           ),
         ),
-        cardColor: Color(0xFF3b3b3b),
+        cardTheme: CardTheme(
+          color: Colors.base_dark_grey(),/*
+          shape: ContinuousRectangleBorder(
+            borderRadius: BorderRadius.circular(0.0),
+            side: BorderSide(
+              color: Colors.primary_accent_dark_blue(),
+            ),
+          ),*/
+        ),
         snackBarTheme: SnackBarThemeData(
-          backgroundColor: Color(0xFF4d4d4d),
-          actionTextColor: Color(0xFF4D7FFA),
+          backgroundColor: Colors.base_dark_grey(),
+          actionTextColor: Colors.primary_accent_light_blue(),
           contentTextStyle: TextStyle(
-            color: Color(0xFFD0D0CE),
+            color: Colors.base_white(),
           ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -153,37 +159,60 @@ class ThemeWrapper extends StatelessWidget {
           elevation: 30,
         ),
         appBarTheme: AppBarTheme(
-          color: Color(0xFF1a1a1a),
+          color: Colors.base_dark_grey(),
           iconTheme: IconThemeData(
-            color: Color(0xFF4D7FFA),
+            color: Colors.primary_accent_light_blue(),
           ),
         ),
         iconTheme: IconThemeData(
-          color: Color(0xFF4D7FFA),
-        ), colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Color(0xFF4D7FFA), brightness: Brightness.dark), checkboxTheme: CheckboxThemeData(
- fillColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
- if (states.contains(MaterialState.disabled)) { return null; }
- if (states.contains(MaterialState.selected)) { return Color(0xFF4D7FFA); }
- return null;
- }),
- ), radioTheme: RadioThemeData(
- fillColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
- if (states.contains(MaterialState.disabled)) { return null; }
- if (states.contains(MaterialState.selected)) { return Color(0xFF4D7FFA); }
- return null;
- }),
- ), switchTheme: SwitchThemeData(
- thumbColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
- if (states.contains(MaterialState.disabled)) { return null; }
- if (states.contains(MaterialState.selected)) { return Color(0xFF4D7FFA); }
- return null;
- }),
- trackColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
- if (states.contains(MaterialState.disabled)) { return null; }
- if (states.contains(MaterialState.selected)) { return Color(0xFF4D7FFA); }
- return null;
- }),
- ),
+          color: Colors.primary_accent_light_blue(),
+        ),
+        checkboxTheme: CheckboxThemeData(
+          fillColor: MaterialStateProperty.resolveWith<Color?>(
+              (Set<MaterialState> states) {
+            if (states.contains(MaterialState.disabled)) {
+              return null;
+            }
+            if (states.contains(MaterialState.selected)) {
+              return Colors.primary_accent_light_blue();
+            }
+            return null;
+          }),
+        ),
+        radioTheme: RadioThemeData(
+          fillColor: MaterialStateProperty.resolveWith<Color?>(
+              (Set<MaterialState> states) {
+            if (states.contains(MaterialState.disabled)) {
+              return null;
+            }
+            if (states.contains(MaterialState.selected)) {
+              return Colors.primary_accent_light_blue();
+            }
+            return null;
+          }),
+        ),
+        switchTheme: SwitchThemeData(
+          thumbColor: MaterialStateProperty.resolveWith<Color?>(
+              (Set<MaterialState> states) {
+            if (states.contains(MaterialState.disabled)) {
+              return null;
+            }
+            if (states.contains(MaterialState.selected)) {
+              return Colors.primary_accent_light_blue();
+            }
+            return null;
+          }),
+          trackColor: MaterialStateProperty.resolveWith<Color?>(
+              (Set<MaterialState> states) {
+            if (states.contains(MaterialState.disabled)) {
+              return null;
+            }
+            if (states.contains(MaterialState.selected)) {
+              return Colors.primary_accent_light_blue();
+            }
+            return null;
+          }),
+        ),
       ),
       home: CongressFahrplanApp(key: key),
     );
@@ -210,45 +239,36 @@ class CongressFahrplanApp extends StatelessWidget {
               } else {
                 return SafeArea(
                   child: Scaffold(
-                      backgroundColor: Color(0xff000000),
-                      body: Stack(
-                        children: [
-                          Image.asset('assets/background.jpg'),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Image.asset('assets/icon.png'),
-                              Text(
-                                'Could not fetch Fahrplan!',
-                              ),
-                              Text(
-                                favoriteProvider.fahrplan!.fetchMessage!,
-                              ),
-                            ],
-                          ),
-                        ],
-                      )),
+                    backgroundColor: Colors.base_black(),
+                    body: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Image.asset('assets/icon.png'),
+                        Text(
+                          'Could not fetch Fahrplan!',
+                        ),
+                        Text(
+                          favoriteProvider.fahrplan!.fetchMessage!,
+                        ),
+                      ],
+                    ),
+                  ),
                 );
               }
             } else {
               return SafeArea(
                 child: Scaffold(
-                  backgroundColor: Color(0xff000000),
-                  body: Stack(
-                    children: [
-                      Image.asset('assets/background.jpg'),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Container(
-                              padding: EdgeInsets.fromLTRB(40, 40, 40, 40),
-                              child: Image.asset('assets/icon.png')),
-                          CircularProgressIndicator(),
-                          Container(
-                            child: Text('Fetching Fahrplan'),
-                            padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                          ),
-                        ],
+                  backgroundColor: Colors.base_black(),
+                  body: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                          padding: EdgeInsets.fromLTRB(40, 40, 40, 40),
+                          child: Image.asset('assets/icon.png')),
+                      CircularProgressIndicator(),
+                      Container(
+                        child: Text('Fetching Fahrplan'),
+                        padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                       ),
                     ],
                   ),

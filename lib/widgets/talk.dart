@@ -46,8 +46,6 @@ class Talk extends StatelessWidget {
       this.favorite});
 
   factory Talk.fromJson(var json, String room) {
-    print("talk fromJson");
-    print(json);
     return Talk(
       id: json['id'] != null ? json['id'] : 0,
       title: json['title'] != null ? json['title'] : "",
