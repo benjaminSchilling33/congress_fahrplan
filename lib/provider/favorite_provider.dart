@@ -11,7 +11,7 @@ import 'package:congress_fahrplan/model/fahrplan.dart';
 import 'package:congress_fahrplan/utilities/fahrplan_fetcher.dart';
 import 'package:congress_fahrplan/widgets/talk.dart';
 import 'package:flutter/material.dart';
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class FavoriteProvider extends ChangeNotifier {
   final List<Widget> _favorites = [];

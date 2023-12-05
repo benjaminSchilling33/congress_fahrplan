@@ -35,7 +35,7 @@ class FlatIconTextButton extends StatelessWidget {
                   padding: EdgeInsets.fromLTRB(12, 0, 0, 0),
                   child: Text(
                     text,
-                    style: Theme.of(context).textTheme.subtitle2,
+                    style: Theme.of(context).textTheme.titleSmall,
                   )),
             ],
           ),

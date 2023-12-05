@@ -15,7 +15,7 @@ import 'package:congress_fahrplan/widgets/sync_calendar.dart';
 import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class FahrplanDrawer extends StatelessWidget {
@@ -32,7 +32,7 @@ class FahrplanDrawer extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           '$title',
-          style: Theme.of(context).textTheme.headline6,
+          style: Theme.of(context).textTheme.titleLarge,
         ),
         leading: Semantics(
           label: 'Close menu',
@@ -99,19 +99,19 @@ class FahrplanDrawer extends StatelessWidget {
           FlatIconTextButton(
             icon: Icons.security,
             text: 'Show Data Privacy Policy',
-            onPressed: () => launchUrl(
+            onPressed: () => launchUrlInternal(
                 'https://github.com/benjaminSchilling33/congress_fahrplan/wiki/Congress-Fahrplan-Datenschutzerkl%C3%A4rung-(Privacy-Policy)'),
           ),
           FlatIconTextButton(
             icon: Icons.bug_report,
             text: 'Report Bug',
-            onPressed: () => launchUrl(
+            onPressed: () => launchUrlInternal(
                 'https://github.com/benjaminSchilling33/congress_fahrplan/issues'),
           ),
           FlatIconTextButton(
             icon: Icons.color_lens,
             text: 'Design adapted from\nrC3 design by kreatur.works',
-            onPressed: () => launchUrl('https://kreatur.works/'),
+            onPressed: () => launchUrlInternal('https://kreatur.works/'),
           ),
           Container(
             padding: EdgeInsets.fromLTRB(32, 0, 0, 0),
@@ -124,9 +124,9 @@ class FahrplanDrawer extends StatelessWidget {
     );
   }
 
-  launchUrl(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
+  launchUrlInternal(String url) async {
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
     } else {
       throw 'Could not launch $url';
     }

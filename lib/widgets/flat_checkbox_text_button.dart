@@ -35,7 +35,7 @@ class FlatCheckBoxTextButton extends StatelessWidget {
                   padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                   child: Text(
                     text!,
-                    style: Theme.of(context).textTheme.subtitle2,
+                    style: Theme.of(context).textTheme.titleSmall,
                   ),
                 ),
               ],

@@ -175,7 +175,7 @@ class Fahrplan {
       padding: EdgeInsets.fromLTRB(8, 0, 8, 16),
       child: Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).appBarTheme.color,
+          color: Theme.of(context).appBarTheme.backgroundColor,
           borderRadius: BorderRadius.all(Radius.circular(4.0)),
         ),
         child: Column(

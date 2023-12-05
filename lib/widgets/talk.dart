@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:provider/provider.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// The Talk widget stores all data about it and build a card with all data relevant for it.
@@ -96,7 +96,7 @@ class Talk extends StatelessWidget {
                 ),
                 onPressed: () {
                   favoriteProvider.favoriteTalk(this, day!);
-                  Scaffold.of(context).showSnackBar(SnackBar(
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: favorite == true
                         ? Text('\"$title\" added to favorites.')
                         : Text('\"$title\" removed from favorites.'),
@@ -143,7 +143,7 @@ class Talk extends StatelessWidget {
                               tooltip: 'Copy abstract.',
                               onPressed: () {
                                 Clipboard.setData(
-                                    ClipboardData(text: abstract));
+                                    ClipboardData(text: abstract!));
                               },
                             ),
                           ),
@@ -335,8 +335,8 @@ class Talk extends StatelessWidget {
                 Expanded(
                   child: Linkify(
                     onOpen: (link) async {
-                      if (await canLaunch(url!)) {
-                        await launch(url!);
+                      if (await canLaunchUrl(Uri.parse(url!))) {
+                        await launchUrl(Uri.parse(url!));
                       } else {
                         throw 'Could not launch $link';
                       }
