@@ -79,12 +79,12 @@ class Fahrplan {
       length: conference!.daysCount!,
       child: new Scaffold(
         appBar: new AppBar(
-          title: Text(getFahrplanTitle()),
+          title: Text(getFahrplanTitle(), style: TextStyle(fontFamily: 'GabriellaHeavy'),),
           bottom: PreferredSize(
             child: TabBar(
               tabs: conference!.getDaysAsText(),
               indicator: UnderlineTabIndicator(
-                borderSide: BorderSide(color: Theme.of(context).indicatorColor),
+                borderSide: BorderSide(color: Theme.of(context).indicatorColor, width: 5.0),
               ),
             ),
             preferredSize: Size.fromHeight(50),
@@ -225,11 +225,11 @@ class Fahrplan {
 
   String getFahrplanTitle() {
     String acronym = conference!.acronym!;
-    return 'Congress Fahrplan - $acronym';
+    return '$acronym Fahrplan';
   }
 
   String getFavoritesTitle() {
     String acronym = conference!.acronym!;
-    return 'Favorites - $acronym';
+    return '$acronym Favorites';
   }
 }

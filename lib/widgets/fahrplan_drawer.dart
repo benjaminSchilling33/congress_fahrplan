@@ -110,8 +110,8 @@ class FahrplanDrawer extends StatelessWidget {
           ),
           FlatIconTextButton(
             icon: Icons.color_lens,
-            text: 'Design adapted from\n37c3 design',
-            onPressed: () => launchUrlInternal('https://kreatur.works/'),
+            text: 'Design adapted from 37c3 design',
+            onPressed: () => {},//launchUrlInternal('https://kreatur.works/'),
           ),
           Container(
             padding: EdgeInsets.fromLTRB(32, 0, 0, 0),
@@ -125,9 +125,7 @@ class FahrplanDrawer extends StatelessWidget {
   }
 
   launchUrlInternal(String url) async {
-    if (await canLaunchUrl(Uri.parse(url))) {
-      await launchUrl(Uri.parse(url));
-    } else {
+    if (!await launchUrl(Uri.parse(url))) {
       throw 'Could not launch $url';
     }
   }

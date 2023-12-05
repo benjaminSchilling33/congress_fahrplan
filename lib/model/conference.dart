@@ -100,11 +100,22 @@ class Conference {
         new Semantics(
           label: semanticsDay,
           child: ExcludeSemantics(
-            child: Text(
-              '$weekday\n$dateString',
-              style: TextStyle(
-                fontSize: 16,
-              ),
+            child: Column(
+              children: [
+                Text(
+                  '$weekday',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                  ),
+                ),
+                Text(
+                  '$dateString',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+              ],
             ),
           ),
         ),

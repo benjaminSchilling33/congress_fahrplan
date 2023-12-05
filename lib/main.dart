@@ -15,7 +15,7 @@ void main() {
   runApp(ThemeWrapper());
 }
 
-class Colors {
+class FahrplanColors {
   static Color base_black() {
     return Color(0xff000000);
   }
@@ -96,76 +96,83 @@ class ThemeWrapper extends StatelessWidget {
     return new MaterialApp(
       title: 'Congress Fahrplan',
       theme: ThemeData(
+        fontFamily: 'VcrOcdFaux',
         brightness: Brightness.dark,
         colorScheme: ColorScheme.dark(
-          background: Colors.base_black(),
+          background: FahrplanColors.base_black(),
           brightness: Brightness.dark,
-          primary: Colors.base_white(),
+          primary: FahrplanColors.base_white(),
         ),
         tabBarTheme: TabBarTheme(
           indicator: UnderlineTabIndicator(),
         ),
-        primaryColor: Colors.base_white(),
-        primaryColorLight: Colors.base_white(),
-        primaryColorDark: Colors.base_dark_grey(),
-        indicatorColor: Colors.primary_accent_light_blue(),
+        primaryColor: FahrplanColors.base_white(),
+        primaryColorLight: FahrplanColors.base_white(),
+        primaryColorDark: FahrplanColors.base_black(),
+        indicatorColor: FahrplanColors.primary_accent_light_blue(),
         textTheme: TextTheme(
           titleLarge: TextStyle(
-            color: Colors.base_white(),
+            color: FahrplanColors.base_white(),
           ),
           bodyMedium: TextStyle(
-            color: Colors.base_white(),
+            color: FahrplanColors.base_white(),
           ),
           bodyLarge: TextStyle(
-            color: Colors.base_white(),
+            color: FahrplanColors.base_white(),
           ),
           titleSmall: TextStyle(
-            color: Colors.base_white(),
+            color: FahrplanColors.base_white(),
           ),
           titleMedium: TextStyle(
-            color: Colors.base_white(),
+            color: FahrplanColors.base_white(),
           ),
           headlineMedium: TextStyle(
-            color: Colors.base_white(),
+            color: FahrplanColors.base_white(),
           ),
           bodySmall: TextStyle(
-            color: Colors.base_white(),
+            color: FahrplanColors.base_white(),
           ),
           labelSmall: TextStyle(
-            color: Colors.base_white(),
+            color: FahrplanColors.base_white(),
           ),
           headlineSmall: TextStyle(
-            color: Colors.base_white(),
+            color: FahrplanColors.base_white(),
           ),
         ),
         cardTheme: CardTheme(
-          color: Colors.base_dark_grey(),/*
+          color: FahrplanColors.base_black(),
           shape: ContinuousRectangleBorder(
             borderRadius: BorderRadius.circular(0.0),
             side: BorderSide(
-              color: Colors.primary_accent_dark_blue(),
+              width: 2.0,
+              color: FahrplanColors.primary_accent_dark_blue(),
             ),
-          ),*/
+          ),
         ),
         snackBarTheme: SnackBarThemeData(
-          backgroundColor: Colors.base_dark_grey(),
-          actionTextColor: Colors.primary_accent_light_blue(),
+          backgroundColor: FahrplanColors.base_black(),
+          actionTextColor: FahrplanColors.primary_accent_light_green(),
           contentTextStyle: TextStyle(
-            color: Colors.base_white(),
+            color: FahrplanColors.primary_accent_light_green(),
           ),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderRadius: BorderRadius.all(Radius.circular(0)),
+            side: BorderSide(
+              width: 2.0,
+              color: FahrplanColors.primary_accent_dark_green()
+            )
           ),
           elevation: 30,
         ),
         appBarTheme: AppBarTheme(
-          color: Colors.base_dark_grey(),
+          color: FahrplanColors.base_black(),
           iconTheme: IconThemeData(
-            color: Colors.primary_accent_light_blue(),
+            color: FahrplanColors.primary_accent_light_blue(),
           ),
+
         ),
         iconTheme: IconThemeData(
-          color: Colors.primary_accent_light_blue(),
+          color: FahrplanColors.primary_accent_light_blue(),
         ),
         checkboxTheme: CheckboxThemeData(
           fillColor: MaterialStateProperty.resolveWith<Color?>(
@@ -174,11 +181,12 @@ class ThemeWrapper extends StatelessWidget {
               return null;
             }
             if (states.contains(MaterialState.selected)) {
-              return Colors.primary_accent_light_blue();
+              return FahrplanColors.primary_accent_light_blue();
             }
             return null;
           }),
         ),
+        dialogBackgroundColor: FahrplanColors.base_black(),
         radioTheme: RadioThemeData(
           fillColor: MaterialStateProperty.resolveWith<Color?>(
               (Set<MaterialState> states) {
@@ -186,7 +194,7 @@ class ThemeWrapper extends StatelessWidget {
               return null;
             }
             if (states.contains(MaterialState.selected)) {
-              return Colors.primary_accent_light_blue();
+              return FahrplanColors.primary_accent_light_blue();
             }
             return null;
           }),
@@ -198,7 +206,7 @@ class ThemeWrapper extends StatelessWidget {
               return null;
             }
             if (states.contains(MaterialState.selected)) {
-              return Colors.primary_accent_light_blue();
+              return FahrplanColors.primary_accent_light_blue();
             }
             return null;
           }),
@@ -208,7 +216,7 @@ class ThemeWrapper extends StatelessWidget {
               return null;
             }
             if (states.contains(MaterialState.selected)) {
-              return Colors.primary_accent_light_blue();
+              return FahrplanColors.primary_accent_light_blue();
             }
             return null;
           }),
@@ -239,7 +247,7 @@ class CongressFahrplanApp extends StatelessWidget {
               } else {
                 return SafeArea(
                   child: Scaffold(
-                    backgroundColor: Colors.base_black(),
+                    backgroundColor: FahrplanColors.base_black(),
                     body: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
@@ -258,7 +266,7 @@ class CongressFahrplanApp extends StatelessWidget {
             } else {
               return SafeArea(
                 child: Scaffold(
-                  backgroundColor: Colors.base_black(),
+                  backgroundColor: FahrplanColors.base_black(),
                   body: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[

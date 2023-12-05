@@ -51,5 +51,18 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  fonts:
+    - family: MonaSans
+      fonts:
+        - asset: assets/MonaSans-Regular.ttf
+        - asset: assets/MonaSans-Bold.ttf
+          weight: 700
+    - family: VcrOcdFaux
+      fonts:
+        - asset: assets/VCROCDFaux.ttf
+    - family: GabriellaHeavy
+      fonts:
+        - asset: assets/GabriellaHeavy.otf
+
   assets:
     - assets/
