@@ -40,7 +40,7 @@ android {
     defaultConfig {
         applicationId "de.delusionsoftware.congress_fahrplan"
         minSdkVersion flutter.minSdkVersion
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionCode 2023
         versionName '1.3.0'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

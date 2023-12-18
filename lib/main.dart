@@ -156,12 +156,10 @@ class ThemeWrapper extends StatelessWidget {
             color: FahrplanColors.primary_accent_light_green(),
           ),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(0)),
-            side: BorderSide(
-              width: 2.0,
-              color: FahrplanColors.primary_accent_dark_green()
-            )
-          ),
+              borderRadius: BorderRadius.all(Radius.circular(0)),
+              side: BorderSide(
+                  width: 2.0,
+                  color: FahrplanColors.primary_accent_dark_green())),
           elevation: 30,
         ),
         appBarTheme: AppBarTheme(
@@ -169,35 +167,36 @@ class ThemeWrapper extends StatelessWidget {
           iconTheme: IconThemeData(
             color: FahrplanColors.primary_accent_light_blue(),
           ),
-
         ),
         iconTheme: IconThemeData(
           color: FahrplanColors.primary_accent_light_blue(),
         ),
         checkboxTheme: CheckboxThemeData(
           fillColor: MaterialStateProperty.resolveWith<Color?>(
-              (Set<MaterialState> states) {
-            if (states.contains(MaterialState.disabled)) {
+            (Set<MaterialState> states) {
+              if (states.contains(MaterialState.disabled)) {
+                return null;
+              }
+              if (states.contains(MaterialState.selected)) {
+                return FahrplanColors.primary_accent_light_blue();
+              }
               return null;
-            }
-            if (states.contains(MaterialState.selected)) {
-              return FahrplanColors.primary_accent_light_blue();
-            }
-            return null;
-          }),
+            },
+          ),
         ),
         dialogBackgroundColor: FahrplanColors.base_black(),
         radioTheme: RadioThemeData(
           fillColor: MaterialStateProperty.resolveWith<Color?>(
-              (Set<MaterialState> states) {
-            if (states.contains(MaterialState.disabled)) {
+            (Set<MaterialState> states) {
+              if (states.contains(MaterialState.disabled)) {
+                return null;
+              }
+              if (states.contains(MaterialState.selected)) {
+                return FahrplanColors.primary_accent_light_blue();
+              }
               return null;
-            }
-            if (states.contains(MaterialState.selected)) {
-              return FahrplanColors.primary_accent_light_blue();
-            }
-            return null;
-          }),
+            },
+          ),
         ),
         switchTheme: SwitchThemeData(
           thumbColor: MaterialStateProperty.resolveWith<Color?>(
