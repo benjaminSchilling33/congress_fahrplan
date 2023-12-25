@@ -6,6 +6,7 @@ Copyright (C) 2019 - 2021 Benjamin Schilling
 */
 
 import 'package:congress_fahrplan/main.dart';
+import 'package:congress_fahrplan/model/person.dart';
 import 'package:congress_fahrplan/provider/favorite_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -52,7 +53,7 @@ class Talk extends StatelessWidget {
       title: json['title'] != null ? json['title'] : "",
       track: json['track'] != null ? json['track'] : "",
       subtitle: json['subtitle'] != null ? json['subtitle'] : "",
-      abstract: json['abstract'] != null ? json['abstract'] : "",
+      abstract: json['abstract'] != null ? json['abstract'] : (json['description'] != null ? json['description'] : ""),
       start: json['start'] != null ? json['start'] : "",
       duration: json['duration'] != null ? json['duration'] : "",
       room: room,
@@ -397,11 +398,7 @@ class Talk extends StatelessWidget {
                       color: FahrplanColors.base_white(),
                     ),
                     onOpen: (link) async {
-                      if (await canLaunchUrl(Uri.parse(url!))) {
-                        await launchUrl(Uri.parse(url!));
-                      } else {
-                        throw 'Could not launch $link';
-                      }
+                      launchUrlInternal(link.url);
                     },
                     text: "$url",
                   ),
@@ -463,18 +460,10 @@ class Talk extends StatelessWidget {
     }
     return widgets;
   }
-}
 
-class Person {
-  String? id;
-  String? publicName;
-
-  Person({this.id, this.publicName});
-
-  factory Person.fromJson(var json) {
-    return Person(
-      id: json['id'] != null ? '${json['id']}' : '',
-      publicName: json['public_name'] != null ? json['public_name'] : '',
-    );
+  launchUrlInternal(String url) async {
+    if (!await launchUrl(Uri.parse(url))) {
+      throw 'Could not launch $url';
+    }
   }
 }

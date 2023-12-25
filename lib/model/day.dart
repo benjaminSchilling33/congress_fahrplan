@@ -6,7 +6,7 @@ Copyright (C) 2019 - 2021 Benjamin Schilling
 */
 
 import 'package:congress_fahrplan/model/room.dart';
-import 'package:congress_fahrplan/widgets/talk.dart';
+import 'package:congress_fahrplan/model/talk.dart';
 
 class Day {
   final int? index;

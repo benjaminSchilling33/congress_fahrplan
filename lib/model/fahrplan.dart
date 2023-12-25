@@ -8,7 +8,7 @@ Copyright (C) 2019 - 2021 Benjamin Schilling
 import 'package:congress_fahrplan/model/favorited_talks.dart';
 import 'package:congress_fahrplan/model/settings.dart';
 import 'package:congress_fahrplan/widgets/fahrplan_drawer.dart';
-import 'package:congress_fahrplan/widgets/talk.dart';
+import 'package:congress_fahrplan/model/talk.dart';
 import 'package:flutter/material.dart';
 import 'package:page_view_indicators/linear_progress_page_indicator.dart';
 
