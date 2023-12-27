@@ -7,6 +7,7 @@ Copyright (C) 2019 - 2021 Benjamin Schilling
 
 import 'dart:collection';
 
+import 'package:congress_fahrplan/model/day.dart';
 import 'package:congress_fahrplan/model/fahrplan.dart';
 import 'package:congress_fahrplan/utilities/fahrplan_fetcher.dart';
 import 'package:congress_fahrplan/model/talk.dart';
@@ -39,6 +40,21 @@ class FavoriteProvider extends ChangeNotifier {
 
   void notifyMainListeners() {
     notifyListeners();
+  }
+
+  void favoriteTalkById(int id){
+    // figure out talk day
+    DateTime? dt;
+    Talk? tt;
+    for (Day d in fahrplan!.days!){
+      for (Talk t in d.talks!) {
+        if (t.id == id) {
+          dt = t.date!;
+          tt= t;
+        }
+      }
+    }
+    favoriteTalk(tt!, dt!);
   }
 
   void favoriteTalk(Talk talk, DateTime talkDay) {

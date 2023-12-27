@@ -5,6 +5,8 @@ SPDX-License-Identifier: GPL-2.0-only
 Copyright (C) 2019 - 2021 Benjamin Schilling
 */
 
+import 'dart:convert';
+
 import 'package:congress_fahrplan/provider/favorite_provider.dart';
 import 'package:congress_fahrplan/utilities/fahrplan_fetcher.dart';
 import 'package:congress_fahrplan/widgets/all_talks.dart';
@@ -14,6 +16,7 @@ import 'package:congress_fahrplan/widgets/flat_icon_text_button.dart';
 import 'package:congress_fahrplan/widgets/sync_calendar.dart';
 import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -111,8 +114,12 @@ class FahrplanDrawer extends StatelessWidget {
           FlatIconTextButton(
             icon: Icons.color_lens,
             text: 'Design adapted from 37c3 design',
-            onPressed: () => {},//launchUrlInternal('https://kreatur.works/'),
+            onPressed: () => {}, //launchUrlInternal('https://kreatur.works/'),
           ),
+          FlatIconTextButton(
+              icon: Icons.qr_code,
+              text: "Import halfnarp favorites",
+              onPressed: () => showHalfnarpImport(context, favorites)),
           Container(
             padding: EdgeInsets.fromLTRB(32, 0, 0, 0),
             child: Text(
@@ -128,6 +135,59 @@ class FahrplanDrawer extends StatelessWidget {
     if (!await launchUrl(Uri.parse(url))) {
       throw 'Could not launch $url';
     }
+  }
+
+  showHalfnarpImport(BuildContext context, FavoriteProvider favorites) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => SimpleDialog(
+        contentPadding: EdgeInsets.all(10),
+        title: Text('Scan halfnarp QR code'),
+        children: <Widget>[
+          Container(
+            width: MediaQuery.of(context).size.width - 50,
+            height: MediaQuery.of(context).size.height / 2,
+            child: MobileScanner(
+              // fit: BoxFit.contain,
+              controller: MobileScannerController(
+                detectionSpeed: DetectionSpeed.normal,
+                facing: CameraFacing.back,
+                torchEnabled: false,
+              ),
+              onDetect: (capture) {
+                final List<Barcode> barcodes = capture.barcodes;
+                for (final barcode in barcodes) {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) => SimpleDialog(
+                            children: [
+                              TextButton(
+                                  onPressed: () {
+                                    var json = jsonDecode(barcode.rawValue!);
+                                    List<dynamic> talk_ids = json['talk_ids'];
+                                    for (var talk_id in talk_ids) {
+                                      if (!favorites.fahrplan!.favTalkIds!
+                                          .contains(talk_id)) {
+                                        favorites.favoriteTalkById(talk_id);
+                                      }
+                                    }
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                      content: Text("Added favorites!"),
+                                      duration: Duration(seconds: 2),
+                                    ));
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text('Add talks to favorites'))
+                            ],
+                          ));
+                }
+              },
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   showSyncCalendar(BuildContext context, FavoriteProvider favorites) async {
