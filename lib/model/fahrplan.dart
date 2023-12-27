@@ -8,7 +8,7 @@ Copyright (C) 2019 - 2021 Benjamin Schilling
 import 'package:congress_fahrplan/model/favorited_talks.dart';
 import 'package:congress_fahrplan/model/settings.dart';
 import 'package:congress_fahrplan/widgets/fahrplan_drawer.dart';
-import 'package:congress_fahrplan/widgets/talk.dart';
+import 'package:congress_fahrplan/model/talk.dart';
 import 'package:flutter/material.dart';
 import 'package:page_view_indicators/linear_progress_page_indicator.dart';
 
@@ -79,12 +79,12 @@ class Fahrplan {
       length: conference!.daysCount!,
       child: new Scaffold(
         appBar: new AppBar(
-          title: Text(getFahrplanTitle()),
+          title: Text(getFahrplanTitle(), style: TextStyle(fontFamily: 'GabriellaHeavy'),),
           bottom: PreferredSize(
             child: TabBar(
               tabs: conference!.getDaysAsText(),
               indicator: UnderlineTabIndicator(
-                borderSide: BorderSide(color: Theme.of(context).indicatorColor),
+                borderSide: BorderSide(color: Theme.of(context).indicatorColor, width: 5.0),
               ),
             ),
             preferredSize: Size.fromHeight(50),
@@ -175,7 +175,7 @@ class Fahrplan {
       padding: EdgeInsets.fromLTRB(8, 0, 8, 16),
       child: Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).appBarTheme.color,
+          color: Theme.of(context).appBarTheme.backgroundColor,
           borderRadius: BorderRadius.all(Radius.circular(4.0)),
         ),
         child: Column(
@@ -225,11 +225,11 @@ class Fahrplan {
 
   String getFahrplanTitle() {
     String acronym = conference!.acronym!;
-    return 'Congress Fahrplan - $acronym';
+    return '$acronym Fahrplan';
   }
 
   String getFavoritesTitle() {
     String acronym = conference!.acronym!;
-    return 'Favorites - $acronym';
+    return '$acronym Favorites';
   }
 }

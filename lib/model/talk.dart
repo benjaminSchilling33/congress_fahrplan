@@ -5,12 +5,14 @@ SPDX-License-Identifier: GPL-2.0-only
 Copyright (C) 2019 - 2021 Benjamin Schilling
 */
 
+import 'package:congress_fahrplan/main.dart';
+import 'package:congress_fahrplan/model/person.dart';
 import 'package:congress_fahrplan/provider/favorite_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:provider/provider.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// The Talk widget stores all data about it and build a card with all data relevant for it.
@@ -46,14 +48,12 @@ class Talk extends StatelessWidget {
       this.favorite});
 
   factory Talk.fromJson(var json, String room) {
-    print("talk fromJson");
-    print(json);
     return Talk(
       id: json['id'] != null ? json['id'] : 0,
       title: json['title'] != null ? json['title'] : "",
       track: json['track'] != null ? json['track'] : "",
       subtitle: json['subtitle'] != null ? json['subtitle'] : "",
-      abstract: json['abstract'] != null ? json['abstract'] : "",
+      abstract: json['abstract'] != null ? json['abstract'] : (json['description'] != null ? json['description'] : ""),
       start: json['start'] != null ? json['start'] : "",
       duration: json['duration'] != null ? json['duration'] : "",
       room: room,
@@ -84,8 +84,17 @@ class Talk extends StatelessWidget {
       child: Semantics(
         child: ListTile(
           title: Semantics(
-              label: 'Talk title, $title',
-              child: ExcludeSemantics(child: Text(title!))),
+            label: 'Talk title, $title',
+            child: ExcludeSemantics(
+              child: Text(
+                title!,
+                style: TextStyle(
+                  fontFamily: 'VcrOcdFaux',
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
           subtitle: getCardSubtitle(),
           leading: Ink(
             child: Consumer<FavoriteProvider>(
@@ -94,18 +103,31 @@ class Talk extends StatelessWidget {
                 icon: Icon(
                   favorite! ? Icons.favorite : Icons.favorite_border,
                 ),
+                color: FahrplanColors.primary_accent_light_blue(),
                 onPressed: () {
                   favoriteProvider.favoriteTalk(this, day!);
-                  Scaffold.of(context).showSnackBar(SnackBar(
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: favorite == true
-                        ? Text('\"$title\" added to favorites.')
-                        : Text('\"$title\" removed from favorites.'),
+                        ? Text(
+                            '\"$title\" added to favorites.',
+                            style: TextStyle(
+                              fontFamily: 'VcrOcdFaux',
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        : Text(
+                            '\"$title\" removed from favorites.',
+                            style: TextStyle(
+                              fontFamily: 'VcrOcdFaux',
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                     action: SnackBarAction(
                       label: "Revert",
                       onPressed: () =>
                           favoriteProvider.favoriteTalk(this, day!),
                     ),
-                    duration: Duration(seconds: 3),
+                    duration: Duration(seconds: 2),
                   ));
                 },
               ),
@@ -119,12 +141,21 @@ class Talk extends StatelessWidget {
               tooltip: "Show talk $title details.",
               icon: Icon(
                 Icons.info,
-                color: Colors.white,
+                color: FahrplanColors.base_white(),
               ),
               onPressed: () {
                 showDialog(
                   context: context,
-                  builder: (BuildContext context) => SimpleDialog(
+                  builder: (context) => SimpleDialog(
+                    backgroundColor: FahrplanColors.base_black(),
+                    shape: ContinuousRectangleBorder(
+
+                      borderRadius: BorderRadius.circular(0.0),
+                      side: BorderSide(
+                        width: 2.0,
+                        color: FahrplanColors.primary_accent_dark_red(),
+                      ),
+                    ),
                     contentPadding: EdgeInsets.all(10),
                     title: Text('$title'),
                     children: <Widget>[
@@ -140,10 +171,11 @@ class Talk extends StatelessWidget {
                             label: 'Copy abstract.',
                             child: IconButton(
                               icon: Icon(Icons.content_copy),
+                              color: FahrplanColors.primary_accent_light_red(),
                               tooltip: 'Copy abstract.',
                               onPressed: () {
                                 Clipboard.setData(
-                                    ClipboardData(text: abstract));
+                                    ClipboardData(text: abstract!));
                               },
                             ),
                           ),
@@ -151,10 +183,12 @@ class Talk extends StatelessWidget {
                             label: 'Share $title',
                             child: ExcludeSemantics(
                               child: IconButton(
-                                tooltip: 'Share talk.',
                                 icon: Icon(
                                   Icons.share,
                                 ),
+                                color:
+                                    FahrplanColors.primary_accent_light_red(),
+                                tooltip: 'Share talk.',
                                 onPressed: () =>
                                     Share.share('Check out this talk: $url'),
                               ),
@@ -187,8 +221,16 @@ class Talk extends StatelessWidget {
             : ' - ');
     textString = textString + ('$language' != '' ? '$language' : '');
     return Semantics(
-        label: 'Start $start, Room $room, Track $track, Language $language',
-        child: ExcludeSemantics(child: Text(textString)));
+      label: 'Start $start, Room $room, Track $track, Language $language',
+      child: ExcludeSemantics(
+        child: Text(
+          textString,
+          style: TextStyle(
+            fontFamily: 'VcrOcdFaux',
+          ),
+        ),
+      ),
+    );
   }
 
   List<Widget> getDetails() {
@@ -219,7 +261,10 @@ class Talk extends StatelessWidget {
             child: Row(
               children: <Widget>[
                 Container(
-                  child: Icon(Icons.access_time),
+                  child: Icon(
+                    Icons.access_time,
+                    color: FahrplanColors.primary_accent_light_red(),
+                  ),
                   padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
                 ),
                 Text(
@@ -241,7 +286,10 @@ class Talk extends StatelessWidget {
             child: Row(
               children: <Widget>[
                 Container(
-                  child: Icon(Icons.hourglass_empty),
+                  child: Icon(
+                    Icons.hourglass_empty,
+                    color: FahrplanColors.primary_accent_light_red(),
+                  ),
                   padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
                 ),
                 Text(
@@ -263,7 +311,10 @@ class Talk extends StatelessWidget {
             child: Row(
               children: <Widget>[
                 Container(
-                  child: Icon(Icons.room),
+                  child: Icon(
+                    Icons.room,
+                    color: FahrplanColors.primary_accent_light_red(),
+                  ),
                   padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
                 ),
                 Text(
@@ -285,7 +336,10 @@ class Talk extends StatelessWidget {
             child: Row(
               children: <Widget>[
                 Container(
-                  child: Icon(Icons.school),
+                  child: Icon(
+                    Icons.school,
+                    color: FahrplanColors.primary_accent_light_red(),
+                  ),
                   padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
                 ),
                 Text(
@@ -307,7 +361,10 @@ class Talk extends StatelessWidget {
             child: Row(
               children: <Widget>[
                 Container(
-                  child: Icon(Icons.translate),
+                  child: Icon(
+                    Icons.translate,
+                    color: FahrplanColors.primary_accent_light_red(),
+                  ),
                   padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
                 ),
                 Text(
@@ -329,17 +386,19 @@ class Talk extends StatelessWidget {
             child: Row(
               children: <Widget>[
                 Container(
-                  child: Icon(Icons.open_in_browser),
+                  child: Icon(
+                    Icons.open_in_browser,
+                    color: FahrplanColors.primary_accent_light_red(),
+                  ),
                   padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
                 ),
                 Expanded(
                   child: Linkify(
+                    linkStyle: TextStyle(
+                      color: FahrplanColors.base_white(),
+                    ),
                     onOpen: (link) async {
-                      if (await canLaunch(url!)) {
-                        await launch(url!);
-                      } else {
-                        throw 'Could not launch $link';
-                      }
+                      launchUrlInternal(link.url);
                     },
                     text: "$url",
                   ),
@@ -360,7 +419,10 @@ class Talk extends StatelessWidget {
             child: Row(
               children: <Widget>[
                 Container(
-                  child: Icon(Icons.group),
+                  child: Icon(
+                    Icons.group,
+                    color: FahrplanColors.primary_accent_light_red(),
+                  ),
                   padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
                 ),
                 Text(p.publicName!.length > 20
@@ -398,18 +460,10 @@ class Talk extends StatelessWidget {
     }
     return widgets;
   }
-}
 
-class Person {
-  String? id;
-  String? publicName;
-
-  Person({this.id, this.publicName});
-
-  factory Person.fromJson(var json) {
-    return Person(
-      id: json['id'] != null ? '${json['id']}' : '',
-      publicName: json['public_name'] != null ? json['public_name'] : '',
-    );
+  launchUrlInternal(String url) async {
+    if (!await launchUrl(Uri.parse(url))) {
+      throw 'Could not launch $url';
+    }
   }
 }

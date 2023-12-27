@@ -10,7 +10,7 @@ import 'package:congress_fahrplan/model/fahrplan.dart';
 import 'package:congress_fahrplan/model/favorited_talks.dart';
 import 'package:congress_fahrplan/model/room.dart';
 import 'package:congress_fahrplan/model/settings.dart';
-import 'package:congress_fahrplan/widgets/talk.dart';
+import 'package:congress_fahrplan/model/talk.dart';
 
 class FahrplanDecoder {
   // Decodes the Fahrplan, initializes it and sets all favorited talks

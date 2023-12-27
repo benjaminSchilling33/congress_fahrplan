@@ -19,15 +19,14 @@ import 'package:http/http.dart' as http;
 
 class FahrplanFetcher {
   static String minimalFahrplanUrl =
-      'https://static.rc3.world/schedule/everything.json';
+  'https://fahrplan.events.ccc.de/congress/2023/fahrplan/schedule.json';
 
   static bool multipleSchedules = false;
 
   static String completeFahrplanUrl = '';
 
   static List<String> oldUrls = [
-    'https://fahrplan.events.ccc.de/rc3/2020/Fahrplan/schedule.json',
-    'https://data.c3voc.de/rC3/everything.schedule.json'
+    'https://static.rc3.world/schedule/everything.json'
   ];
 
   static Future<Fahrplan> fetchFahrplan() async {
