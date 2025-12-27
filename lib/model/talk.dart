@@ -30,6 +30,8 @@ class Talk extends StatelessWidget {
   final DateTime? date;
   final String? url;
   final List<Person>? persons;
+  final bool? doNotRecord;
+  final bool? doNotStream;
   bool? favorite;
 
   Talk(
@@ -45,6 +47,8 @@ class Talk extends StatelessWidget {
       this.language,
       this.url,
       this.persons,
+      this.doNotRecord,
+      this.doNotStream,
       this.favorite});
 
   factory Talk.fromJson(var json, String room) {
@@ -53,7 +57,9 @@ class Talk extends StatelessWidget {
       title: json['title'] != null ? json['title'] : "",
       track: json['track'] != null ? json['track'] : "",
       subtitle: json['subtitle'] != null ? json['subtitle'] : "",
-      abstract: json['abstract'] != null ? json['abstract'] : (json['description'] != null ? json['description'] : ""),
+      abstract: json['abstract'] != null
+          ? json['abstract']
+          : (json['description'] != null ? json['description'] : ""),
       start: json['start'] != null ? json['start'] : "",
       duration: json['duration'] != null ? json['duration'] : "",
       room: room,
@@ -62,6 +68,10 @@ class Talk extends StatelessWidget {
       url: json['url'] != null ? json['url'] : "",
       persons:
           json['persons'] != null ? jsonToPersonList(json['persons']) : null,
+      doNotRecord:
+          json['do_not_record'] != null ? json['do_not_record'] : false,
+      doNotStream:
+          json['do_not_stream'] != null ? json['do_not_stream'] : false,
       favorite: false,
     );
   }
@@ -89,7 +99,7 @@ class Talk extends StatelessWidget {
               child: Text(
                 title!,
                 style: TextStyle(
-                  fontFamily: 'VcrOcdFaux',
+                  fontFamily: 'SpaceGrotesk',
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -103,7 +113,7 @@ class Talk extends StatelessWidget {
                 icon: Icon(
                   favorite! ? Icons.favorite : Icons.favorite_border,
                 ),
-                color: FahrplanColors.primary_accent_light_blue(),
+                color: FahrplanColors.primary(),
                 onPressed: () {
                   favoriteProvider.favoriteTalk(this, day!);
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -111,14 +121,14 @@ class Talk extends StatelessWidget {
                         ? Text(
                             '\"$title\" added to favorites.',
                             style: TextStyle(
-                              fontFamily: 'VcrOcdFaux',
+                              fontFamily: 'SpaceGrotesk',
                               fontWeight: FontWeight.bold,
                             ),
                           )
                         : Text(
                             '\"$title\" removed from favorites.',
                             style: TextStyle(
-                              fontFamily: 'VcrOcdFaux',
+                              fontFamily: 'SpaceGrotesk',
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -141,19 +151,18 @@ class Talk extends StatelessWidget {
               tooltip: "Show talk $title details.",
               icon: Icon(
                 Icons.info,
-                color: FahrplanColors.base_white(),
+                color: FahrplanColors.highlight(),
               ),
               onPressed: () {
                 showDialog(
                   context: context,
                   builder: (context) => SimpleDialog(
-                    backgroundColor: FahrplanColors.base_black(),
+                    backgroundColor: FahrplanColors.background(),
                     shape: ContinuousRectangleBorder(
-
                       borderRadius: BorderRadius.circular(0.0),
                       side: BorderSide(
                         width: 2.0,
-                        color: FahrplanColors.primary_accent_dark_red(),
+                        color: FahrplanColors.accent1(),
                       ),
                     ),
                     contentPadding: EdgeInsets.all(10),
@@ -171,7 +180,7 @@ class Talk extends StatelessWidget {
                             label: 'Copy abstract.',
                             child: IconButton(
                               icon: Icon(Icons.content_copy),
-                              color: FahrplanColors.primary_accent_light_red(),
+                              color: FahrplanColors.primary(),
                               tooltip: 'Copy abstract.',
                               onPressed: () {
                                 Clipboard.setData(
@@ -186,8 +195,7 @@ class Talk extends StatelessWidget {
                                 icon: Icon(
                                   Icons.share,
                                 ),
-                                color:
-                                    FahrplanColors.primary_accent_light_red(),
+                                color: FahrplanColors.primary(),
                                 tooltip: 'Share talk.',
                                 onPressed: () =>
                                     Share.share('Check out this talk: $url'),
@@ -209,6 +217,7 @@ class Talk extends StatelessWidget {
 
   Semantics getCardSubtitle() {
     String textString = '';
+
     textString = textString +
         ('$start' != ''
             ? ('$room' != '' ? '$start' + ' - ' : '$start')
@@ -220,13 +229,15 @@ class Talk extends StatelessWidget {
             ? ('$language' != '' ? '$track' + ' - ' : '$track')
             : ' - ');
     textString = textString + ('$language' != '' ? '$language' : '');
+    textString = textString + (doNotRecord == true ? ' - No rec.' : '');
+    textString = textString + (doNotStream == true ? ' - No stream' : '');
     return Semantics(
       label: 'Start $start, Room $room, Track $track, Language $language',
       child: ExcludeSemantics(
         child: Text(
           textString,
           style: TextStyle(
-            fontFamily: 'VcrOcdFaux',
+            fontFamily: 'SpaceGrotesk',
           ),
         ),
       ),
@@ -263,7 +274,7 @@ class Talk extends StatelessWidget {
                 Container(
                   child: Icon(
                     Icons.access_time,
-                    color: FahrplanColors.primary_accent_light_red(),
+                    color: FahrplanColors.primary(),
                   ),
                   padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
                 ),
@@ -288,7 +299,7 @@ class Talk extends StatelessWidget {
                 Container(
                   child: Icon(
                     Icons.hourglass_empty,
-                    color: FahrplanColors.primary_accent_light_red(),
+                    color: FahrplanColors.primary(),
                   ),
                   padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
                 ),
@@ -313,7 +324,7 @@ class Talk extends StatelessWidget {
                 Container(
                   child: Icon(
                     Icons.room,
-                    color: FahrplanColors.primary_accent_light_red(),
+                    color: FahrplanColors.primary(),
                   ),
                   padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
                 ),
@@ -338,7 +349,7 @@ class Talk extends StatelessWidget {
                 Container(
                   child: Icon(
                     Icons.school,
-                    color: FahrplanColors.primary_accent_light_red(),
+                    color: FahrplanColors.primary(),
                   ),
                   padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
                 ),
@@ -363,7 +374,7 @@ class Talk extends StatelessWidget {
                 Container(
                   child: Icon(
                     Icons.translate,
-                    color: FahrplanColors.primary_accent_light_red(),
+                    color: FahrplanColors.primary(),
                   ),
                   padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
                 ),
@@ -388,14 +399,14 @@ class Talk extends StatelessWidget {
                 Container(
                   child: Icon(
                     Icons.open_in_browser,
-                    color: FahrplanColors.primary_accent_light_red(),
+                    color: FahrplanColors.primary(),
                   ),
                   padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
                 ),
                 Expanded(
                   child: Linkify(
                     linkStyle: TextStyle(
-                      color: FahrplanColors.base_white(),
+                      color: FahrplanColors.highlight(),
                     ),
                     onOpen: (link) async {
                       launchUrlInternal(link.url);
@@ -421,7 +432,7 @@ class Talk extends StatelessWidget {
                 Container(
                   child: Icon(
                     Icons.group,
-                    color: FahrplanColors.primary_accent_light_red(),
+                    color: FahrplanColors.primary(),
                   ),
                   padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
                 ),
@@ -433,6 +444,52 @@ class Talk extends StatelessWidget {
           ),
         ));
       }
+    }
+
+    /// Add the recording details
+    if (doNotRecord != '') {
+      widgets.add(
+        Semantics(
+          label: 'Recording $doNotRecord',
+          child: ExcludeSemantics(
+            child: Row(
+              children: <Widget>[
+                Container(
+                  child: Icon(
+                    Icons.local_movies,
+                    color: FahrplanColors.primary(),
+                  ),
+                  padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                ),
+                Text(doNotRecord! ? 'No recording' : 'Recorded'),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    /// Add the recording details
+    if (doNotStream != '') {
+      widgets.add(
+        Semantics(
+          label: 'Streaming $doNotStream',
+          child: ExcludeSemantics(
+            child: Row(
+              children: <Widget>[
+                Container(
+                  child: Icon(
+                    Icons.broadcast_on_home,
+                    color: FahrplanColors.primary(),
+                  ),
+                  padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                ),
+                Text(doNotStream! ? 'No Streaming' : 'Streamed'),
+              ],
+            ),
+          ),
+        ),
+      );
     }
 
     /// Add the abstract text

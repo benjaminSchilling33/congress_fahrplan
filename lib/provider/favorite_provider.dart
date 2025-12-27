@@ -9,8 +9,8 @@ import 'dart:collection';
 
 import 'package:congress_fahrplan/model/day.dart';
 import 'package:congress_fahrplan/model/fahrplan.dart';
-import 'package:congress_fahrplan/utilities/fahrplan_fetcher.dart';
 import 'package:congress_fahrplan/model/talk.dart';
+import 'package:congress_fahrplan/utilities/fahrplan_fetcher.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -42,15 +42,15 @@ class FavoriteProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void favoriteTalkById(int id){
+  void favoriteTalkById(int id) {
     // figure out talk day
     DateTime? dt;
     Talk? tt;
-    for (Day d in fahrplan!.days!){
+    for (Day d in fahrplan!.days!) {
       for (Talk t in d.talks!) {
         if (t.id == id) {
           dt = t.date!;
-          tt= t;
+          tt = t;
         }
       }
     }
@@ -58,8 +58,9 @@ class FavoriteProvider extends ChangeNotifier {
   }
 
   void favoriteTalk(Talk talk, DateTime talkDay) {
-    for (Talk t
-        in fahrplan!.days!.firstWhere((day) => day.date == talkDay).talks!) {
+    for (Talk t in fahrplan!.days!
+        .firstWhere((day) => day.date!.day == talkDay.day)
+        .talks!) {
       /// Check for
       /// 1. a matching talk id,
       /// 2. favorite is not set and (if favorites has elements) ,
@@ -101,7 +102,7 @@ class FavoriteProvider extends ChangeNotifier {
   void _favorite(Talk t, Talk talk, DateTime talkDate) {
     /// Set favorite of talk in correct room to true
     fahrplan!.days!
-        .firstWhere((day) => day.date == talkDate)
+        .firstWhere((day) => day.date!.day == talkDate.day)
         .rooms!
         .firstWhere((room) => room.name == talk.room, orElse: null)
         .talks!

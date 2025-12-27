@@ -16,16 +16,8 @@ void main() {
 }
 
 class FahrplanColors {
-  static Color base_black() {
-    return Color(0xff000000);
-  }
-
-  static Color base_white() {
-    return Color(0xffffffff);
-  }
-
-  static Color base_grey_light() {
-    return Color(0xffd9d9d9);
+  static Color background() {
+    return Color(0xff0f000A);
   }
 
   static Color base_grey_medium() {
@@ -40,30 +32,34 @@ class FahrplanColors {
     return Color(0xff202020);
   }
 
-  static Color primary_accent_light_blue() {
-    return Color(0xff2d42ff);
+  static Color primary() {
+    return Color(0xffff5053);
   }
 
-  static Color primary_accent_dark_blue() {
-    return Color(0xff0b1575);
+  static Color highlight() {
+    return Color(0xfffef2ff);
   }
 
-  static Color primary_accent_light_red() {
-    return Color(0xffde4040);
+  static Color accent1() {
+    return Color(0xff6a5fdb);
   }
 
-  static Color primary_accent_dark_red() {
-    return Color(0xff561010);
+  static Color accent2() {
+    return Color(0xffb2aaff);
   }
 
-  static Color primary_accent_light_green() {
-    return Color(0xff79ff5e);
+  static Color accent3() {
+    return Color(0xff261a66);
   }
 
-  static Color primary_accent_dark_green() {
-    return Color(0xff2b8d18);
+  static Color accent4() {
+    return Color(0xff29114c);
   }
 
+  static Color accent5() {
+    return Color(0xff190b2f);
+  }
+/*
   static Color secondary_accent_light_turquoise() {
     return Color(0xff29ffff);
   }
@@ -87,6 +83,7 @@ class FahrplanColors {
   static Color secondary_accent_dark_yellow() {
     return Color(0xff757501);
   }
+  */
 }
 
 class ThemeWrapper extends StatelessWidget {
@@ -96,80 +93,78 @@ class ThemeWrapper extends StatelessWidget {
     return new MaterialApp(
       title: 'Congress Fahrplan',
       theme: ThemeData(
-        fontFamily: 'VcrOcdFaux',
+        fontFamily: 'SpaceGrotesk',
         brightness: Brightness.dark,
         colorScheme: ColorScheme.dark(
-          background: FahrplanColors.base_black(),
+          background: FahrplanColors.background(),
           brightness: Brightness.dark,
-          primary: FahrplanColors.base_white(),
+          primary: FahrplanColors.highlight(),
         ),
         tabBarTheme: TabBarTheme(
           indicator: UnderlineTabIndicator(),
         ),
-        primaryColor: FahrplanColors.base_white(),
-        primaryColorLight: FahrplanColors.base_white(),
-        primaryColorDark: FahrplanColors.base_black(),
-        indicatorColor: FahrplanColors.primary_accent_light_blue(),
+        primaryColor: FahrplanColors.primary(),
+        primaryColorLight: FahrplanColors.highlight(),
+        primaryColorDark: FahrplanColors.accent1(),
+        indicatorColor: FahrplanColors.accent2(),
         textTheme: TextTheme(
           titleLarge: TextStyle(
-            color: FahrplanColors.base_white(),
+            color: FahrplanColors.highlight(),
           ),
           bodyMedium: TextStyle(
-            color: FahrplanColors.base_white(),
+            color: FahrplanColors.highlight(),
           ),
           bodyLarge: TextStyle(
-            color: FahrplanColors.base_white(),
+            color: FahrplanColors.highlight(),
           ),
           titleSmall: TextStyle(
-            color: FahrplanColors.base_white(),
+            color: FahrplanColors.highlight(),
           ),
           titleMedium: TextStyle(
-            color: FahrplanColors.base_white(),
+            color: FahrplanColors.highlight(),
           ),
           headlineMedium: TextStyle(
-            color: FahrplanColors.base_white(),
+            color: FahrplanColors.highlight(),
           ),
           bodySmall: TextStyle(
-            color: FahrplanColors.base_white(),
+            color: FahrplanColors.highlight(),
           ),
           labelSmall: TextStyle(
-            color: FahrplanColors.base_white(),
+            color: FahrplanColors.highlight(),
           ),
           headlineSmall: TextStyle(
-            color: FahrplanColors.base_white(),
+            color: FahrplanColors.highlight(),
           ),
         ),
         cardTheme: CardTheme(
-          color: FahrplanColors.base_black(),
+          color: FahrplanColors.background(),
           shape: ContinuousRectangleBorder(
             borderRadius: BorderRadius.circular(0.0),
             side: BorderSide(
               width: 2.0,
-              color: FahrplanColors.primary_accent_dark_blue(),
+              color: FahrplanColors.accent3(),
             ),
           ),
         ),
         snackBarTheme: SnackBarThemeData(
-          backgroundColor: FahrplanColors.base_black(),
-          actionTextColor: FahrplanColors.primary_accent_light_green(),
+          backgroundColor: FahrplanColors.background(),
+          actionTextColor: FahrplanColors.accent1(),
           contentTextStyle: TextStyle(
-            color: FahrplanColors.primary_accent_light_green(),
+            color: FahrplanColors.highlight(),
           ),
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(0)),
-              side: BorderSide(
-                  width: 2.0,
-                  color: FahrplanColors.primary_accent_dark_green())),
+              side: BorderSide(width: 2.0, color: FahrplanColors.accent1())),
           elevation: 30,
         ),
         appBarTheme: AppBarTheme(
-          color: FahrplanColors.base_black(),
+          color: FahrplanColors.background(),
           iconTheme: IconThemeData(
-            color: FahrplanColors.primary_accent_light_blue(),
+            color: FahrplanColors.accent1(),
           ),
         ),
         iconTheme: IconThemeData(
-          color: FahrplanColors.primary_accent_light_blue(),
+          color: FahrplanColors.accent1(),
         ),
         checkboxTheme: CheckboxThemeData(
           fillColor: MaterialStateProperty.resolveWith<Color?>(
@@ -178,13 +173,13 @@ class ThemeWrapper extends StatelessWidget {
                 return null;
               }
               if (states.contains(MaterialState.selected)) {
-                return FahrplanColors.primary_accent_light_blue();
+                return FahrplanColors.accent2();
               }
               return null;
             },
           ),
         ),
-        dialogBackgroundColor: FahrplanColors.base_black(),
+        dialogBackgroundColor: FahrplanColors.background(),
         radioTheme: RadioThemeData(
           fillColor: MaterialStateProperty.resolveWith<Color?>(
             (Set<MaterialState> states) {
@@ -192,7 +187,7 @@ class ThemeWrapper extends StatelessWidget {
                 return null;
               }
               if (states.contains(MaterialState.selected)) {
-                return FahrplanColors.primary_accent_light_blue();
+                return FahrplanColors.accent2();
               }
               return null;
             },
@@ -205,7 +200,7 @@ class ThemeWrapper extends StatelessWidget {
               return null;
             }
             if (states.contains(MaterialState.selected)) {
-              return FahrplanColors.primary_accent_light_blue();
+              return FahrplanColors.accent2();
             }
             return null;
           }),
@@ -215,7 +210,7 @@ class ThemeWrapper extends StatelessWidget {
               return null;
             }
             if (states.contains(MaterialState.selected)) {
-              return FahrplanColors.primary_accent_light_blue();
+              return FahrplanColors.accent2();
             }
             return null;
           }),
@@ -246,7 +241,7 @@ class CongressFahrplanApp extends StatelessWidget {
               } else {
                 return SafeArea(
                   child: Scaffold(
-                    backgroundColor: FahrplanColors.base_black(),
+                    backgroundColor: FahrplanColors.background(),
                     body: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
@@ -265,7 +260,7 @@ class CongressFahrplanApp extends StatelessWidget {
             } else {
               return SafeArea(
                 child: Scaffold(
-                  backgroundColor: FahrplanColors.base_black(),
+                  backgroundColor: FahrplanColors.background(),
                   body: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[

@@ -113,7 +113,7 @@ class FahrplanDrawer extends StatelessWidget {
           ),
           FlatIconTextButton(
             icon: Icons.color_lens,
-            text: 'Design adapted from 37c3 design',
+            text: 'Design adapted from 38c3 design',
             onPressed: () => {}, //launchUrlInternal('https://kreatur.works/'),
           ),
           FlatIconTextButton(
@@ -150,7 +150,7 @@ class FahrplanDrawer extends StatelessWidget {
             child: MobileScanner(
               // fit: BoxFit.contain,
               controller: MobileScannerController(
-                detectionSpeed: DetectionSpeed.normal,
+                detectionSpeed: DetectionSpeed.noDuplicates,
                 facing: CameraFacing.back,
                 torchEnabled: false,
               ),
@@ -158,29 +158,37 @@ class FahrplanDrawer extends StatelessWidget {
                 final List<Barcode> barcodes = capture.barcodes;
                 for (final barcode in barcodes) {
                   showDialog(
-                      context: context,
-                      builder: (BuildContext context) => SimpleDialog(
-                            children: [
-                              TextButton(
-                                  onPressed: () {
-                                    var json = jsonDecode(barcode.rawValue!);
-                                    List<dynamic> talk_ids = json['talk_ids'];
-                                    for (var talk_id in talk_ids) {
-                                      if (!favorites.fahrplan!.favTalkIds!
-                                          .contains(talk_id)) {
-                                        favorites.favoriteTalkById(talk_id);
-                                      }
-                                    }
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(SnackBar(
-                                      content: Text("Added favorites!"),
-                                      duration: Duration(seconds: 2),
-                                    ));
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text('Add talks to favorites'))
-                            ],
-                          ));
+                    context: context,
+                    builder: (BuildContext context) => SimpleDialog(
+                      children: [
+                        TextButton(
+                            onPressed: () {
+                              var json = jsonDecode(barcode.rawValue!);
+                              List<dynamic> talk_ids = json['talk_ids'];
+                              for (var talk_id in talk_ids) {
+                                if (!favorites.fahrplan!.favTalkIds!
+                                    .contains(talk_id)) {
+                                  favorites.favoriteTalkById(talk_id);
+                                }
+                              }
+
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) => AlertDialog(
+                                  title: Text('Sync successful'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: Text('Ok'),
+                                      onPressed: () => Navigator.pop(context),
+                                    )
+                                  ],
+                                ),
+                              );
+                            },
+                            child: Text('Add talks to favorites'))
+                      ],
+                    ),
+                  );
                 }
               },
             ),

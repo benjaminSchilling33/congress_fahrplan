@@ -7,8 +7,8 @@ Copyright (C) 2019 - 2021 Benjamin Schilling
 
 import 'package:congress_fahrplan/model/favorited_talks.dart';
 import 'package:congress_fahrplan/model/settings.dart';
-import 'package:congress_fahrplan/widgets/fahrplan_drawer.dart';
 import 'package:congress_fahrplan/model/talk.dart';
+import 'package:congress_fahrplan/widgets/fahrplan_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:page_view_indicators/linear_progress_page_indicator.dart';
 
@@ -35,8 +35,6 @@ class Fahrplan {
 
   List<Talk>? favoriteTalks;
   FavoritedTalks? favTalkIds;
-
-  Widget? dayTabCache;
 
   final currentPageNotifier = ValueNotifier<int>(0);
   final PageStorageBucket bucket = PageStorageBucket();
@@ -68,33 +66,6 @@ class Fahrplan {
       favoriteTalks: List<Talk>.empty(growable: true),
       settings: settings,
       fetchState: fetchState,
-    );
-  }
-
-  Widget buildDayLayout(BuildContext context) {
-    dayTabCache = TabBarView(
-      children: this.conference!.buildDayTabs(),
-    );
-    return new DefaultTabController(
-      length: conference!.daysCount!,
-      child: new Scaffold(
-        appBar: new AppBar(
-          title: Text(getFahrplanTitle(), style: TextStyle(fontFamily: 'GabriellaHeavy'),),
-          bottom: PreferredSize(
-            child: TabBar(
-              tabs: conference!.getDaysAsText(),
-              indicator: UnderlineTabIndicator(
-                borderSide: BorderSide(color: Theme.of(context).indicatorColor, width: 5.0),
-              ),
-            ),
-            preferredSize: Size.fromHeight(50),
-          ),
-        ),
-        drawer: FahrplanDrawer(
-          title: 'Overview',
-        ),
-        body: dayTabCache,
-      ),
     );
   }
 
