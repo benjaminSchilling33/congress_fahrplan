@@ -17,47 +17,47 @@ void main() {
 
 class FahrplanColors {
   static Color background() {
-    return Color(0xff0f000A);
+    return Color(0xff141414);
   }
 
   static Color base_grey_medium() {
-    return Color(0xffaaaaaa);
+    return Color(0xfffaf5f5);
   }
 
   static Color base_medium_dark_grey() {
-    return Color(0xff7a7a7a);
+    return Color(0xfffaf5f5);
   }
 
   static Color base_dark_grey() {
-    return Color(0xff202020);
+    return Color(0xfffaf5f5);
   }
 
   static Color primary() {
-    return Color(0xffff5053);
+    return Color(0xff00ff00);
   }
 
   static Color highlight() {
-    return Color(0xfffef2ff);
+    return Color(0xff9673ff);
   }
 
   static Color accent1() {
-    return Color(0xff6a5fdb);
+    return Color(0xffff3719);
   }
 
   static Color accent2() {
-    return Color(0xffb2aaff);
+    return Color(0xff66f2ff);
   }
 
   static Color accent3() {
-    return Color(0xff261a66);
+    return Color(0xff66f2ff);
   }
 
   static Color accent4() {
-    return Color(0xff29114c);
+    return Color(0xff66f2ff);
   }
 
   static Color accent5() {
-    return Color(0xff190b2f);
+    return Color(0xff66f2ff);
   }
 /*
   static Color secondary_accent_light_turquoise() {
@@ -93,7 +93,7 @@ class ThemeWrapper extends StatelessWidget {
     return new MaterialApp(
       title: 'Congress Fahrplan',
       theme: ThemeData(
-        fontFamily: 'SpaceGrotesk',
+        fontFamily: 'OfficeSans',
         brightness: Brightness.dark,
         colorScheme: ColorScheme.dark(
           background: FahrplanColors.background(),

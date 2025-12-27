@@ -33,7 +33,7 @@ class _DayLayoutState extends State<DayLayout> {
         appBar: new AppBar(
           title: Text(
             this.widget.fahrplan!.getFahrplanTitle(),
-            style: TextStyle(fontFamily: 'Pilowlava'),
+            style: TextStyle(fontFamily: 'Kario39c3'),
           ),
           /* actions: [
             rooms.length > 1
