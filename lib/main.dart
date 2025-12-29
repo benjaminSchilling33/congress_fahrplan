@@ -96,17 +96,17 @@ class ThemeWrapper extends StatelessWidget {
         fontFamily: 'OfficeSans',
         brightness: Brightness.dark,
         colorScheme: ColorScheme.dark(
-          background: FahrplanColors.background(),
+          surface: FahrplanColors.background(),
           brightness: Brightness.dark,
           primary: FahrplanColors.highlight(),
         ),
-        tabBarTheme: TabBarTheme(
+        tabBarTheme: TabBarThemeData(
           indicator: UnderlineTabIndicator(),
+          indicatorColor: FahrplanColors.accent2(),
         ),
         primaryColor: FahrplanColors.primary(),
         primaryColorLight: FahrplanColors.highlight(),
         primaryColorDark: FahrplanColors.accent1(),
-        indicatorColor: FahrplanColors.accent2(),
         textTheme: TextTheme(
           titleLarge: TextStyle(
             color: FahrplanColors.highlight(),
@@ -136,7 +136,7 @@ class ThemeWrapper extends StatelessWidget {
             color: FahrplanColors.highlight(),
           ),
         ),
-        cardTheme: CardTheme(
+        cardTheme: CardThemeData(
           color: FahrplanColors.background(),
           shape: ContinuousRectangleBorder(
             borderRadius: BorderRadius.circular(0.0),
@@ -158,7 +158,7 @@ class ThemeWrapper extends StatelessWidget {
           elevation: 30,
         ),
         appBarTheme: AppBarTheme(
-          color: FahrplanColors.background(),
+          backgroundColor: FahrplanColors.background(),
           iconTheme: IconThemeData(
             color: FahrplanColors.accent1(),
           ),

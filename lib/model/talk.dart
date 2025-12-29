@@ -197,8 +197,9 @@ class Talk extends StatelessWidget {
                                 ),
                                 color: FahrplanColors.primary(),
                                 tooltip: 'Share talk.',
-                                onPressed: () =>
-                                    Share.share('Check out this talk: $url'),
+                                onPressed: () => SharePlus.instance.share(
+                                    ShareParams(
+                                        text: 'Check out this talk: $url')),
                               ),
                             ),
                           ),

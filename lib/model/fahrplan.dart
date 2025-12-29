@@ -83,7 +83,7 @@ class Fahrplan {
                 LinearProgressPageIndicator(
               itemCount: rooms!.length,
               currentPageNotifier: currentPageNotifier,
-              progressColor: Theme.of(context).indicatorColor,
+              progressColor: Theme.of(context).tabBarTheme.indicatorColor!,
               width: constrains.maxWidth,
               height: 10,
             ),

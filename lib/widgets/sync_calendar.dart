@@ -14,7 +14,6 @@ import 'package:congress_fahrplan/model/talk.dart';
 import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:timezone/data/latest.dart' as tz;
-import 'package:timezone/timezone.dart';
 
 class SyncCalendar extends StatelessWidget {
   final DeviceCalendarPlugin? calendarPlugin;

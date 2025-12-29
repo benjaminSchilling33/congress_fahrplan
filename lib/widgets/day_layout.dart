@@ -4,8 +4,8 @@ import 'package:congress_fahrplan/widgets/fahrplan_drawer.dart';
 import 'package:flutter/material.dart';
 
 class DayLayout extends StatefulWidget {
-  Fahrplan? fahrplan;
-  DayLayout({this.fahrplan});
+  final Fahrplan? fahrplan;
+  const DayLayout({this.fahrplan});
 
   @override
   State<DayLayout> createState() => _DayLayoutState();
@@ -132,7 +132,7 @@ class _DayLayoutState extends State<DayLayout> {
               tabs: this.widget.fahrplan!.conference!.getDaysAsText(),
               indicator: UnderlineTabIndicator(
                 borderSide: BorderSide(
-                    color: Theme.of(context).indicatorColor, width: 5.0),
+                    color: Theme.of(context).tabBarTheme.indicatorColor!, width: 5.0),
               ),
             ),
             preferredSize: Size.fromHeight(50),
