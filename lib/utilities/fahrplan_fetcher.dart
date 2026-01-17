@@ -19,14 +19,17 @@ import 'package:http/http.dart' as http;
 
 class FahrplanFetcher {
   static String minimalFahrplanUrl =
-  'https://fahrplan.events.ccc.de/congress/2023/fahrplan/schedule.json';
+      'https://fahrplan.events.ccc.de/congress/2025/fahrplan/schedules/fahrplan.json';
 
-  static bool multipleSchedules = false;
+  static bool multipleSchedules = true;
 
-  static String completeFahrplanUrl = '';
+  static String completeFahrplanUrl =
+      'https://api.events.ccc.de/congress/2025/schedule.json';
 
   static List<String> oldUrls = [
-    'https://static.rc3.world/schedule/everything.json'
+    'https://api.events.ccc.de/congress/2024/schedule.json',
+    'https://api.events.ccc.de/congress/2024/assembly/6840c453-af5c-413c-8127-adcbdcd98e9e/schedule.json',
+    'https://fahrplan.events.ccc.de/congress/2023/fahrplan/schedule.json'
   ];
 
   static Future<Fahrplan> fetchFahrplan() async {
@@ -72,10 +75,9 @@ class FahrplanFetcher {
 
     /// Fetch the Fahrplan from the REST API
     /// Check for network connectivity
-    ConnectivityResult connectivityResult =
-        await (Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.mobile ||
-        connectivityResult == ConnectivityResult.wifi) {
+    final List<ConnectivityResult> connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult.contains(ConnectivityResult.mobile) ||
+        connectivityResult.contains(ConnectivityResult.wifi)) {
       /// Fetch the fahrplan depending on what is set in the settings,
       /// if the timeout expires load the local fahrplan
       String requestString = FahrplanFetcher.minimalFahrplanUrl;

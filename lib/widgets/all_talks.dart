@@ -7,6 +7,7 @@ Copyright (C) 2019 - 2021 Benjamin Schilling
 
 import 'package:congress_fahrplan/provider/favorite_provider.dart';
 import 'package:congress_fahrplan/utilities/fahrplan_fetcher.dart';
+import 'package:congress_fahrplan/widgets/day_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -27,7 +28,9 @@ class AllTalks extends StatelessWidget {
             ///Portrait Orientation
             Future.delayed(
                 Duration.zero, () => openOutdatedDialog(context, favorites));
-            return favorites.fahrplan!.buildDayLayout(context);
+            return DayLayout(
+              fahrplan: favorites.fahrplan!,
+            );
           } else {
             ///Landscape Orientation
             Future.delayed(
@@ -51,7 +54,7 @@ class AllTalks extends StatelessWidget {
         builder: (BuildContext context) => SimpleDialog(
           contentPadding: EdgeInsets.all(10),
           title: Text(
-              'The RC3 Fahrplan is not yet released, therefore the Fahrplan from last year is shown.'),
+              'The new Fahrplan is not yet released, therefore the Fahrplan from last year is shown.'),
           children: <Widget>[
             Semantics(
               label: 'Dismiss',

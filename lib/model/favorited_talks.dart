@@ -27,4 +27,11 @@ class FavoritedTalks {
     ids.remove(id);
     FileStorage.writeFavoritesFile('{"ids": $ids}');
   }
+
+  bool contains(int id) {
+    if (ids.contains(id)) {
+      return true;
+    }
+    return false;
+  }
 }

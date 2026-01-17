@@ -7,8 +7,8 @@ Copyright (C) 2019 - 2021 Benjamin Schilling
 
 import 'package:congress_fahrplan/model/favorited_talks.dart';
 import 'package:congress_fahrplan/model/settings.dart';
-import 'package:congress_fahrplan/widgets/fahrplan_drawer.dart';
 import 'package:congress_fahrplan/model/talk.dart';
+import 'package:congress_fahrplan/widgets/fahrplan_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:page_view_indicators/linear_progress_page_indicator.dart';
 
@@ -35,8 +35,6 @@ class Fahrplan {
 
   List<Talk>? favoriteTalks;
   FavoritedTalks? favTalkIds;
-
-  Widget? dayTabCache;
 
   final currentPageNotifier = ValueNotifier<int>(0);
   final PageStorageBucket bucket = PageStorageBucket();
@@ -71,33 +69,6 @@ class Fahrplan {
     );
   }
 
-  Widget buildDayLayout(BuildContext context) {
-    dayTabCache = TabBarView(
-      children: this.conference!.buildDayTabs(),
-    );
-    return new DefaultTabController(
-      length: conference!.daysCount!,
-      child: new Scaffold(
-        appBar: new AppBar(
-          title: Text(getFahrplanTitle(), style: TextStyle(fontFamily: 'GabriellaHeavy'),),
-          bottom: PreferredSize(
-            child: TabBar(
-              tabs: conference!.getDaysAsText(),
-              indicator: UnderlineTabIndicator(
-                borderSide: BorderSide(color: Theme.of(context).indicatorColor, width: 5.0),
-              ),
-            ),
-            preferredSize: Size.fromHeight(50),
-          ),
-        ),
-        drawer: FahrplanDrawer(
-          title: 'Overview',
-        ),
-        body: dayTabCache,
-      ),
-    );
-  }
-
   /// Room layout is shown when in landscape mode
   Widget buildRoomLayout(BuildContext context) {
     return new Scaffold(
@@ -112,7 +83,7 @@ class Fahrplan {
                 LinearProgressPageIndicator(
               itemCount: rooms!.length,
               currentPageNotifier: currentPageNotifier,
-              progressColor: Theme.of(context).indicatorColor,
+              progressColor: Theme.of(context).tabBarTheme.indicatorColor!,
               width: constrains.maxWidth,
               height: 10,
             ),
